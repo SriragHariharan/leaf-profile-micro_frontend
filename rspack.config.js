@@ -97,13 +97,19 @@ module.exports = {
   },
   plugins: [
     new rspack.container.ModuleFederationPlugin({
-      name: 'profile_mf',
+      name: 'profileMF',
       filename: 'remoteEntry.js',
-      exposes: {},
+      exposes: {
+        "./ProfileApp": "./src/app.tsx",
+        "./ProfilePage": "./src/pages/Profile.tsx",
+        "./GalleryPage": "./src/pages/Gallery.tsx"
+      },
       shared: {
         react: { eager: true },
         'react-dom': { eager: true },
-        'react-router-dom': { eager: true },
+        'react-router': { eager: true },
+        clsx: {eager: true},
+        "lucide-react": {eager: true},
       },
     }),
     new rspack.DefinePlugin({

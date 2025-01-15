@@ -1,6 +1,7 @@
 import React from 'react';
 import { useParams } from 'react-router';
 import { Plus } from 'lucide-react';
+import '../index.scss';
 
 const mockPhotos = [
   'https://images.unsplash.com/photo-1527254432336-ea5d55ebf3c0',

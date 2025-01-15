@@ -7,6 +7,7 @@ import AddBucketListModal from '../components/AddBucketListModal';
 import CreateGalleryModal from '../components/CreateGalleryModal';
 import { MapPin, Calendar, Film, Image, Plus } from 'lucide-react';
 import { clsx } from 'clsx';
+import '../index.scss';
 
 const tabs = [
   { id: 'feed', label: 'Feed', icon: Film },
