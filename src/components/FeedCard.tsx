@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Heart, MessageCircle, Share2, MoreVertical, Bookmark, Flag, Trash2 } from 'lucide-react';
 import { clsx } from 'clsx';
-import CommentsModal from './CommentsModal';
+import CommentsModal from '../modals/CommentsModal';
 
 interface FeedCardProps {
   id: string;

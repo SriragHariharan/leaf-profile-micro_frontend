@@ -100,9 +100,11 @@ module.exports = {
       name: 'profileMF',
       filename: 'remoteEntry.js',
       exposes: {
-        "./ProfileApp": "./src/app.tsx",
-        "./ProfilePage": "./src/pages/Profile.tsx",
-        "./GalleryPage": "./src/pages/Gallery.tsx"
+        "./ProfilePage": "./src/pages/Profile",
+        "./GalleryPage": "./src/pages/Gallery"
+      },
+      remotes: {
+        hostApp: "host@http://localhost:8000/remoteEntry.js"
       },
       shared: {
         react: { eager: true },

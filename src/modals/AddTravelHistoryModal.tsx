@@ -5,14 +5,14 @@ interface AddTravelHistoryModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSave: (data: {
-    location: string;
+    destination: string;
     year: number;
     places: string[];
   }) => void;
 }
 
 export default function AddTravelHistoryModal({ isOpen, onClose, onSave }: AddTravelHistoryModalProps) {
-  const [location, setLocation] = useState('');
+  const [destination, setDestination] = useState('');
   const [year, setYear] = useState(new Date().getFullYear());
   const [places, setPlaces] = useState(['']);
 
@@ -34,7 +34,7 @@ export default function AddTravelHistoryModal({ isOpen, onClose, onSave }: AddTr
 
   const handleSubmit = () => {
     onSave({
-      location,
+      destination,
       year,
       places: places.filter(place => place.trim() !== '')
     });
@@ -58,8 +58,8 @@ export default function AddTravelHistoryModal({ isOpen, onClose, onSave }: AddTr
             </label>
             <input
               type="text"
-              value={location}
-              onChange={(e) => setLocation(e.target.value)}
+              value={destination}
+              onChange={(e) => setDestination(e.target.value)}
               placeholder="e.g., Switzerland"
               className="w-full rounded-lg border px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
             />
@@ -70,7 +70,7 @@ export default function AddTravelHistoryModal({ isOpen, onClose, onSave }: AddTr
               Year
             </label>
             <input
-              type="number"
+              type="int"
               value={year}
               onChange={(e) => setYear(parseInt(e.target.value))}
               min="1900"

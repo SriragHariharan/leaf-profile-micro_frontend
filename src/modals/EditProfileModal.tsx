@@ -5,7 +5,7 @@ interface EditProfileModalProps {
   isOpen: boolean;
   onClose: () => void;
   type: 'username' | 'description' | 'location';
-  currentValue: string;
+  // currentValue: string;
   onSave: (value: string) => void;
 }
 
@@ -13,10 +13,10 @@ export default function EditProfileModal({
   isOpen, 
   onClose, 
   type, 
-  currentValue,
+  // currentValue,
   onSave 
 }: EditProfileModalProps) {
-  const [value, setValue] = useState(currentValue);
+  const [value, setValue] = useState("");
 
   if (!isOpen) return null;
 

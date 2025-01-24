@@ -5,19 +5,19 @@ interface AddBucketListModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSave: (data: {
-    location: string;
+    destination: string;
     notes: string;
   }) => void;
 }
 
 export default function AddBucketListModal({ isOpen, onClose, onSave }: AddBucketListModalProps) {
-  const [location, setLocation] = useState('');
+  const [destination, setDestination] = useState('');
   const [notes, setNotes] = useState('');
 
   if (!isOpen) return null;
 
   const handleSubmit = () => {
-    onSave({ location, notes });
+    onSave({ destination, notes });
     onClose();
   };
 
@@ -34,12 +34,12 @@ export default function AddBucketListModal({ isOpen, onClose, onSave }: AddBucke
         <div className="p-4 space-y-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Location
+              Destination
             </label>
             <input
               type="text"
-              value={location}
-              onChange={(e) => setLocation(e.target.value)}
+              value={destination}
+              onChange={(e) => setDestination(e.target.value)}
               placeholder="e.g., Bali, Indonesia"
               className="w-full rounded-lg border px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
             />
@@ -68,7 +68,7 @@ export default function AddBucketListModal({ isOpen, onClose, onSave }: AddBucke
           </button>
           <button
             onClick={handleSubmit}
-            disabled={!location.trim()}
+            disabled={!destination.trim()}
             className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50"
           >
             Save
