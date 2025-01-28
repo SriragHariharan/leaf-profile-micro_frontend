@@ -101,7 +101,9 @@ module.exports = {
       filename: 'remoteEntry.js',
       exposes: {
         "./ProfilePage": "./src/pages/Profile",
-        "./GalleryPage": "./src/pages/Gallery"
+        "./GalleryPage": "./src/pages/Gallery",
+        "./FriendsPage": "./src/pages/Friends",
+        "./FeedsPage": "./src/pages/Feed",
       },
       remotes: {
         hostApp: "host@http://localhost:8000/remoteEntry.js"

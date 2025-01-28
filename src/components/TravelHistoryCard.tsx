@@ -23,7 +23,7 @@ function TravelHistoryCard() {
     }, [])
 
     /* submit to the server */
-    const AddTravelHistory = (data: Object) => {
+    const AddTravelHistory = (data:{ destination: string, year: number, places: string[]}) => {
         axiosInstance.post("/travel-history", {...data, year: String(data?.year)})
         .then(resp => setTravelHistory([ ...travelHistory, resp?.data?.data]))
         .catch(err => console.log(err?.response?.data))

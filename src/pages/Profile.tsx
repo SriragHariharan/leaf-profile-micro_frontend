@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import ProfileHeader from '../components/ProfileHeader';
 import FeedCard from '../components/FeedCard';
-import AddBucketListModal from '../modals/AddBucketListModal';
 import { MapPin, Calendar, Film } from 'lucide-react';
 import { clsx } from 'clsx';
 import '../index.scss';
@@ -51,7 +50,7 @@ export default function Profile({self}: {self: boolean}) {
   
 
   return (
-    <div className="max-w-4xl mx-auto space-y-6 pt-4 px-4 md:px-0">
+    <div className="max-w-3xl mx-auto space-y-6 pt-4 px-4 md:px-0">
       <ProfileHeader self={self} />
 
       <div className="bg-white rounded-lg shadow-sm p-1">

@@ -8,6 +8,16 @@ import CoverImgUploadModal from '../modals/CoverImgUploadModal';
 import useAxiosInstance from '../axios/axiosInstance';
 import dayjs from 'dayjs';
 
+type Profile = {
+  username: string | null;
+  description: string | null;
+  location: string | null;
+  profilePicture: string | null;
+  coverPicture: string | null;
+  joinDate: string | null;
+};
+
+
 export default function ProfileHeader({self}: {self: boolean}) {
   const { logout, accessToken } = useStore();
   
@@ -26,7 +36,7 @@ export default function ProfileHeader({self}: {self: boolean}) {
   const openCoverModal = () => setIsCoverModalOpen(true);
   const closeCoverModal = () => setIsCoverModalOpen(false);
 
-  const [profile, setProfile] = useState({
+  const [profile, setProfile] = useState<Profile>({
     username: null,
     description: null,
     location: null,
@@ -52,7 +62,9 @@ export default function ProfileHeader({self}: {self: boolean}) {
           location:         profileData.location ||"location not added",
           profilePicture:   profileData.profilePicture || null,
           coverPicture:     profileData.coverPicture || null,
-          joinDate:         dayjs(profileData?.createdAt).format('MMMM YYYY')
+          joinDate: profileData?.createdAt
+            ? dayjs(profileData.createdAt).format("MMMM YYYY")
+            : "Date not available",
       });
     })
     .catch((err) => console.log(err));
