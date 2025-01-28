@@ -3,9 +3,10 @@ import { Edit, MapPin, Calendar, UserPlus, LogOut } from 'lucide-react';
 import EditProfileModal from '../modals/EditProfileModal';
 // import ImageUploadModal from './ImageUploadModal';
 import useStore from "hostApp/GlobalStore";
-import useAxiosInstance from '../axios/axiosInstance';
 import ProfileImgUploadModal from '../modals/ProfileImgUploadModal';
 import CoverImgUploadModal from '../modals/CoverImgUploadModal';
+import useAxiosInstance from '../axios/axiosInstance';
+import dayjs from 'dayjs';
 
 export default function ProfileHeader({self}: {self: boolean}) {
   const { logout, accessToken } = useStore();
@@ -37,22 +38,24 @@ export default function ProfileHeader({self}: {self: boolean}) {
   /* logout user */
   const handleLogout = () => logout();
 
-  /* fetch profile picture */ 
-  const axiosInstance = useAxiosInstance()
+  const axiosInstance = useAxiosInstance();
+
+  /* fetch profile details */ 
   useEffect(() => {
     axiosInstance.get("/self")
     .then((resp) => {
+      console.log(resp?.data?.data);
       const profileData = resp?.data?.data;
       setProfile({
-            username: profileData.username || null,
-            description: profileData.description || "description not added yet",
-            location: profileData.location ||"location not added",
-            profilePicture: profileData.profilePicture || null,
-            coverPicture: profileData.coverPicture || null,
-            joinDate: profileData?.createdAt
-          });
+          username:         profileData.username || null,
+          description:      profileData.description || "description not added yet",
+          location:         profileData.location ||"location not added",
+          profilePicture:   profileData.profilePicture || null,
+          coverPicture:     profileData.coverPicture || null,
+          joinDate:         dayjs(profileData?.createdAt).format('MMMM YYYY')
+      });
     })
-    .catch((err) => console.log(err?.response));
+    .catch((err) => console.log(err));
   }, [])
 
   /* update profile details */
@@ -64,6 +67,7 @@ export default function ProfileHeader({self}: {self: boolean}) {
                 }
             })
     .then(resp => {
+      console.log(resp?.data?.data)
       const data = resp.data?.data?.response;
       setProfile(prevProfile => ({
           ...prevProfile,
@@ -175,7 +179,7 @@ export default function ProfileHeader({self}: {self: boolean}) {
               </div>
               <div className="flex items-center gap-1">
                 <Calendar className="h-4 w-4" />
-                <span>Joined March 2024</span>
+                <span>Joined {profile?.joinDate}</span>
               </div>
             </div>
           </div>
@@ -189,7 +193,7 @@ export default function ProfileHeader({self}: {self: boolean}) {
           type={editModal.type}
           // currentValue={profile[editModal.type]}
           onSave={async(value) => {
-            changeProfileDetails( value, editModal.type)
+            changeProfileDetails( value, editModal?.type!)
           }}
         />
       )}
