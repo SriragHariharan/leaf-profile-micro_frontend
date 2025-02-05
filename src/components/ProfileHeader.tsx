@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Edit, MapPin, Calendar, UserPlus, LogOut } from 'lucide-react';
+import { Edit, MapPin, Calendar, UserPlus, LogOut, UserMinus, Hourglass } from 'lucide-react';
 import EditProfileModal from '../modals/EditProfileModal';
 // import ImageUploadModal from './ImageUploadModal';
 import useStore from "hostApp/GlobalStore";
@@ -7,6 +7,9 @@ import ProfileImgUploadModal from '../modals/ProfileImgUploadModal';
 import CoverImgUploadModal from '../modals/CoverImgUploadModal';
 import useAxiosInstance from '../axios/axiosInstance';
 import dayjs from 'dayjs';
+import { useParams } from 'react-router';
+
+import { showSuccessToast, showErrorToast, Toaster } from 'authMF/toastFunction';
 
 type Profile = {
   username: string | null;
@@ -15,6 +18,8 @@ type Profile = {
   profilePicture: string | null;
   coverPicture: string | null;
   joinDate: string | null;
+  isFriend?: boolean;
+  friendStatus?: string;
 };
 
 
@@ -43,6 +48,8 @@ export default function ProfileHeader({self}: {self: boolean}) {
     profilePicture: null,
     coverPicture: null,
     joinDate: null,
+    isFriend: false,
+    friendStatus: ""
   });
 
   /* logout user */
@@ -50,9 +57,11 @@ export default function ProfileHeader({self}: {self: boolean}) {
 
   const axiosInstance = useAxiosInstance();
 
+  const {userID} = useParams();
+
   /* fetch profile details */ 
   useEffect(() => {
-    axiosInstance.get("/self")
+    axiosInstance.get("/profile/" + (userID ? userID : "self"))
     .then((resp) => {
       console.log(resp?.data?.data);
       const profileData = resp?.data?.data;
@@ -65,6 +74,8 @@ export default function ProfileHeader({self}: {self: boolean}) {
           joinDate: profileData?.createdAt
             ? dayjs(profileData.createdAt).format("MMMM YYYY")
             : "Date not available",
+          isFriend: profileData.isFriend,
+          friendStatus: profileData.friendStatus
       });
     })
     .catch((err) => console.log(err));
@@ -89,9 +100,19 @@ export default function ProfileHeader({self}: {self: boolean}) {
     .catch(err => console.log(err?.response?.data));
   }
 
+  /* handle friend request: send friend request */
+  const handleSendFriendRequest = () => {
+    axiosInstance.post("/friend/request/" + userID )
+    .then(_resp => {
+      showSuccessToast("Friend request sent")
+    })
+    .catch(err => showErrorToast(err?.response?.data?.error?.message));
+  };
+
 
   return (
     <div className="bg-white rounded-lg shadow-sm overflow-hidden">
+      <Toaster />
       <div className="relative">
         <div 
           className="h-32 sm:h-48 bg-cover bg-center"
@@ -132,15 +153,36 @@ export default function ProfileHeader({self}: {self: boolean}) {
           </div>
           {
             self ? (
-              <button onClick={handleLogout} className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600">
+              <button
+                onClick={handleLogout}
+                className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600"
+              >
                 <LogOut className="h-4 w-4" />
                 <span className="hidden sm:inline">Logout</span>
-              </button>    
-            ):(
-              <button className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">
-                <UserPlus className="h-4 w-4" />
-                <span className="hidden sm:inline">Add Friend</span>
               </button>
+              ) : profile.isFriend ? (
+                <button
+                  onClick={handleSendFriendRequest} // or use a dedicated unfriend handler
+                  className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
+                >
+                  <UserMinus className="h-4 w-4" />
+                  <span className="hidden sm:inline">Unfriend</span>
+                </button>
+              ) : profile?.friendStatus === 'pending' ? (
+                <button
+                  className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600"
+                >
+                  <Hourglass className="h-4 w-4 spin" />
+                  <span className="hidden sm:inline">Pending request</span>
+                </button>
+              ) : (
+                <button
+                  onClick={handleSendFriendRequest}
+                  className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
+                >
+                  <UserPlus className="h-4 w-4" />
+                  <span className="hidden sm:inline">Add Friend</span>
+                </button>
             )
           }
         </div>

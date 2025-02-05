@@ -2,6 +2,7 @@ import React from 'react';
 import { DEFAULT_PROFILE_IMAGE } from '../constants/constants';
 import { Hourglass, UserMinus, UserPlus } from 'lucide-react';
 import { User } from '../interfaces/User.interface';
+import { Link } from 'react-router';
 // import { UserPlus, UserMinus } from 'lucide-react';
 
 
@@ -13,7 +14,7 @@ interface UserCardProps {
 
 export default function UserCard({ user }: UserCardProps) {
   return (
-    <div className="bg-white p-4 shadow-md border border-gray-200 flex items-center justify-between w-[768px]">
+    <Link to={"/view-profile/" + user?.userID} className="bg-white p-4 shadow-md border border-gray-200 flex items-center justify-between w-[768px]">
       <div className="flex items-center space-x-4">
         <img
           src={user.profilePicture || DEFAULT_PROFILE_IMAGE}
@@ -55,6 +56,6 @@ export default function UserCard({ user }: UserCardProps) {
             : <UserPlus size={24} />
         }
       </button>
-    </div>
+    </Link>
   );
 }

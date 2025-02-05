@@ -2,6 +2,7 @@ import axios from 'axios';
 import { jwtDecode } from "jwt-decode";
 import useStore from "hostApp/GlobalStore";
 import dayjs from 'dayjs'
+import { LEAF_PROFILE_REFRESH_TOKEN_URL, LEAF_USER_BASE_URL } from '../constants/constants';
 
 // Helper function to check if token is expired
 const isTokenExpired = (token) => {
@@ -22,7 +23,7 @@ const useAxiosInstance = () => {
 
     const refreshAccessToken = async () => {
         try {
-            const response = await axios.post("http://localhost:2000/api/v1/user/auth/refresh-token", {
+            const response = await axios.post(LEAF_PROFILE_REFRESH_TOKEN_URL, {
                 refreshToken
             });
             console.log("new tokens set generated");
@@ -38,7 +39,7 @@ const useAxiosInstance = () => {
     };
 
     const axiosInstance = axios.create({
-        baseURL: "http://localhost:2000/api/v1/user" // "/profile endpoint removed from here. Add it to the profiles component later."
+        baseURL: LEAF_USER_BASE_URL // "/profile endpoint removed from here. Add it to the profiles component later."
     });
 
     // Request interceptor to add access token and refresh token logic

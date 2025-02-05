@@ -106,7 +106,8 @@ module.exports = {
         "./FeedsPage": "./src/pages/Feed",
       },
       remotes: {
-        hostApp: "host@http://localhost:8000/remoteEntry.js"
+        hostApp: "host@http://localhost:8080/remoteEntry.js",
+        authMF: "authMF@http://localhost:8081/remoteEntry.js"
       },
       shared: {
         react: { eager: true },

@@ -8,7 +8,7 @@ import Gallery from './pages/Gallery';
 const App = () => (
   <Router>
     <Routes>
-      <Route path="/profile" element={<Profile />} />
+      <Route path="/profile" element={<Profile self={false} />} />
       <Route path="/gallery/:id" element={<Gallery />} />
     </Routes>
   </Router>
