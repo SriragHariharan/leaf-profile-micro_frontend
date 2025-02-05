@@ -38,7 +38,7 @@ const useAxiosInstance = () => {
     };
 
     const axiosInstance = axios.create({
-        baseURL: "http://localhost:2000/api/v1/user/profile"
+        baseURL: "http://localhost:2000/api/v1/user" // "/profile endpoint removed from here. Add it to the profiles component later."
     });
 
     // Request interceptor to add access token and refresh token logic
