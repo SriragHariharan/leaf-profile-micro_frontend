@@ -11,7 +11,7 @@ interface TravelHistory {
   Places: { placeName: string }[];
 }
 
-function TravelHistoryCard() {
+function TravelHistoryCard({ userID, self }: {userID: string, self: boolean}) {
     const axiosInstance = useAxiosInstance();
     const [showTravelModal, setShowTravelModal] = useState(false);
     const [travelHistory, setTravelHistory] = useState<TravelHistory[]>([]);
@@ -19,12 +19,12 @@ function TravelHistoryCard() {
 
     /* fetch user details */
     useEffect(() => {
-        axiosInstance.get("/travel-history/self").then(resp => setTravelHistory(resp?.data?.data?.travelList)).catch(err => console.log(err));
+        axiosInstance.get("/profile/travel-history/" + (userID ? userID : "self")).then(resp => setTravelHistory(resp?.data?.data?.travelList)).catch(err => console.log(err));
     }, [])
 
     /* submit to the server */
     const AddTravelHistory = (data:{ destination: string, year: number, places: string[]}) => {
-        axiosInstance.post("/travel-history", {...data, year: String(data?.year)})
+        axiosInstance.post("/profile/travel-history", {...data, year: String(data?.year)})
         .then(resp => setTravelHistory([ ...travelHistory, resp?.data?.data]))
         .catch(err => console.log(err?.response?.data))
     }

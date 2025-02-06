@@ -17,23 +17,23 @@ export default function UserCard({ user }: UserCardProps) {
     <Link to={"/view-profile/" + user?.userID} className="bg-white p-4 shadow-md border border-gray-200 flex items-center justify-between w-[768px]">
       <div className="flex items-center space-x-4">
         <img
-          src={user.profilePicture || DEFAULT_PROFILE_IMAGE}
-          alt={user.username}
+          src={user?.profilePicture || DEFAULT_PROFILE_IMAGE}
+          alt={user?.username}
           className="w-14 h-14 rounded-full object-cover border border-gray-300"
         />
         <div>
-          <h3 className="font-semibold text-lg text-gray-500">{user.username}</h3>
+          <h3 className="font-semibold text-lg text-gray-500">{user?.username}</h3>
           {
-            user.description && (
+            user?.description && (
               <p className="text-sm font-extralight text-gray-400 line-clamp-1">
-                {user.description}
+                {user?.description}
               </p>
             )
           }
         </div>
       </div>
 
-      <button
+      {/* <button
         className={`p-3 rounded-lg flex items-center justify-center transition-colors duration-200 ${
           user.isFriend
             ? 'text-red-600 bg-red-50 hover:bg-red-100'
@@ -55,7 +55,7 @@ export default function UserCard({ user }: UserCardProps) {
             ? <Hourglass size={24} />
             : <UserPlus size={24} />
         }
-      </button>
+      </button> */}
     </Link>
   );
 }

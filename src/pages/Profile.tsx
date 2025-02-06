@@ -6,6 +6,7 @@ import { clsx } from 'clsx';
 import '../index.scss';
 import TravelHistoryCard from '../components/TravelHistoryCard';
 import BucketListCard from '../components/BucketListCard';
+import { useParams } from 'react-router';
 
 const tabs = [
   { id: 'feed', label: 'Feed', icon: Film },
@@ -47,7 +48,7 @@ export default function Profile({self}: {self: boolean}) {
 
   const [activeTab, setActiveTab] = useState('feed');
 
-  
+  const { userID } = useParams()  ;
 
   return (
     <div className="max-w-3xl mx-auto space-y-6 pt-4 px-4 md:px-0">
@@ -78,9 +79,9 @@ export default function Profile({self}: {self: boolean}) {
           <FeedCard key={feed.id} {...feed} />
         ))}
 
-        { activeTab === 'travel-history' && <TravelHistoryCard /> }
+        { activeTab === 'travel-history' && <TravelHistoryCard userID={userID} self={self} /> }
 
-        { activeTab === 'bucket-list' && <BucketListCard /> }
+        { activeTab === 'bucket-list' && <BucketListCard userID={userID} self={self}  /> }
       </div>
 
       

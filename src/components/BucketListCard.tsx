@@ -3,20 +3,20 @@ import AddBucketListModal from '../modals/AddBucketListModal';
 import { Plus } from 'lucide-react';
 import useAxiosInstance from '../axios/axiosInstance';
 
-function BucketListCard() {
+function BucketListCard({ userID, self }: {userID: string, self: boolean}) {
     const [bucketList, setBucketList] = useState<Array<{ destination: string, notes: string, id: number }>>([]);
     const [showBucketModal, setShowBucketModal] = useState(false);
     const axiosInstance = useAxiosInstance();
 
     const saveBucketList = (destination: string, notes: string) => {
-        axiosInstance.post("/bucket-list", { destination, notes })
+        axiosInstance.post("/profile/bucket-list", { destination, notes })
         .then(resp => setBucketList([...bucketList, resp?.data?.data]))
         .catch(err => console.log(err?.response?.data))
     }
 
     /* fetch user details */
     useEffect(() => {
-        axiosInstance.get("/bucket-list/self")
+        axiosInstance.get("/profile/bucket-list/" + (userID ? userID : "self"))
         .then(resp => setBucketList(resp?.data?.data?.response))
         .catch(err => console.log(err));
     }, [])

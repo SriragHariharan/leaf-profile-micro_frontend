@@ -5,4 +5,6 @@ export interface User {
   description: string;
   isFriend: boolean;
   friendStatus: string;
+  FriendOf?: Object;
+  Profile: Object;
 }

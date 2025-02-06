@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Edit, MapPin, Calendar, UserPlus, LogOut, UserMinus, Hourglass } from 'lucide-react';
+import { Edit, MapPin, Calendar, UserPlus, LogOut, UserMinus, Hourglass, MessageCircleIcon } from 'lucide-react';
 import EditProfileModal from '../modals/EditProfileModal';
 // import ImageUploadModal from './ImageUploadModal';
 import useStore from "hostApp/GlobalStore";
@@ -10,6 +10,7 @@ import dayjs from 'dayjs';
 import { useParams } from 'react-router';
 
 import { showSuccessToast, showErrorToast, Toaster } from 'authMF/toastFunction';
+import { DEFAULT_PROFILE_IMAGE } from '../constants/constants';
 
 type Profile = {
   username: string | null;
@@ -30,6 +31,9 @@ export default function ProfileHeader({self}: {self: boolean}) {
     type: 'username' | 'description' | 'location' | null;
     isOpen: boolean;
   }>({ type: null, isOpen: false });
+
+  /* store friendship ID to accept/ cancel request */
+  const [friendshipID, setFriendshipID] = useState<number | null>(null);
   
   /* profile image upload modal */
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
@@ -63,28 +67,29 @@ export default function ProfileHeader({self}: {self: boolean}) {
   useEffect(() => {
     axiosInstance.get("/profile/" + (userID ? userID : "self"))
     .then((resp) => {
-      console.log(resp?.data?.data);
-      const profileData = resp?.data?.data;
-      setProfile({
-          username:         profileData.username || null,
-          description:      profileData.description || "description not added yet",
-          location:         profileData.location ||"location not added",
-          profilePicture:   profileData.profilePicture || null,
-          coverPicture:     profileData.coverPicture || null,
-          joinDate: profileData?.createdAt
-            ? dayjs(profileData.createdAt).format("MMMM YYYY")
-            : "Date not available",
-          isFriend: profileData.isFriend,
-          friendStatus: profileData.friendStatus
-      });
+        console.log(resp?.data?.data);
+        const profileData = resp?.data?.data;
+        setProfile({
+            username:         profileData.username || null,
+            description:      profileData.description || "description not added yet",
+            location:         profileData.location ||"location not added",
+            profilePicture:   profileData.profilePicture || null,
+            coverPicture:     profileData.coverPicture || null,
+            joinDate: profileData?.createdAt
+              ? dayjs(profileData.createdAt).format("MMMM YYYY")
+              : "Date not available",
+            isFriend: profileData.isFriend,
+            friendStatus: profileData.friendStatus
+        });
+        setFriendshipID(Number(resp?.data?.data?.friendshipId));
     })
     .catch((err) => console.log(err));
-  }, [])
+  }, [userID])
 
   /* update profile details */
   const changeProfileDetails = async ( value:string, type: string): Promise<void> => {
     console.log(value, type);
-    axiosInstance.put(`/${type}`, { [type]: value }, {
+    axiosInstance.put(`/profile/${type}`, { [type]: value }, {
                 headers: {
                     'Authorization': `Bearer ${accessToken}`
                 }
@@ -109,6 +114,22 @@ export default function ProfileHeader({self}: {self: boolean}) {
     .catch(err => showErrorToast(err?.response?.data?.error?.message));
   };
 
+  /* accept friend request */
+  const handleAcceptFriendship = () => {
+      axiosInstance.put("/friend/request/" + friendshipID)
+      .then(_resp => {
+        showSuccessToast("Friend request accepted")
+        setProfile({...profile, isFriend: true})
+      })
+      .catch(_err => showErrorToast("You cannot perform this action"));
+  }
+
+  /* reject friend request */
+  const handleRejectFriendship = () => {
+      axiosInstance.delete("/friend/request/" + friendshipID)
+      .then(resp => showSuccessToast("friend request rejected") )
+      .catch(err => showErrorToast("Unable to reject request"));
+  }
 
   return (
     <div className="bg-white rounded-lg shadow-sm overflow-hidden">
@@ -136,7 +157,7 @@ export default function ProfileHeader({self}: {self: boolean}) {
         <div className="flex justify-between items-end -mt-12 sm:-mt-16">
           <div className="relative">
             <img
-              src={profile?.profilePicture || undefined}
+              src={profile?.profilePicture || DEFAULT_PROFILE_IMAGE }
               alt="Profile"
               className="w-24 h-24 sm:w-32 sm:h-32 rounded-full border-4 border-white"
             />
@@ -162,19 +183,31 @@ export default function ProfileHeader({self}: {self: boolean}) {
               </button>
               ) : profile.isFriend ? (
                 <button
-                  onClick={handleSendFriendRequest} // or use a dedicated unfriend handler
-                  className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
+                  // onClick={} // or use a dedicated unfriend handler
+                  className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-blue-300 text-white rounded-lg hover:bg-blue-400"
                 >
-                  <UserMinus className="h-4 w-4" />
-                  <span className="hidden sm:inline">Unfriend</span>
+                  <MessageCircleIcon className="h-4 w-4" />
+                  <span className="hidden sm:inline">Message</span>
                 </button>
               ) : profile?.friendStatus === 'pending' ? (
-                <button
-                  className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600"
-                >
-                  <Hourglass className="h-4 w-4 spin" />
-                  <span className="hidden sm:inline">Pending request</span>
-                </button>
+                <div className="flex">
+                  <button
+                    onClick={handleRejectFriendship}
+                    className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600"
+                  >
+                    <Hourglass className="h-4 w-4 spin" />
+                    <span className="hidden sm:inline">Reject</span>
+                  </button>
+
+                  <button
+                    onClick={handleAcceptFriendship}
+                    className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600"
+                  >
+                    <Hourglass className="h-4 w-4 spin" />
+                    <span className="hidden sm:inline">Accept</span>
+                  </button>
+
+                </div>
               ) : (
                 <button
                   onClick={handleSendFriendRequest}
