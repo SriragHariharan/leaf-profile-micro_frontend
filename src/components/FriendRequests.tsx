@@ -19,7 +19,7 @@ function FriendRequests() {
         {
             friendRequests?.length > 0 ? (
                 friendRequests?.map((user) => ( <UserCard user={user?.Profile} /> ))
-            ) : (<InfoCard message='No New Friend Requests.' />)
+            ) : (<InfoCard message='No New Friend Requests has been received.' />)
         }
     </div>
   )

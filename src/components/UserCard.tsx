@@ -14,7 +14,7 @@ interface UserCardProps {
 
 export default function UserCard({ user }: UserCardProps) {
   return (
-    <Link to={"/view-profile/" + user?.userID} className="bg-white p-4 shadow-md border border-gray-200 flex items-center justify-between w-[768px]">
+    <Link to={"/view-profile/" + user?.userID} className="bg-white p-4 shadow-md border border-gray-200 flex items-center justify-between max-w-4xl">
       <div className="flex items-center space-x-4">
         <img
           src={user?.profilePicture || DEFAULT_PROFILE_IMAGE}

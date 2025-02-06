@@ -11,7 +11,7 @@ export default function PeoplePage() {
 
 
   return (
-    <div className="p-6 max-w-3xl">
+    <div className="p-6 max-w-4xl">
       <h1 className="text-2xl font-bold mb-4">Friends</h1>
 
       <div className="mb-6">

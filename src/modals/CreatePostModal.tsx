@@ -7,7 +7,7 @@ interface CreatePostModalProps {
   onClose: () => void;
 }
 
-import { showSuccessToast, showErrorToast, Toaster } from 'authMF/toastFunction';
+import { showErrorToast, Toaster } from 'authMF/toastFunction';
 
 const CreatePostModal: React.FC<CreatePostModalProps> = ({ isOpen, onClose }) => {
   const [content, setContent] = useState('');
@@ -34,7 +34,6 @@ const CreatePostModal: React.FC<CreatePostModalProps> = ({ isOpen, onClose }) =>
     axiosInstance.post("../post", formData, 
       { headers: { "Content-Type": "multipart/form-data" } }
     ).then(_resp => {
-      showSuccessToast("Post added successfully");
       onClose(); // Close the modal after successful post
     })
     .catch(_err => showErrorToast("Unable to add post"))

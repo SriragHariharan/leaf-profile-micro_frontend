@@ -18,7 +18,7 @@ function MyFriends() {
         {
             friendsArray?.length > 0 ? 
                 ( friendsArray.map(user => <UserCard user={user?.friendProfile} key={user?.userID} /> )  ) 
-                : <InfoCard message='No friends found' />
+                : <InfoCard message='No friends found. Add more friends 🙂' />
         }
 
     </div>

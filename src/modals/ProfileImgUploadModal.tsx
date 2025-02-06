@@ -29,7 +29,7 @@ const ProfileImgUploadModal: React.FC<ModalProps> = ({ closeModal }) => {
     formData.append("picture", file);
 
     // Make the API call
-    axiosInstance.post("/picture/profile", formData, {
+    axiosInstance.post("/profile/picture/profile", formData, {
       headers: { "Content-Type": "multipart/form-data" },
     }).then(resp => {
       console.log(resp.data?.data?.url);
