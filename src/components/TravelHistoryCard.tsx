@@ -11,7 +11,7 @@ interface TravelHistory {
   Places: { placeName: string }[];
 }
 
-function TravelHistoryCard({ userID, self }: {userID: string, self: boolean}) {
+function TravelHistoryCard({ userID, self }: {userID: string|undefined, self: boolean}) {
     const axiosInstance = useAxiosInstance();
     const [showTravelModal, setShowTravelModal] = useState(false);
     const [travelHistory, setTravelHistory] = useState<TravelHistory[]>([]);

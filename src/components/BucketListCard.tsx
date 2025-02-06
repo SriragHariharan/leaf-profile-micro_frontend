@@ -3,7 +3,7 @@ import AddBucketListModal from '../modals/AddBucketListModal';
 import { Plus } from 'lucide-react';
 import useAxiosInstance from '../axios/axiosInstance';
 
-function BucketListCard({ userID, self }: {userID: string, self: boolean}) {
+function BucketListCard({ userID, self }: {userID: string|undefined, self: boolean}) {
     const [bucketList, setBucketList] = useState<Array<{ destination: string, notes: string, id: number }>>([]);
     const [showBucketModal, setShowBucketModal] = useState(false);
     const axiosInstance = useAxiosInstance();

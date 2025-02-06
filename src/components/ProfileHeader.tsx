@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Edit, MapPin, Calendar, UserPlus, LogOut, UserMinus, Hourglass, MessageCircleIcon } from 'lucide-react';
+import { Edit, MapPin, Calendar, UserPlus, LogOut, Hourglass, MessageCircleIcon } from 'lucide-react';
 import EditProfileModal from '../modals/EditProfileModal';
 // import ImageUploadModal from './ImageUploadModal';
 import useStore from "hostApp/GlobalStore";
@@ -127,8 +127,8 @@ export default function ProfileHeader({self}: {self: boolean}) {
   /* reject friend request */
   const handleRejectFriendship = () => {
       axiosInstance.delete("/friend/request/" + friendshipID)
-      .then(resp => showSuccessToast("friend request rejected") )
-      .catch(err => showErrorToast("Unable to reject request"));
+      .then(_resp => showSuccessToast("friend request rejected") )
+      .catch(_err => showErrorToast("Unable to reject request"));
   }
 
   return (
