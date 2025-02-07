@@ -104,6 +104,7 @@ module.exports = {
         "./GalleryPage": "./src/pages/Gallery",
         "./FriendsPage": "./src/pages/Friends",
         "./FeedsPage": "./src/pages/Feed",
+        "./PostsPage": "./src/pages/Post"
       },
       remotes: {
         hostApp: "host@http://localhost:8080/remoteEntry.js",
