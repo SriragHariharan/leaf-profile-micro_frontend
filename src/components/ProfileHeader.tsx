@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Edit, MapPin, Calendar, UserPlus, LogOut, Hourglass, MessageCircleIcon } from 'lucide-react';
+import { Edit, MapPin, Calendar, UserPlus, LogOut, Hourglass, MessageCircleIcon, Flag } from 'lucide-react';
 import EditProfileModal from '../modals/EditProfileModal';
 // import ImageUploadModal from './ImageUploadModal';
 import useStore from "hostApp/GlobalStore";
@@ -11,6 +11,7 @@ import { useParams } from 'react-router';
 
 import { showSuccessToast, showErrorToast, Toaster } from 'authMF/toastFunction';
 import { DEFAULT_PROFILE_IMAGE } from '../constants/constants';
+import ReportModal from '../modals/ReportModal';
 
 type Profile = {
   username: string | null;
@@ -131,6 +132,21 @@ export default function ProfileHeader({self}: {self: boolean}) {
       .catch(_err => showErrorToast("Unable to reject request"));
   }
 
+  /* report modal */
+  const [isReportModalOpen, setIsReportModalOpen] = useState(false);
+
+  const openReportModal = () => setIsReportModalOpen(true);
+  const closeReportModal = () => setIsReportModalOpen(false);
+
+  const handleReportSubmit = (reportData: {issue: string, description: string, priority: string}) => {
+    axiosInstance.post("/profile/report/" + userID, {...reportData })
+    .then(resp => {
+      closeReportModal();
+      showSuccessToast(resp?.data?.message)      ;
+    })
+    .catch(_err => showErrorToast("Unable to report profile"));
+  };
+
   return (
     <div className="bg-white rounded-lg shadow-sm overflow-hidden">
       <Toaster />
@@ -172,6 +188,17 @@ export default function ProfileHeader({self}: {self: boolean}) {
               )
             }
           </div>
+          {
+            !self && (
+              <button
+                onClick={openReportModal}
+                className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600"
+              >
+                <Flag className="h-4 w-4" />
+                <span className="hidden sm:inline">Report</span>
+              </button>
+            )
+          }
           {
             self ? (
               <button
@@ -287,6 +314,17 @@ export default function ProfileHeader({self}: {self: boolean}) {
 
       {isProfileModalOpen && <ProfileImgUploadModal closeModal={closeProfileModal} />}
       {isCoverModalOpen && <CoverImgUploadModal closeModal={closeCoverModal} />}
+
+      {/* report modal */}
+      {
+        isReportModalOpen && (
+          <ReportModal
+            isOpen={isReportModalOpen}
+            onClose={closeReportModal}
+            onSubmit={handleReportSubmit}
+          />
+        )
+      }
     </div>
   );
 }
