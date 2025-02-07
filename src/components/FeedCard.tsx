@@ -4,6 +4,7 @@ import { clsx } from 'clsx';
 import CommentsModal from '../modals/CommentsModal';
 import useAxiosInstance from '../axios/axiosInstance';
 import { showSuccessToast, Toaster, showErrorToast } from 'authMF/toastFunction';
+import ReportPostModal from '../modals/ReportPostModal';
 
 interface FeedCardProps {
   postID: string;
@@ -54,6 +55,18 @@ export default function FeedCard({ username, userImage, content, timestamp, imag
       });
   };
 
+  /* report post modal */
+   const [showReportModal, setShowReportModal] = useState(false);
+
+  const handleReportPost = (reason: string, description: string) => {
+    axiosInstance.post("../post/report/" + postID, {reason, description})
+      .then(_ => {
+        showSuccessToast("Post reported");
+        setShowReportModal(false);
+      })
+      .catch(_ =>showErrorToast("Unable to report post"))
+  };
+
   return (
     <>
       <Toaster />
@@ -81,7 +94,7 @@ export default function FeedCard({ username, userImage, content, timestamp, imag
               </button>
               
               {showMenu && (
-                <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-1 z-10">
+                <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-1">
                   <button className="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 flex items-center gap-2">
                     <Bookmark className="h-4 w-4" />
                     Save post
@@ -90,7 +103,7 @@ export default function FeedCard({ username, userImage, content, timestamp, imag
                     <Trash2 className="h-4 w-4" />
                     Hide from timeline
                   </button>
-                  <button className="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 flex items-center gap-2 text-red-600">
+                  <button onClick={() => setShowReportModal(true)} className="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 flex items-center gap-2 text-red-600">
                     <Flag className="h-4 w-4" />
                     Report post
                   </button>
@@ -157,6 +170,12 @@ export default function FeedCard({ username, userImage, content, timestamp, imag
         isOpen={showComments}
         onClose={() => setShowComments(false)}
         postId={postID}
+      />
+
+      <ReportPostModal
+        isOpen={showReportModal}
+        onClose={() => setShowReportModal(false)}
+        reportPost={handleReportPost}
       />
     </>
   );
