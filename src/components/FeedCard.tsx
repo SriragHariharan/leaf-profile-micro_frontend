@@ -67,6 +67,16 @@ export default function FeedCard({ username, userImage, content, timestamp, imag
       .catch(_ =>showErrorToast("Unable to report post"))
   };
 
+  /* save the post */
+  const handleSavePost = () => {
+    axiosInstance.post("../post/save/" + postID)
+      .then(_ => {
+        showSuccessToast("Post saved");
+        setShowReportModal(false);
+      })
+      .catch(err => showErrorToast(err?.response?.data?.error?.message));
+  }
+
   return (
     <>
       <Toaster />
@@ -95,7 +105,7 @@ export default function FeedCard({ username, userImage, content, timestamp, imag
               
               {showMenu && (
                 <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-1">
-                  <button className="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 flex items-center gap-2">
+                  <button onClick={handleSavePost} className="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 flex items-center gap-2">
                     <Bookmark className="h-4 w-4" />
                     Save post
                   </button>
