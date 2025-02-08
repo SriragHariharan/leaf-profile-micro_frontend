@@ -1,5 +1,13 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { X, Send } from 'lucide-react';
+import useAxiosInstance from '../axios/axiosInstance';
+import { showErrorToast, showSuccessToast } from 'authMF/toastFunction';
+import { DEFAULT_PROFILE_IMAGE } from '../constants/constants';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
+
+dayjs.extend(relativeTime);
+
 
 interface Comment {
   id: string;
@@ -16,26 +24,40 @@ interface CommentsModalProps {
 }
 
 export default function CommentsModal({ isOpen, onClose, postId }: CommentsModalProps) {
+  
+  const axiosInstance = useAxiosInstance();
   const [newComment, setNewComment] = useState('');
-  const [comments] = useState<Comment[]>([
-    {
-      id: '1',
-      username: 'Emma Wilson',
-      userImage: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&q=80',
-      content: 'This looks absolutely incredible! Which trail did you take?',
-      timestamp: '1 hour ago'
-    },
-    {
-      id: '2',
-      username: 'Michael Chen',
-      userImage: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80',
-      content: 'The views are breathtaking! Would love to do this trek someday.',
-      timestamp: '2 hours ago'
-    }
-  ]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [comments, setComments] = useState<Comment[]>([]);
 
+  
+  /* get comments */
+  useEffect(() => {
+    axiosInstance.get(`../post/${postId}/comment`)
+    .then(resp => setComments(resp.data?.data?.comments))
+    .catch(err => console.log(err));
+  }, [postId])
+  
+  /* Add comment */
+  const handleAddComment = () => {
+    if (newComment.trim() === '') return;
+
+    setIsLoading(true);
+
+    axiosInstance.post(`../post/${postId}/comment`, { comment: newComment })
+    .then(resp => {
+      const comment = resp.data?.data?.comment;
+      console.log(comment)
+      setComments([comment, ...comments]);
+      setNewComment('');
+      showSuccessToast("Comment Added")
+    })
+    .catch(_err => showErrorToast("Unable to add comment"))
+    .finally(() => setIsLoading(false));
+  };
+  
   if (!isOpen) return null;
-
+  
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
       <div className="bg-white rounded-lg w-full max-w-lg h-[80vh] flex flex-col">
@@ -50,16 +72,16 @@ export default function CommentsModal({ isOpen, onClose, postId }: CommentsModal
           {comments.map((comment) => (
             <div key={comment.id} className="flex gap-3">
               <img
-                src={comment.userImage}
+                src={comment?.user?.profilepic ?? DEFAULT_PROFILE_IMAGE}
                 alt={comment.username}
                 className="w-8 h-8 rounded-full object-cover"
               />
               <div className="flex-1">
                 <div className="bg-gray-50 rounded-lg p-3">
-                  <h4 className="font-semibold text-sm">{comment.username}</h4>
-                  <p className="text-gray-700 text-sm">{comment.content}</p>
+                  <h4 className="font-semibold text-sm">{comment?.user?.username}</h4>
+                  <p className="text-gray-700 text-sm">{comment?.comment}</p>
                 </div>
-                <p className="text-xs text-gray-500 mt-1">{comment.timestamp}</p>
+                <p className="text-xs text-gray-500 mt-1">{dayjs(comment?.createdAt)?.fromNow()}</p>
               </div>
             </div>
           ))}
@@ -67,11 +89,6 @@ export default function CommentsModal({ isOpen, onClose, postId }: CommentsModal
 
         <div className="p-4 border-t">
           <div className="flex gap-3">
-            <img
-              src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80"
-              alt="Your profile"
-              className="w-8 h-8 rounded-full object-cover"
-            />
             <div className="flex-1 flex gap-2">
               <input
                 type="text"
@@ -81,10 +98,11 @@ export default function CommentsModal({ isOpen, onClose, postId }: CommentsModal
                 className="flex-1 bg-gray-50 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
               />
               <button 
+                onClick={handleAddComment}
                 className="p-2 text-green-600 hover:bg-green-50 rounded-lg disabled:opacity-50"
-                disabled={!newComment.trim()}
+                disabled={isLoading || !newComment.trim()}
               >
-                <Send className="h-5 w-5" />
+                <Send className={`h-5 w-5 ${isLoading ? "animate-spin" : ""}`} />
               </button>
             </div>
           </div>

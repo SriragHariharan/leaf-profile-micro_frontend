@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import useAxiosInstance from '../axios/axiosInstance';
 import FeedCard from './FeedCard';
 import { showErrorToast, showSuccessToast } from 'authMF/toastFunction';
+import { Post } from '../types';
 
 interface ProfileFeedProps {
     userID: string | undefined;
@@ -28,7 +29,7 @@ function ProfileFeed({ userID, self }: ProfileFeedProps) {
             console.log(data);
 
             if (data.length > 0) {
-                setPosts((prevPosts) => [...prevPosts, ...data]);
+                setPosts((prevPosts: Post[]) => [...prevPosts, ...data]);
                 setPage((prevPage) => prevPage + 1);
             } else {
                 setHasMore(false);
