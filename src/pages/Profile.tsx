@@ -12,7 +12,6 @@ const tabs = [
   { id: 'feed', label: 'Feed', icon: Film },
   { id: 'travel-history', label: 'Travel History', icon: MapPin },
   { id: 'bucket-list', label: 'Bucket List', icon: Calendar },
-  // { id: 'gallery', label: 'Photo Gallery', icon: Image },
 ];
 
 const mockFeeds = [

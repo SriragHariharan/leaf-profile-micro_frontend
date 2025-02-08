@@ -16,3 +16,9 @@ declare module 'hostApp/GlobalStore' {
   const globalStore: import('zustand').Store<GlobalState>;  // Zustand store type
   export default globalStore;
 }
+
+declare module 'authMF/toastFunction' {
+  export const Toaster: any;
+  export const showErrorToast: (message: string) => void;
+  export const showSuccessToast: (message: string) => void;
+}
