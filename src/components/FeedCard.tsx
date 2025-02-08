@@ -5,11 +5,12 @@ import CommentsModal from '../modals/CommentsModal';
 import useAxiosInstance from '../axios/axiosInstance';
 import { showSuccessToast, Toaster, showErrorToast } from 'authMF/toastFunction';
 import ReportPostModal from '../modals/ReportPostModal';
+import { DEFAULT_PROFILE_IMAGE } from '../constants/constants';
 
 interface FeedCardProps {
   postID: string;
   username: string;
-  userImage: string;
+  userImage: string | undefined | null;
   content: string;
   timestamp: string;
   image?: string | null;
@@ -85,7 +86,7 @@ export default function FeedCard({ username, userImage, content, timestamp, imag
           <div className="flex items-center justify-between flex-wrap">
             <div className="flex items-center gap-3">
               <img
-                src={userImage}
+                src={userImage ?? DEFAULT_PROFILE_IMAGE}
                 alt={username}
                 className="w-12 h-12 rounded-full object-cover"  // Fixed size for profile image
               />
