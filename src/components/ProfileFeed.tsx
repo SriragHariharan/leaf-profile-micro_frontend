@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import useAxiosInstance from '../axios/axiosInstance';
 import FeedCard from './FeedCard';
+import { showErrorToast, showSuccessToast } from 'authMF/toastFunction';
 
 interface ProfileFeedProps {
     userID: string | undefined;
@@ -58,6 +59,18 @@ function ProfileFeed({ userID, self }: ProfileFeedProps) {
     }, [loading, hasMore, page, userid]);
 
 
+    /* delete a post */
+    const handleDeletePost = (postID: string) => {
+        console.log("deleting the post with ID: " + postID)
+        console.log(posts.filter(post => post?.id !== postID ));
+        axiosInstance.delete(`../post/${postID}/delete`)
+        .then(_resp => {
+            setPosts(posts.filter(post => post?.id !== postID ));
+            showSuccessToast("Post deleted")
+        })
+        .catch(_err => showErrorToast("Unable to delete post"));
+    }
+
     return (
         <div className="mx-auto">
             {posts.map(post => (
@@ -70,6 +83,7 @@ function ProfileFeed({ userID, self }: ProfileFeedProps) {
                     postID={post?.id}
                     timestamp={post?.createdAt}
                     type={self ? "self" : "common"}
+                    handleDeletePost={handleDeletePost}
                 />
             ))}
 

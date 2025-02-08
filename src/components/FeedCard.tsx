@@ -18,9 +18,10 @@ interface FeedCardProps {
   isLiked: boolean;
   isCommented: boolean;
   type: string
+  handleDeletePost: (postID: string) => void;
 }
 
-export default function FeedCard({ username, userImage, content, timestamp, image, postID, type }: FeedCardProps) {
+export default function FeedCard({ username, userImage, content, timestamp, image, postID, type, handleDeletePost }: FeedCardProps) {
   const [isLiked, setIsLiked] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
   const [likes, setLikes] = useState(0);
@@ -87,6 +88,11 @@ export default function FeedCard({ username, userImage, content, timestamp, imag
       .catch(err => console.log(err?.response?.data?.message ?? "Unable to Unsave post"));
   }
 
+  /* handle delete post */
+  const handleDelete = () => {
+    handleDeletePost(postID);
+  }
+
   return (
     <>
       <Toaster />
@@ -108,7 +114,7 @@ export default function FeedCard({ username, userImage, content, timestamp, imag
             
             <div className="relative">
               {
-                type === "self" && <Trash className='text-red-500 cursor-pointer' />
+                type === "self" && <Trash onClick={handleDelete} className='text-red-500 cursor-pointer' />
               }
               {
                 type === "common" && (
