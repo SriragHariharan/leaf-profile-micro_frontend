@@ -7,6 +7,7 @@ import '../index.scss';
 import TravelHistoryCard from '../components/TravelHistoryCard';
 import BucketListCard from '../components/BucketListCard';
 import { useParams } from 'react-router';
+import ProfileFeed from '../components/ProfileFeed';
 
 const tabs = [
   { id: 'feed', label: 'Feed', icon: Film },
@@ -14,32 +15,8 @@ const tabs = [
   { id: 'bucket-list', label: 'Bucket List', icon: Calendar },
 ];
 
-const mockFeeds = [
-  {
-    id: '1',
-    username: 'Ricky Ponting',
-    userImage: "https://st3.cricketcountry.com/wp-content/uploads/2022/12/ricky-ponting.jpg",
-    content: 'Just completed an amazing trek through the Swiss Alps! The views were absolutely breathtaking. Can\'t wait to share more photos from this incredible journey! 🏔️ #SwissAlps #Adventure #Hiking',
-    timestamp: '2 hours ago',
-    image: 'https://th.bing.com/th/id/OIP.HKTIB3DM46yiY-RGWmu8SQHaLf?rs=1&pid=ImgDetMain'
-  },
-  {
-    id: '3',
-    username: 'Ricky Ponting',
-    userImage: "https://st3.cricketcountry.com/wp-content/uploads/2022/12/ricky-ponting.jpg",
-    content: 'Just completed an amazing trek through the Swiss Alps! The views were absolutely breathtaking. Can\'t wait to share more photos from this incredible journey! 🏔️ #SwissAlps #Adventure #Hiking',
-    timestamp: '2 hours ago',
-    image: 'https://images.unsplash.com/photo-1454496522488-7a8e488e8606'
-  },
-  
-  {
-    id: '2',
-    username: 'Ricky Ponting',
-    userImage: "https://st3.cricketcountry.com/wp-content/uploads/2022/12/ricky-ponting.jpg",
-    content: 'Planning my next adventure to Southeast Asia! Any recommendations for must-visit places in Vietnam and Thailand? 🌏 #TravelPlanning #SoutheastAsia',
-    timestamp: '1 day ago'
-  }
-];
+
+
 
 
 
@@ -74,9 +51,7 @@ export default function Profile({self}: {self: boolean}) {
       </div>
 
       <div className="space-y-4">
-        {activeTab === 'feed' && mockFeeds.map(feed => (
-          <FeedCard key={feed.id} {...feed} />
-        ))}
+        {activeTab === 'feed' && <ProfileFeed userID={userID} self={self} /> }
 
         { activeTab === 'travel-history' && <TravelHistoryCard userID={userID} self={self} /> }
 

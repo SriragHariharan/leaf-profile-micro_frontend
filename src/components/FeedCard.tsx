@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { Heart, MessageCircle, Share2, MoreVertical, Bookmark, Flag, Trash2 } from 'lucide-react';
+import { Heart, MessageCircle, Share2, MoreVertical, Bookmark, Flag, Trash2, Trash, Save } from 'lucide-react';
 import { clsx } from 'clsx';
 import CommentsModal from '../modals/CommentsModal';
 import useAxiosInstance from '../axios/axiosInstance';
 import { showSuccessToast, Toaster, showErrorToast } from 'authMF/toastFunction';
 import ReportPostModal from '../modals/ReportPostModal';
 import { DEFAULT_PROFILE_IMAGE } from '../constants/constants';
+import dayjs from 'dayjs';
 
 interface FeedCardProps {
   postID: string;
@@ -16,9 +17,10 @@ interface FeedCardProps {
   image?: string | null;
   isLiked: boolean;
   isCommented: boolean;
+  type: string
 }
 
-export default function FeedCard({ username, userImage, content, timestamp, image, postID }: FeedCardProps) {
+export default function FeedCard({ username, userImage, content, timestamp, image, postID, type }: FeedCardProps) {
   const [isLiked, setIsLiked] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
   const [likes, setLikes] = useState(0);
@@ -78,10 +80,17 @@ export default function FeedCard({ username, userImage, content, timestamp, imag
       .catch(err => showErrorToast(err?.response?.data?.error?.message));
   }
 
+  /* unsave post */
+  const handleUnsavePost = () => {
+      axiosInstance.delete("../post/save/" + postID)
+      .then(_resp => showSuccessToast("Post unsaved"))
+      .catch(err => console.log(err?.response?.data?.message ?? "Unable to Unsave post"));
+  }
+
   return (
     <>
       <Toaster />
-      <div className="bg-white rounded-lg shadow-sm mb-4 overflow-hidden">
+      <div className="bg-white rounded-lg shadow-sm mb-4 overflow-hidden max-w-4xl">
         <div className="p-4">
           <div className="flex items-center justify-between flex-wrap">
             <div className="flex items-center gap-3">
@@ -92,17 +101,28 @@ export default function FeedCard({ username, userImage, content, timestamp, imag
               />
               <div>
                 <h3 className="font-semibold text-gray-900 text-base md:text-lg">{username}</h3>
-                <p className="text-sm text-gray-500">{timestamp}</p>
+                <p className="text-sm text-gray-500">{dayjs(timestamp).format('MMMM D, YYYY h:mm A')}</p>
+                
               </div>
             </div>
             
             <div className="relative">
-              <button 
-                onClick={() => setShowMenu(!showMenu)}
-                className="p-2 hover:bg-gray-100 rounded-full"
-              >
-                <MoreVertical className="h-5 w-5 text-gray-600" />
-              </button>
+              {
+                type === "self" && <Trash className='text-red-500 cursor-pointer' />
+              }
+              {
+                type === "common" && (
+                  <button 
+                    onClick={() => setShowMenu(!showMenu)}
+                    className="p-2 hover:bg-gray-100 rounded-full"
+                  >
+                    <MoreVertical className="h-5 w-5 text-gray-600" />
+                  </button>
+                )
+              }
+              {
+                type === "save" && <Save onClick={handleUnsavePost} className='text-red-500 cursor-pointer' />
+              }
               
               {showMenu && (
                 <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-1">

@@ -1,0 +1,91 @@
+import React, { useEffect, useState } from 'react';
+import useAxiosInstance from '../axios/axiosInstance';
+import FeedCard from './FeedCard';
+
+interface ProfileFeedProps {
+    userID: string | undefined;
+    self: boolean;
+}
+
+function ProfileFeed({ userID, self }: ProfileFeedProps) {
+    const userid = userID || "self";
+
+    const axiosInstance = useAxiosInstance();
+
+    const [posts, setPosts] = useState<any>([]);
+    const [page, setPage] = useState<number>(1);
+    const [loading, setLoading] = useState<boolean>(false);
+    const [hasMore, setHasMore] = useState<boolean>(true);
+
+    const fetchPosts = async () => {
+        if (loading || !hasMore) return;
+
+        setLoading(true);
+        try {
+            const response = await axiosInstance.get(`../post/timeline/${userid}/?page=${page}`);
+            const data = response.data?.data?.posts; 
+            console.log(data);
+
+            if (data.length > 0) {
+                setPosts((prevPosts) => [...prevPosts, ...data]);
+                setPage((prevPage) => prevPage + 1);
+            } else {
+                setHasMore(false);
+            }
+        } catch (error) {
+            console.error('Error fetching posts:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    //initial fetch
+    useEffect(() => { fetchPosts() }, [userid, self]);
+
+      // Handle scroll event
+    useEffect(() => {
+        const handleScroll = () => {
+            if (
+                window.innerHeight + document.documentElement.scrollTop >=
+                document.documentElement.offsetHeight - 100
+            ) {
+                fetchPosts();
+            }
+        };
+
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, [loading, hasMore, page, userid]);
+
+
+    return (
+        <div className="mx-auto">
+            {posts.map(post => (
+                <FeedCard
+                    key={post?.id}
+                    username={post?.user?.username}
+                    userImage={post?.user?.profilepic}
+                    content={post?.content}
+                    image={post?.imageURL}
+                    postID={post?.id}
+                    timestamp={post?.createdAt}
+                    type={self ? "self" : "common"}
+                />
+            ))}
+
+            {loading && (
+                <p className="text-center text-gray-500 py-4 animate-pulse">
+                    Loading...
+                </p>
+            )}
+
+            {!hasMore && (
+                <div className="mt-6 p-4 bg-gray-100 text-gray-600 rounded-lg text-center">
+                    <p>No more posts to load</p>
+                </div>
+            )}
+        </div>
+    );
+}
+
+export default ProfileFeed;

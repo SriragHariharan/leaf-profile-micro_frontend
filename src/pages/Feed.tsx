@@ -96,6 +96,8 @@ function Feed() {
             username={post?.owner?.username}
             userImage={post?.owner?.profilePic || DEFAULT_PROFILE_IMAGE}
             postID={post?.postID}
+            timestamp={post?.createdAt}
+            type={"common"}
           />
         ))}
         

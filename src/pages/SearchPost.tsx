@@ -98,15 +98,16 @@ function SearchPost() {
                     // Show saved posts in SavedFeedCard
                     savedPosts?.length > 0 ? (
                         savedPosts.map((post) => (
-                            <SavedFeedCard
+                            <FeedCard
                                 key={post?.id}
                                 postID={post?.postID}
                                 username={post?.user?.username}
                                 userImage={post?.user?.profilepic}
                                 content={post?.post?.content}
-                                imageURL={post?.post?.imageURL}
+                                image={post?.post?.imageURL}
                                 createdAt={post?.post?.createdAt}
                                 userID={post?.userID}
+                                type='save'
                             />
                         ))
                     ) : (
@@ -126,6 +127,7 @@ function SearchPost() {
                                 content={post?.content}
                                 image={post?.imageURL}
                                 timestamp={post?.createdAt}
+                                type={"common"}
                             />
                         ))
                     ) : (
