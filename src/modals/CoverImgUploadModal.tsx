@@ -1,5 +1,6 @@
 import React, { useState, ChangeEvent } from "react";
 import useAxiosInstance from "../axios/axiosInstance";
+import { showErrorToast, showSuccessToast } from "authMF/toastFunction";
 
 interface ModalProps {
   closeModal: () => void;
@@ -8,6 +9,7 @@ interface ModalProps {
 const CoverImgUploadModal: React.FC<ModalProps> = ({ closeModal }) => {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [file, setFile] = useState<File | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
   const axiosInstance = useAxiosInstance();
 
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -23,17 +25,20 @@ const CoverImgUploadModal: React.FC<ModalProps> = ({ closeModal }) => {
       alert("Please select an image to upload.");
       return;
     }
+    setIsLoading(true);
     const formData = new FormData();
     formData.append("picture", file);
 
     // Make the API call
-    axiosInstance.post("/picture/cover", formData, {
+    axiosInstance.post("/profile/picture/cover", formData, {
       headers: { "Content-Type": "multipart/form-data" },
     }).then(resp => {
       console.log(resp?.data?.data);
-      window.alert("Cover pic updated successfully")
+      showSuccessToast("Cover picture updated successfully")
+      closeModal(); // Close the modal after successful update
     })
-    .catch(err => console.log(err));
+    .catch(_err => showErrorToast("Unable to update cover picture"))
+    .finally(() => setIsLoading(false));
   };
 
   return (
@@ -75,9 +80,17 @@ const CoverImgUploadModal: React.FC<ModalProps> = ({ closeModal }) => {
           </button>
           <button
             onClick={handleSave}
-            className="px-4 py-2 ml-2 text-sm text-white bg-green-500 rounded hover:bg-green-600"
+            disabled={isLoading}
+            className={`px-4 py-2 ml-2 text-sm ${isLoading ? 'text-gray-500 bg-gray-300' : 'text-white bg-green-500'} rounded hover:${isLoading ? '' : 'bg-green-600'}`}
           >
-            Save
+            {isLoading ? (
+              <div className="flex items-center justify-center">
+                <svg className="animate-spin h-5 w-5 mr-3 border-4 border-gray-200 rounded-full border-t-gray-600" viewBox="0 0 24 24"></svg>
+                Uploading...
+              </div>
+            ) : (
+              'Save'
+            )}
           </button>
         </div>
       </div>

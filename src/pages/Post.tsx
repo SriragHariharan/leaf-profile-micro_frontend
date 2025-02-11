@@ -34,7 +34,7 @@ const Post = () => {
     }
 
     axios
-      .get(`http://localhost:2000/api/v1/post/${postID}`)
+      .get(`http://localhost:2000/api/v1/post/${postID}/details`)
       .then((resp) => {
         console.log(resp?.data?.data?.post)
         setPost(resp?.data?.data?.post);

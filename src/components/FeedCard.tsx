@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Heart, MessageCircle, Share2, MoreVertical, Bookmark, Flag, Trash2, Trash, Save } from 'lucide-react';
 import { clsx } from 'clsx';
 import CommentsModal from '../modals/CommentsModal';
@@ -21,18 +21,14 @@ interface FeedCardProps {
   handleDeletePost: (postID: string) => void;
 }
 
-export default function FeedCard({ username, userImage, content, timestamp, image, postID, type, handleDeletePost }: FeedCardProps) {
-  const [isLiked, setIsLiked] = useState(false);
+export default function FeedCard({ username, userImage, content, timestamp, image, postID, type, handleDeletePost, isLiked }: FeedCardProps) {
+  const [postLiked, setIsPostLiked] = useState(isLiked);
   const [showMenu, setShowMenu] = useState(false);
   const [likes, setLikes] = useState(0);
   const [comments, setComments] = useState(0)
   const [showComments, setShowComments] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
-
-  const handleLike = () => {
-    setIsLiked(!isLiked);
-    setLikes(prev => isLiked ? prev - 1 : prev + 1);
-  };
+  console.log(isLiked, " isliked the post ???")
 
   const toggleContent = () => {
     setIsExpanded(!isExpanded);
@@ -40,12 +36,14 @@ export default function FeedCard({ username, userImage, content, timestamp, imag
 
   /* get interactions */
   const axiosInstance = useAxiosInstance();
-  axiosInstance.get("../post/interaction/" + postID)
-  .then(resp => {
-    setLikes(Number(resp?.data?.data?.likesCount));
-    setComments(Number(resp?.data?.data?.commentsCount));
-  })
-  .catch(err => console.log(err))
+  useEffect(() => {
+    axiosInstance.get("../post/interaction/" + postID)
+    .then(resp => {
+      setLikes(Number(resp?.data?.data?.likesCount));
+      setComments(Number(resp?.data?.data?.commentsCount));
+    })
+    .catch(err => console.log(err))
+  }, [])
 
   /* share a post(copy link to clipboard) */
   const handleShare = () => {
@@ -92,6 +90,25 @@ export default function FeedCard({ username, userImage, content, timestamp, imag
   const handleDelete = () => {
     handleDeletePost(postID);
   }
+
+  /* add interaction(like or unlike) */
+  const handleLikeInteraction = async () => {
+      try {
+          setIsPostLiked(!postLiked);
+          setLikes(postLiked ? likes - 1 : likes + 1);
+
+          await Promise.all([
+              axiosInstance.put("../feed/like/" + postID), // Send to timeline service
+              axiosInstance.post("../post/like/" + postID),     // Send to post service
+          ]);
+          console.log("post liked")
+
+      } catch (error) {
+          console.log(error)
+          setIsPostLiked(postLiked);
+          setLikes(postLiked ? likes + 1 : likes - 1);
+      }
+  };
 
   return (
     <>
@@ -170,13 +187,13 @@ export default function FeedCard({ username, userImage, content, timestamp, imag
 
           <div className="mt-4 flex items-center justify-between pt-3 border-t flex-wrap">
             <button 
-              onClick={handleLike}
+              onClick={handleLikeInteraction}
               className="flex items-center gap-2 text-sm hover:bg-gray-50 px-3 py-2 rounded-lg"
             >
               <Heart 
                 className={clsx(
                   "h-5 w-5 transition-colors",
-                  isLiked ? "fill-red-500 text-red-500" : "text-gray-600"
+                  postLiked ? "fill-red-500 text-red-500" : "text-gray-600"
                 )} 
               />
               <span>{likes} Likes</span>
@@ -217,3 +234,4 @@ export default function FeedCard({ username, userImage, content, timestamp, imag
     </>
   );
 }
+

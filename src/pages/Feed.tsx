@@ -75,6 +75,8 @@ function Feed() {
     fetchPosts(); // Fetch posts again
   };
 
+  console.log(posts[0], "::: final post");
+
   return (
     <div className="flex items-start justify-center min-h-screen">
       <div className="max-w-3xl w-full lg:mt-10">
@@ -98,6 +100,7 @@ function Feed() {
             postID={post?.postID}
             timestamp={post?.createdAt}
             type={"common"}
+            isLiked={post?.isLiked}
           />
         ))}
         
