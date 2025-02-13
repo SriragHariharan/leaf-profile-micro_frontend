@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Edit, MapPin, Calendar, UserPlus, LogOut, Hourglass, MessageCircleIcon, Flag } from 'lucide-react';
+import { Edit, MapPin, Calendar, UserPlus, LogOut, Hourglass, Flag } from 'lucide-react';
 import EditProfileModal from '../modals/EditProfileModal';
 // import ImageUploadModal from './ImageUploadModal';
 import useStore from "hostApp/GlobalStore";
@@ -10,8 +10,11 @@ import dayjs from 'dayjs';
 import { useParams } from 'react-router';
 
 import { showSuccessToast, showErrorToast, Toaster } from 'authMF/toastFunction';
+
+
 import { DEFAULT_PROFILE_IMAGE } from '../constants/constants';
 import ReportModal from '../modals/ReportModal';
+import MessageBtn from './MessageBtn';
 
 type Profile = {
   username: string | null;
@@ -152,7 +155,7 @@ export default function ProfileHeader({self}: {self: boolean}) {
       <Toaster />
       <div className="relative">
         <div 
-          className="h-32 sm:h-48 bg-cover bg-center"
+          className="h-48 sm:h-64 bg-cover bg-center"
           style={{
             backgroundImage: `url(${profile?.coverPicture})`
           }}
@@ -209,13 +212,7 @@ export default function ProfileHeader({self}: {self: boolean}) {
                 <span className="hidden sm:inline">Logout</span>
               </button>
               ) : profile.isFriend ? (
-                <button
-                  // onClick={} // or use a dedicated unfriend handler
-                  className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-blue-300 text-white rounded-lg hover:bg-blue-400"
-                >
-                  <MessageCircleIcon className="h-4 w-4" />
-                  <span className="hidden sm:inline">Message</span>
-                </button>
+                <MessageBtn userTwoID={ userID } />
               ) : profile?.friendStatus === 'pending' ? (
                 <div className="flex">
                   <button

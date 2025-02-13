@@ -109,7 +109,8 @@ module.exports = {
       },
       remotes: {
         hostApp: "host@http://localhost:8080/remoteEntry.js",
-        authMF: "authMF@http://localhost:8081/remoteEntry.js"
+        authMF: "authMF@http://localhost:8081/remoteEntry.js",
+        chatMF: "chatMF@http://localhost:8083/remoteEntry.js"
       },
       shared: {
         react: { eager: true },

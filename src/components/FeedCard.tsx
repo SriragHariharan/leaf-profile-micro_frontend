@@ -153,10 +153,10 @@ export default function FeedCard({ username, userImage, content, timestamp, imag
                     <Bookmark className="h-4 w-4" />
                     Save post
                   </button>
-                  <button className="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 flex items-center gap-2">
+                  {/* <button className="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 flex items-center gap-2">
                     <Trash2 className="h-4 w-4" />
                     Hide from timeline
-                  </button>
+                  </button> */}
                   <button onClick={() => setShowReportModal(true)} className="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 flex items-center gap-2 text-red-600">
                     <Flag className="h-4 w-4" />
                     Report post

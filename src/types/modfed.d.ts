@@ -22,3 +22,5 @@ declare module 'authMF/toastFunction' {
   export const showErrorToast: (message: string) => void;
   export const showSuccessToast: (message: string) => void;
 }
+
+declare module 'chatMF/MessageButton' {}
