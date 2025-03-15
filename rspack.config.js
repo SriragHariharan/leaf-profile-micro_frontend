@@ -105,12 +105,19 @@ module.exports = {
         "./FriendsPage": "./src/pages/Friends",
         "./FeedsPage": "./src/pages/Feed",
         "./PostsPage": "./src/pages/Post",
-        "./SearchPosts": "./src/pages/SearchPost"
+        "./SearchPosts": "./src/pages/SearchPost",
+        "./useAxiosInstance":"./src/axios/axiosInstance"
       },
       remotes: {
-        hostApp: "host@http://localhost:8080/remoteEntry.js",
-        authMF: "authMF@http://localhost:8081/remoteEntry.js",
-        chatMF: "chatMF@http://localhost:8083/remoteEntry.js"
+        // // dev environment
+        // hostApp: "host@http://localhost:8080/remoteEntry.js",
+        // authMF: "authMF@http://localhost:8081/remoteEntry.js",
+        // chatMF: "chatMF@http://localhost:8083/remoteEntry.js"
+
+        // prod environment
+        hostApp: "host@https://www.leaf.monster/remoteEntry.js",
+        authMF: "authMF@https://auth.leaf.monster/remoteEntry.js",
+        chatMF: "chatMF@https://chat.leaf.monster/remoteEntry.js"
       },
       shared: {
         react: { eager: true },
