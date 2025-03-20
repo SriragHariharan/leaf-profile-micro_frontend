@@ -26,6 +26,7 @@ function ProfileFeed({ userID, self }: ProfileFeedProps) {
         try {
             const response = await axiosInstance.get(`../feed/timeline/${userid}/?page=${page}`);
             const data = response.data?.data?.timeline; 
+            console.log("feed data ::: ",data);
 
             if (data.length > 0) {
                 setPosts((prevPosts: Post[]) => [...prevPosts, ...data]);
@@ -76,7 +77,7 @@ function ProfileFeed({ userID, self }: ProfileFeedProps) {
             {posts.map(post => (
                 <FeedCard
                     key={post?.id}
-                    username={post?.User?.username}
+                    username={post?.User?.username || "You"}
                     userImage={post?.User?.profilePic}
                     content={post?.content}
                     image={post?.imageURL}
@@ -84,7 +85,7 @@ function ProfileFeed({ userID, self }: ProfileFeedProps) {
                     timestamp={post?.createdAt}
                     type={self ? "self" : "common"}
                     handleDeletePost={handleDeletePost}
-                    isLiked={post?.Timelines[0]?.isLiked}
+                    isLiked={post?.Timelines[0]?.isLiked || false}
                 />
             ))}
 
