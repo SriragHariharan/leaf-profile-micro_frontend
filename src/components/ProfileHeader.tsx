@@ -212,7 +212,10 @@ export default function ProfileHeader({self}: {self: boolean}) {
                 <span className="hidden sm:inline">Logout</span>
               </button>
               ) : profile.isFriend ? (
-                <MessageBtn userTwoID={ userID } />
+                <div className="h2">Friends</div>
+                /* uncomment this when message feature is implemented correctly */
+                /* on clicking it will take to the message page where we can send message */
+                // <MessageBtn userTwoID={ userID } />
               ) : profile?.friendStatus === 'pending' ? (
                 <div className="flex">
                   <button
