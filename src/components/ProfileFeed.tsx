@@ -74,32 +74,40 @@ function ProfileFeed({ userID, self }: ProfileFeedProps) {
 
     return (
         <div className="mx-auto">
-            {posts.map(post => (
-                <FeedCard
-                    key={post?.id}
-                    username={post?.User?.username || "You"}
-                    userImage={post?.User?.profilePic}
-                    content={post?.content}
-                    image={post?.imageURL}
-                    postID={post?.postID}
-                    timestamp={post?.createdAt}
-                    type={self ? "self" : "common"}
-                    handleDeletePost={handleDeletePost}
-                    isLiked={post?.Timelines[0]?.isLiked || false}
-                />
-            ))}
+            {
+                Array.isArray(posts) && posts.map(post => (
+                    <FeedCard
+                        key={post?.id}
+                        username={post?.User?.username || post?.owner?.username || "You"}
+                        userImage={post?.User?.profilePic || post?.owner?.profilePic || "https://leaf-user-profile-pics.s3.us-east-1.amazonaws.com/default-avatar.jpg"}
+                        content={post?.content}
+                        image={post?.imageURL}
+                        postID={post?.postID}
+                        timestamp={post?.createdAt}
+                        type={self ? "self" : "common"}
+                        handleDeletePost={handleDeletePost}
+                        isLiked={post?.timelines?.[0]?.isLiked ?? post?.Timelines?.[0]?.isLiked ?? false}
+                        isCommented={false}
+                    />
+                ))
+            }
 
-            {loading && (
-                <p className="text-center text-gray-500 py-4 animate-pulse">
-                    Loading...
-                </p>
-            )}
 
-            {!hasMore && (
-                <div className="mt-6 p-4 bg-gray-100 text-gray-600 rounded-lg text-center">
-                    <p>No more posts to load</p>
-                </div>
-            )}
+            {
+                loading && (
+                    <p className="text-center text-gray-500 py-4 animate-pulse">
+                        Loading...
+                    </p>
+                )
+            }
+
+            {
+                !hasMore && (
+                    <div className="mt-6 p-4 bg-gray-100 text-gray-600 rounded-lg text-center">
+                        <p>No more posts to load</p>
+                    </div>
+                )
+            }
         </div>
     );
 }
