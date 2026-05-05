@@ -3,6 +3,7 @@ import useAxiosInstance from '../axios/axiosInstance';
 import FeedCard from './FeedCard';
 import { showErrorToast, showSuccessToast } from 'authMF/toastFunction';
 import { Post } from '../types';
+import { DEFAULT_PROFILE_IMAGE } from '../constants/constants';
 
 interface ProfileFeedProps {
     userID: string | undefined;
@@ -79,7 +80,7 @@ function ProfileFeed({ userID, self }: ProfileFeedProps) {
                     <FeedCard
                         key={post?.id}
                         username={post?.User?.username || post?.owner?.username || "You"}
-                        userImage={post?.User?.profilePic || post?.owner?.profilePic || "https://leaf-user-profile-pics.s3.us-east-1.amazonaws.com/default-avatar.jpg"}
+                        userImage={post?.User?.profilePic || post?.owner?.profilePic || DEFAULT_PROFILE_IMAGE}
                         content={post?.content}
                         image={post?.imageURL}
                         postID={post?.postID}

@@ -2,6 +2,7 @@ const rspack = require('@rspack/core')
 const refreshPlugin = require('@rspack/plugin-react-refresh')
 const isDev = process.env.NODE_ENV === 'development'
 const path = require('path');
+require('dotenv').config();
 
 const printCompilationMessage = require('./compilation.config.js');
 
@@ -109,15 +110,9 @@ module.exports = {
         "./useAxiosInstance":"./src/axios/axiosInstance"
       },
       remotes: {
-        // // dev environment
-        // hostApp: "host@http://localhost:8080/remoteEntry.js",
-        // authMF: "authMF@http://localhost:8081/remoteEntry.js",
-        // chatMF: "chatMF@http://localhost:8083/remoteEntry.js"
-
-        // prod environment
-        hostApp: "host@https://www.leaf.monster/remoteEntry.js",
-        authMF: "authMF@https://auth.leaf.monster/remoteEntry.js",
-        chatMF: "chatMF@https://chat.leaf.monster/remoteEntry.js"
+        hostApp: `host@${process.env.REACT_APP_HOST_REMOTE}`,
+        authMF: `authMF@${process.env.REACT_APP_AUTH_MF_REMOTE}`,
+        chatMF: `chatMF@${process.env.REACT_APP_CHAT_MF_REMOTE}`
       },
       shared: {
         react: { eager: true },
@@ -129,6 +124,13 @@ module.exports = {
     }),
     new rspack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
+      'process.env.REACT_APP_DEFAULT_PROFILE_IMAGE': JSON.stringify(process.env.REACT_APP_DEFAULT_PROFILE_IMAGE),
+      'process.env.REACT_APP_LEAF_USER_BASE_URL': JSON.stringify(process.env.REACT_APP_LEAF_USER_BASE_URL),
+      'process.env.REACT_APP_LEAF_PROFILE_REFRESH_TOKEN_URL': JSON.stringify(process.env.REACT_APP_LEAF_PROFILE_REFRESH_TOKEN_URL),
+      'process.env.REACT_APP_LEAF_POST_BASE_URL': JSON.stringify(process.env.REACT_APP_LEAF_POST_BASE_URL),
+      'process.env.REACT_APP_HOST_REMOTE': JSON.stringify(process.env.REACT_APP_HOST_REMOTE),
+      'process.env.REACT_APP_AUTH_MF_REMOTE': JSON.stringify(process.env.REACT_APP_AUTH_MF_REMOTE),
+      'process.env.REACT_APP_CHAT_MF_REMOTE': JSON.stringify(process.env.REACT_APP_CHAT_MF_REMOTE),
     }),
     new rspack.ProgressPlugin({}),
     new rspack.HtmlRspackPlugin({

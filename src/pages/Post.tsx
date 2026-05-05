@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router";
 import axios from "axios";
 import { Loader2, AlertCircle, Heart, MessageSquare } from "lucide-react";
-import { DEFAULT_PROFILE_IMAGE } from "../constants/constants";
+import { DEFAULT_PROFILE_IMAGE, LEAF_POST_BASE_URL } from "../constants/constants";
 import '../index.scss';
 
 interface Post {
@@ -34,7 +34,7 @@ const Post = () => {
     }
 
     axios
-      .get(`http://localhost:2000/api/v1/post/${postID}/details`)
+      .get(`${LEAF_POST_BASE_URL}/${postID}/details`)
       .then((resp) => {
         console.log(resp?.data?.data?.post)
         setPost(resp?.data?.data?.post);
