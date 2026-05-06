@@ -4,6 +4,7 @@ import FeedCard from './FeedCard';
 import { showErrorToast, showSuccessToast } from 'authMF/toastFunction';
 import { Post } from '../types';
 import { DEFAULT_PROFILE_IMAGE } from '../constants/constants';
+import { designRecipes } from 'hostApp/designRecipes';
 
 interface ProfileFeedProps {
     userID: string | undefined;
@@ -96,7 +97,7 @@ function ProfileFeed({ userID, self }: ProfileFeedProps) {
 
             {
                 loading && (
-                    <p className="text-center text-gray-500 py-4 animate-pulse">
+                    <p className="py-4 text-center text-ds-text-muted animate-pulse">
                         Loading...
                     </p>
                 )
@@ -104,7 +105,7 @@ function ProfileFeed({ userID, self }: ProfileFeedProps) {
 
             {
                 !hasMore && (
-                    <div className="mt-6 p-4 bg-gray-100 text-gray-600 rounded-lg text-center">
+                    <div className={`${designRecipes.panel} mt-6 p-4 text-center text-ds-text-secondary`}>
                         <p>No more posts to load</p>
                     </div>
                 )

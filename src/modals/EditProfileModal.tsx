@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { X, MapPin, Sparkles } from 'lucide-react';
+import { designRecipes } from 'hostApp/designRecipes';
 
 interface EditProfileModalProps {
   isOpen: boolean;
@@ -27,30 +28,30 @@ export default function EditProfileModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/55 p-4 backdrop-blur-[2px]">
-      <div className="w-full max-w-md overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-2xl">
-        <div className="flex items-center justify-between border-b border-gray-100 px-5 py-4">
+    <div className={designRecipes.modalOverlay}>
+      <div className={designRecipes.modalContainer}>
+        <div className={designRecipes.modalHeader}>
           <div className="flex items-center gap-2">
-            <div className="rounded-full bg-green-50 p-2 text-green-600">
+            <div className="rounded-full bg-ds-brand-50 p-2 text-ds-brand-600">
               <Sparkles className="h-4 w-4" />
             </div>
-            <h2 className="text-lg font-semibold text-gray-900">{titles[type]}</h2>
+            <h2 className="text-lg font-semibold text-ds-text-primary">{titles[type]}</h2>
           </div>
-          <button onClick={onClose} className="rounded-full p-2 text-gray-500 hover:bg-gray-100 hover:text-gray-700">
+          <button onClick={onClose} className={designRecipes.iconButton}>
             <X className="h-5 w-5" />
           </button>
         </div>
 
         <div className="space-y-4 p-5">
           {type === 'location' ? (
-            <div className="flex items-center gap-2 rounded-xl border border-gray-200 bg-gray-50/70 p-3 focus-within:border-green-500 focus-within:bg-white focus-within:ring-2 focus-within:ring-green-500/20">
-              <MapPin className="h-5 w-5 text-gray-500" />
+            <div className="flex items-center gap-2 rounded-xl border border-ds-border-subtle bg-ds-surface-muted/70 p-3 focus-within:border-ds-brand-500 focus-within:bg-ds-surface-card focus-within:ring-2 focus-within:ring-ds-brand-500/20">
+              <MapPin className="h-5 w-5 text-ds-text-muted" />
               <input
                 type="text"
                 value={value}
                 onChange={(e) => setValue(e.target.value)}
                 placeholder="Enter your location"
-                className="flex-1 bg-transparent text-sm text-gray-800 outline-none placeholder:text-gray-400"
+                className="flex-1 bg-transparent text-sm text-ds-text-primary outline-none placeholder:text-ds-text-muted"
               />
             </div>
           ) : (
@@ -59,14 +60,14 @@ export default function EditProfileModal({
               onChange={(e) => setValue(e.target.value)}
               placeholder={type === 'description' ? "Write something about yourself..." : "Enter your username"}
               rows={type === 'description' ? 4 : 1}
-              className="w-full resize-none rounded-xl border border-gray-200 bg-gray-50/70 p-3 text-sm text-gray-800 outline-none transition-all placeholder:text-gray-400 focus:border-green-500 focus:bg-white focus:ring-2 focus:ring-green-500/20"
+              className={`${designRecipes.inputBase} resize-none`}
             />
           )}
 
           <div className="flex justify-end gap-3 pt-1">
             <button
               onClick={onClose}
-              className="rounded-xl border border-gray-200 px-4 py-2 text-sm font-medium text-gray-600 hover:bg-gray-50"
+              className={designRecipes.buttonSecondary}
             >
               Cancel
             </button>
@@ -75,7 +76,7 @@ export default function EditProfileModal({
                 onSave(value);
                 onClose();
               }}
-              className="rounded-xl bg-green-600 px-4 py-2 text-sm font-semibold text-white hover:bg-green-700"
+              className={`${designRecipes.buttonPrimary} px-4`}
             >
               Save
             </button>

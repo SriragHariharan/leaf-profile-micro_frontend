@@ -4,6 +4,7 @@ import CreatePost from '../components/CreatePost';
 import FeedCard from '../components/FeedCard';
 import useAxiosInstance from '../axios/axiosInstance';
 import { DEFAULT_PROFILE_IMAGE } from '../constants/constants';
+import { designRecipes } from 'hostApp/designRecipes';
 
 // Define the type for a post
 interface Post {
@@ -83,9 +84,9 @@ function Feed() {
         <CreatePost />
         
         {/* Refresh Button */}
-        <button 
+        <button
           onClick={refreshFeed} 
-          className="mb-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
+          className={`${designRecipes.buttonPrimary} mb-4 px-4`}
         >
           Refresh Feed
         </button>
@@ -106,14 +107,14 @@ function Feed() {
         
         {loading && (
           <div className="flex items-center justify-center min-h-screen">
-            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-gray-900"></div>
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-ds-text-primary"></div>
           </div>
         )}
         
         {!hasMore && (
           <div className="flex items-center justify-center">
-            <div className="bg-gray-100 border border-gray-300 rounded-lg p-4 shadow-md text-center">
-              <p className="text-gray-700">No more posts to load.</p>
+            <div className={`${designRecipes.panel} p-4 text-center`}>
+              <p className="text-ds-text-secondary">No more posts to load.</p>
             </div>
           </div>
         )}

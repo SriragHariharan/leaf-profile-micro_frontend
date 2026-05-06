@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import AddBucketListModal from '../modals/AddBucketListModal';
 import { Plus } from 'lucide-react';
 import useAxiosInstance from '../axios/axiosInstance';
+import { designRecipes } from 'hostApp/designRecipes';
 
 function BucketListCard({ userID, self }: {userID: string|undefined, self: boolean}) {
     const [bucketList, setBucketList] = useState<Array<{ destination: string, notes: string, id: number }>>([]);
@@ -30,7 +31,7 @@ function BucketListCard({ userID, self }: {userID: string|undefined, self: boole
                     {self && (
                     <button
                         onClick={() => setShowBucketModal(true)}
-                        className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
+                        className={`${designRecipes.buttonPrimary} flex items-center gap-2 px-4`}
                     >
                         <Plus className="h-4 w-4" />
                         Add Destination
@@ -39,9 +40,9 @@ function BucketListCard({ userID, self }: {userID: string|undefined, self: boole
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {bucketList.map((item) => (
-                    <div key={item.id} className="bg-white p-4 rounded-lg shadow-sm">
+                    <div key={item.id} className={`${designRecipes.panel} p-4`}>
                         <h3 className="text-lg font-semibold">{item.destination}</h3>
-                        <p className="mt-2 text-gray-600">{item.notes}</p>
+                        <p className="mt-2 text-ds-text-secondary">{item.notes}</p>
                     </div>
                     ))}
                 </div>

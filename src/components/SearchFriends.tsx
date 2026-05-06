@@ -4,6 +4,7 @@ import InfoCard from './InfoCard'
 import SearchBar from './SearchBar'
 import useAxiosInstance from '../axios/axiosInstance'
 import { User } from '../interfaces/User.interface'
+import { designRecipes } from 'hostApp/designRecipes'
 
 
 function SearchFriends() {
@@ -20,7 +21,7 @@ function SearchFriends() {
     } 
   return (
     <>
-      <div className="mb-6">
+      <div className={`${designRecipes.panel} mb-6 p-4`}>
           <SearchBar
             value={search}
             onChange={setSearch}

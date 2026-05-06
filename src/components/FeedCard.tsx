@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Heart, MessageCircle, Share2, MoreVertical, Bookmark, Flag, Trash2, Trash, Save } from 'lucide-react';
+import { Heart, MessageCircle, Share2, MoreVertical, Bookmark, Flag, Trash, Save } from 'lucide-react';
 import { clsx } from 'clsx';
 import CommentsModal from '../modals/CommentsModal';
 import useAxiosInstance from '../axios/axiosInstance';
@@ -7,6 +7,7 @@ import { showSuccessToast, Toaster, showErrorToast } from 'authMF/toastFunction'
 import ReportPostModal from '../modals/ReportPostModal';
 import { DEFAULT_PROFILE_IMAGE } from '../constants/constants';
 import dayjs from 'dayjs';
+import { designRecipes } from 'hostApp/designRecipes';
 
 interface FeedCardProps {
   postID: string;
@@ -113,7 +114,7 @@ export default function FeedCard({ username, userImage, content, timestamp, imag
   return (
     <>
       <Toaster />
-      <div className="bg-white rounded-lg shadow-sm mb-4 overflow-hidden max-w-4xl">
+      <div className={`${designRecipes.panel} mb-4 overflow-hidden max-w-4xl`}>
         <div className="p-4">
           <div className="flex items-center justify-between flex-wrap">
             <div className="flex items-center gap-3">
@@ -123,41 +124,37 @@ export default function FeedCard({ username, userImage, content, timestamp, imag
                 className="w-12 h-12 rounded-full object-cover"  // Fixed size for profile image
               />
               <div>
-                <h3 className="font-semibold text-gray-900 text-base md:text-lg">{username}</h3>
-                <p className="text-sm text-gray-500">{dayjs(timestamp).format('MMMM D, YYYY h:mm A')}</p>
+                <h3 className="font-semibold text-ds-text-primary text-base md:text-lg">{username}</h3>
+                <p className="text-sm text-ds-text-muted">{dayjs(timestamp).format('MMMM D, YYYY h:mm A')}</p>
                 
               </div>
             </div>
             
             <div className="relative">
               {
-                type === "self" && <Trash onClick={handleDelete} className='text-red-500 cursor-pointer' />
+                type === "self" && <Trash onClick={handleDelete} className='text-ds-state-danger cursor-pointer' />
               }
               {
                 type === "common" && (
                   <button 
                     onClick={() => setShowMenu(!showMenu)}
-                    className="p-2 hover:bg-gray-100 rounded-full"
+                    className="p-2 hover:bg-ds-surface-muted rounded-full"
                   >
-                    <MoreVertical className="h-5 w-5 text-gray-600" />
+                    <MoreVertical className="h-5 w-5 text-ds-text-secondary" />
                   </button>
                 )
               }
               {
-                type === "save" && <Save onClick={handleUnsavePost} className='text-red-500 cursor-pointer' />
+                type === "save" && <Save onClick={handleUnsavePost} className='text-ds-state-danger cursor-pointer' />
               }
               
               {showMenu && (
-                <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-1">
-                  <button onClick={handleSavePost} className="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 flex items-center gap-2">
+                <div className="absolute right-0 mt-2 w-48 bg-ds-surface-card rounded-lg shadow-dsLg py-1">
+                  <button onClick={handleSavePost} className="w-full px-4 py-2 text-left text-sm hover:bg-ds-surface-muted flex items-center gap-2">
                     <Bookmark className="h-4 w-4" />
                     Save post
                   </button>
-                  {/* <button className="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 flex items-center gap-2">
-                    <Trash2 className="h-4 w-4" />
-                    Hide from timeline
-                  </button> */}
-                  <button onClick={() => setShowReportModal(true)} className="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 flex items-center gap-2 text-red-600">
+                  <button onClick={() => setShowReportModal(true)} className="w-full px-4 py-2 text-left text-sm hover:bg-ds-surface-muted flex items-center gap-2 text-ds-state-danger">
                     <Flag className="h-4 w-4" />
                     Report post
                   </button>
@@ -166,10 +163,10 @@ export default function FeedCard({ username, userImage, content, timestamp, imag
             </div>
           </div>
 
-          <p className="mt-3 text-gray-800 break-words text-sm max-w-full overflow-hidden whitespace-normal">
+          <p className="mt-3 text-ds-text-primary break-words text-sm max-w-full overflow-hidden whitespace-normal">
             {isExpanded ? content : `${content.substring(0, 200)}...`}
             {content.length > 200 && (
-              <button onClick={toggleContent} className="text-blue-500 ml-1">
+              <button onClick={toggleContent} className="text-ds-state-info ml-1">
                 {isExpanded ? 'Read less' : 'Read more...'}
               </button>
             )}
@@ -188,12 +185,12 @@ export default function FeedCard({ username, userImage, content, timestamp, imag
           <div className="mt-4 flex items-center justify-between pt-3 border-t flex-wrap">
             <button 
               onClick={handleLikeInteraction}
-              className="flex items-center gap-2 text-sm hover:bg-gray-50 px-3 py-2 rounded-lg"
+              className="flex items-center gap-2 text-sm hover:bg-ds-surface-muted px-3 py-2 rounded-lg"
             >
               <Heart 
                 className={clsx(
                   "h-5 w-5 transition-colors",
-                  postLiked ? "fill-red-500 text-red-500" : "text-gray-600"
+                  postLiked ? "fill-ds-state-danger text-ds-state-danger" : "text-ds-text-secondary"
                 )} 
               />
               <span>{likes} Likes</span>
@@ -201,18 +198,18 @@ export default function FeedCard({ username, userImage, content, timestamp, imag
             
             <button 
               onClick={() => setShowComments(true)}
-              className="flex items-center gap-2 text-sm hover:bg-gray-50 px-3 py-2 rounded-lg text-gray-600"
+              className="flex items-center gap-2 text-sm hover:bg-ds-surface-muted px-3 py-2 rounded-lg text-ds-text-secondary"
             >
               <MessageCircle 
                 className={clsx(
                   "h-5 w-5",
-                "text-gray-600"
+                "text-ds-text-secondary"
                 )}
               />
               <span>{comments} Comment</span>
             </button>
             
-            <button onClick={handleShare} className="flex items-center gap-2 text-sm hover:bg-gray-50 px-3 py-2 rounded-lg text-gray-600">
+            <button onClick={handleShare} className="flex items-center gap-2 text-sm hover:bg-ds-surface-muted px-3 py-2 rounded-lg text-ds-text-secondary">
               <Share2 className="h-5 w-5" />
               <span>Share</span>
             </button>

@@ -8,6 +8,7 @@ interface CreatePostModalProps {
 }
 
 import { showErrorToast, Toaster } from 'authMF/toastFunction';
+import { designRecipes } from 'hostApp/designRecipes';
 
 const CreatePostModal: React.FC<CreatePostModalProps> = ({ isOpen, onClose }) => {
   const [content, setContent] = useState('');
@@ -58,22 +59,22 @@ const CreatePostModal: React.FC<CreatePostModalProps> = ({ isOpen, onClose }) =>
   const isPostDisabled = isLoading || (!content.trim() && !selectedFile);
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/55 p-4 backdrop-blur-[2px]">
+    <div className={designRecipes.modalOverlay}>
       <Toaster />
-      <div className="w-full max-w-2xl overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-2xl">
-        <div className="flex items-center justify-between border-b border-gray-100 px-6 py-4">
+      <div className={`${designRecipes.modalContainer} max-w-2xl`}>
+        <div className={designRecipes.modalHeader}>
           <div className="flex items-center gap-2">
-            <div className="rounded-full bg-green-50 p-2 text-green-600">
+            <div className="rounded-full bg-ds-brand-50 p-2 text-ds-brand-600">
               <Sparkles className="h-4 w-4" />
             </div>
             <div>
-              <h3 className="text-lg font-semibold text-gray-900">Create Post</h3>
-              <p className="text-xs text-gray-500">Share an update with your network</p>
+              <h3 className="text-lg font-semibold text-ds-text-primary">Create Post</h3>
+              <p className="text-xs text-ds-text-muted">Share an update with your network</p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="rounded-full p-2 text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-700"
+            className={designRecipes.iconButton}
           >
             <X size={20} />
           </button>
@@ -81,7 +82,7 @@ const CreatePostModal: React.FC<CreatePostModalProps> = ({ isOpen, onClose }) =>
 
         <div className="space-y-5 p-6">
           <textarea
-            className="h-36 w-full resize-none rounded-xl border border-gray-200 bg-gray-50/70 px-4 py-3 text-sm text-gray-800 outline-none transition-all placeholder:text-gray-400 focus:border-green-500 focus:bg-white focus:ring-2 focus:ring-green-500/20"
+            className={`${designRecipes.inputBase} h-36 resize-none py-3`}
             placeholder="What's on your mind?"
             value={content}
             onChange={(e) => setContent(e.target.value)}
@@ -96,28 +97,28 @@ const CreatePostModal: React.FC<CreatePostModalProps> = ({ isOpen, onClose }) =>
           />
           <label
             htmlFor="file-upload"
-            className="flex cursor-pointer items-center justify-between rounded-xl border border-green-100 bg-green-50/60 px-4 py-3 transition-colors hover:bg-green-50"
+            className="flex cursor-pointer items-center justify-between rounded-xl border border-ds-brand-100 bg-ds-brand-50/60 px-4 py-3 transition-colors hover:bg-ds-brand-50"
           >
-            <span className="flex items-center gap-2 text-sm font-medium text-green-700">
+            <span className="flex items-center gap-2 text-sm font-medium text-ds-brand-700">
               <Image size={18} />
               Add Photo
             </span>
-            <span className="text-xs text-green-600">JPG, PNG, WEBP</span>
+            <span className="text-xs text-ds-brand-600">JPG, PNG, WEBP</span>
           </label>
 
           {selectedFile && previewUrl && (
-            <div className="rounded-xl border border-gray-200 bg-white p-3">
+            <div className="rounded-xl border border-ds-border-subtle bg-ds-surface-card p-3">
               <div className="mb-2 flex items-center justify-between">
-                <p className="truncate text-sm font-medium text-gray-700">{selectedFile.name}</p>
+                <p className="truncate text-sm font-medium text-ds-text-secondary">{selectedFile.name}</p>
                 <button
                   type="button"
                   onClick={() => setSelectedFile(null)}
-                  className="rounded-full bg-white p-1.5 text-red-500 shadow-sm ring-1 ring-gray-200 transition-colors hover:bg-red-50"
+                  className="rounded-full bg-ds-surface-card p-1.5 text-ds-state-danger shadow-dsSm ring-1 ring-ds-border-subtle transition-colors hover:bg-ds-state-dangerSoft"
                 >
                   <X size={14} />
                 </button>
               </div>
-              <div className="relative h-56 w-full overflow-hidden rounded-lg border border-gray-100">
+              <div className="relative h-56 w-full overflow-hidden rounded-lg border border-ds-border-subtle">
                 <img
                   src={previewUrl}
                   alt="preview"
@@ -128,14 +129,14 @@ const CreatePostModal: React.FC<CreatePostModalProps> = ({ isOpen, onClose }) =>
           )}
 
           {isLoading && (
-            <div className="flex items-center justify-center gap-2 rounded-lg bg-gray-50 py-2 text-sm text-gray-600">
+            <div className="flex items-center justify-center gap-2 rounded-lg bg-ds-surface-muted py-2 text-sm text-ds-text-secondary">
               <Loader size={16} className="animate-spin" />
               Posting your update...
             </div>
           )}
 
           <button
-            className="flex w-full items-center justify-center rounded-xl bg-green-600 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-green-700 disabled:cursor-not-allowed disabled:bg-green-300"
+            className={`${designRecipes.buttonPrimary} flex w-full items-center justify-center py-2.5 disabled:cursor-not-allowed`}
             onClick={handleAddPost}
             disabled={isPostDisabled}
           >

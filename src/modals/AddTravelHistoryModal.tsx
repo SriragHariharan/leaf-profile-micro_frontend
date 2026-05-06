@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { X, Plus, Minus, Sparkles } from 'lucide-react';
+import { designRecipes } from 'hostApp/designRecipes';
 
 interface AddTravelHistoryModalProps {
   isOpen: boolean;
@@ -42,23 +43,23 @@ export default function AddTravelHistoryModal({ isOpen, onClose, onSave }: AddTr
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/55 p-4 backdrop-blur-[2px]">
-      <div className="w-full max-w-md overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-2xl">
-        <div className="flex items-center justify-between border-b border-gray-100 p-4">
+    <div className={designRecipes.modalOverlay}>
+      <div className={designRecipes.modalContainer}>
+        <div className={designRecipes.modalHeader}>
           <div className="flex items-center gap-2">
-            <div className="rounded-full bg-green-50 p-2 text-green-600">
+            <div className="rounded-full bg-ds-brand-50 p-2 text-ds-brand-600">
               <Sparkles className="h-4 w-4" />
             </div>
-            <h2 className="text-lg font-semibold text-gray-900">Add Travel History</h2>
+            <h2 className="text-lg font-semibold text-ds-text-primary">Add Travel History</h2>
           </div>
-          <button onClick={onClose} className="rounded-full p-2 text-gray-500 hover:bg-gray-100 hover:text-gray-700">
+          <button onClick={onClose} className={designRecipes.iconButton}>
             <X className="h-5 w-5" />
           </button>
         </div>
 
         <div className="p-4 space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-ds-text-secondary mb-1">
               Location
             </label>
             <input
@@ -66,12 +67,12 @@ export default function AddTravelHistoryModal({ isOpen, onClose, onSave }: AddTr
               value={destination}
               onChange={(e) => setDestination(e.target.value)}
               placeholder="e.g., Switzerland"
-              className="w-full rounded-xl border border-gray-200 bg-gray-50/70 px-4 py-2.5 text-sm outline-none transition-all placeholder:text-gray-400 focus:border-green-500 focus:bg-white focus:ring-2 focus:ring-green-500/20"
+              className={designRecipes.inputBase}
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-ds-text-secondary mb-1">
               Year
             </label>
             <input
@@ -80,12 +81,12 @@ export default function AddTravelHistoryModal({ isOpen, onClose, onSave }: AddTr
               onChange={(e) => setYear(parseInt(e.target.value))}
               min="1900"
               max={new Date().getFullYear()}
-              className="w-full rounded-xl border border-gray-200 bg-gray-50/70 px-4 py-2.5 text-sm outline-none transition-all focus:border-green-500 focus:bg-white focus:ring-2 focus:ring-green-500/20"
+              className={designRecipes.inputBase}
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-ds-text-secondary mb-1">
               Places Visited
             </label>
             {places.map((place, index) => (
@@ -95,12 +96,12 @@ export default function AddTravelHistoryModal({ isOpen, onClose, onSave }: AddTr
                   value={place}
                   onChange={(e) => handlePlaceChange(index, e.target.value)}
                   placeholder="e.g., Zermatt"
-                  className="flex-1 rounded-xl border border-gray-200 bg-gray-50/70 px-4 py-2.5 text-sm outline-none transition-all placeholder:text-gray-400 focus:border-green-500 focus:bg-white focus:ring-2 focus:ring-green-500/20"
+                  className={`${designRecipes.inputBase} flex-1`}
                 />
                 {places.length > 1 && (
                   <button
                     onClick={() => handleRemovePlace(index)}
-                    className="rounded-xl p-2 text-red-500 hover:bg-red-50"
+                    className="rounded-xl p-2 text-ds-state-danger hover:bg-ds-state-dangerSoft"
                   >
                     <Minus className="h-5 w-5" />
                   </button>
@@ -109,7 +110,7 @@ export default function AddTravelHistoryModal({ isOpen, onClose, onSave }: AddTr
             ))}
             <button
               onClick={handleAddPlace}
-              className="inline-flex items-center gap-2 rounded-xl border border-green-200 bg-green-50 px-4 py-2 text-sm font-medium text-green-700 hover:bg-green-100"
+              className="inline-flex items-center gap-2 rounded-xl border border-ds-brand-100 bg-ds-brand-50 px-4 py-2 text-sm font-medium text-ds-brand-700 hover:bg-ds-brand-100"
             >
               <Plus className="h-4 w-4" />
               Add Place
@@ -117,17 +118,17 @@ export default function AddTravelHistoryModal({ isOpen, onClose, onSave }: AddTr
           </div>
         </div>
 
-        <div className="flex justify-end gap-3 border-t border-gray-100 p-4">
+        <div className="flex justify-end gap-3 border-t border-ds-border-subtle p-4">
           <button
             onClick={onClose}
-            className="rounded-xl border border-gray-200 px-4 py-2 text-sm font-medium text-gray-600 hover:bg-gray-50"
+            className={designRecipes.buttonSecondary}
           >
             Cancel
           </button>
           <button
             onClick={handleSubmit}
             disabled={!destination.trim() || places.every(place => !place.trim())}
-            className="rounded-xl bg-green-600 px-4 py-2 text-sm font-semibold text-white hover:bg-green-700 disabled:cursor-not-allowed disabled:bg-green-300"
+            className={`${designRecipes.buttonPrimary} disabled:cursor-not-allowed`}
           >
             Save
           </button>

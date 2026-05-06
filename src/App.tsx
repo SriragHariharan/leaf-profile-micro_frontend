@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter as Router, Routes, Route } from 'react-router';
+import "hostApp/themeBootstrap";
 import './index.scss';
 import Profile from './pages/Profile';
 import Gallery from './pages/Gallery';

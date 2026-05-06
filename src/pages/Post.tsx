@@ -4,6 +4,7 @@ import axios from "axios";
 import { Loader2, AlertCircle, Heart, MessageSquare } from "lucide-react";
 import { DEFAULT_PROFILE_IMAGE, LEAF_POST_BASE_URL } from "../constants/constants";
 import '../index.scss';
+import { designRecipes } from "hostApp/designRecipes";
 
 interface Post {
   id: string;
@@ -50,7 +51,7 @@ const Post = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <Loader2 className="h-8 w-8 animate-spin text-blue-500" />
+        <Loader2 className="h-8 w-8 animate-spin text-ds-brand-600" />
       </div>
     );
   }
@@ -58,7 +59,7 @@ const Post = () => {
   if (error) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <div className="bg-red-100 text-red-600 p-4 rounded-md flex items-center gap-2">
+        <div className={`${designRecipes.panel} flex items-center gap-2 bg-ds-state-dangerSoft p-4 text-ds-state-danger`}>
           <AlertCircle className="h-5 w-5" />
           {error}
         </div>
@@ -69,7 +70,7 @@ const Post = () => {
   if (!post) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <div className="bg-yellow-100 text-yellow-600 p-4 rounded-md flex items-center gap-2">
+        <div className={`${designRecipes.panel} flex items-center gap-2 bg-ds-state-warningSoft p-4 text-ds-state-warning`}>
           <AlertCircle className="h-5 w-5" />
           Post not found.
         </div>
@@ -78,7 +79,7 @@ const Post = () => {
   }
 
   return (
-    <div className="bg-white rounded-lg shadow-md p-6 max-w-2xl mx-auto mt-8">
+    <div className={`${designRecipes.panel} mx-auto mt-8 max-w-2xl p-6`}>
       {/* User Info */}
       <div className="flex items-center gap-4">
         <img
@@ -87,17 +88,17 @@ const Post = () => {
           className="w-12 h-12 rounded-full object-cover"
         />
         <div>
-          <h3 className="font-semibold text-gray-900 text-base md:text-lg">
+          <h3 className="font-semibold text-ds-text-primary text-base md:text-lg">
             {post.user.username}
           </h3>
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-ds-text-muted">
             {new Date(post.createdAt).toLocaleString()}
           </p>
         </div>
       </div>
 
       {/* Post Content */}
-      <p className="mt-3 text-gray-800 break-words text-base">{post.content}</p>
+      <p className="mt-3 text-ds-text-primary break-words text-base">{post.content}</p>
 
       {/* Post Image */}
       {post.imageURL && (
@@ -111,14 +112,14 @@ const Post = () => {
       )}
 
       {/* Post Engagement */}
-      <div className="mt-4 flex items-center justify-between text-gray-600">
+      <div className="mt-4 flex items-center justify-between text-ds-text-secondary">
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-1">
-            <Heart className="h-5 w-5 text-red-500" />
+            <Heart className="h-5 w-5 text-ds-state-danger" />
             <span className="text-sm font-medium">{post.likesCount} Likes</span>
           </div>
           <div className="flex items-center gap-1">
-            <MessageSquare className="h-5 w-5 text-blue-500" />
+            <MessageSquare className="h-5 w-5 text-ds-state-info" />
             <span className="text-sm font-medium">{post.commentsCount} Comments</span>
           </div>
         </div>

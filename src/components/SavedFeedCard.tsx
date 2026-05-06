@@ -5,6 +5,7 @@ import { Link } from 'react-router'
 import dayjs from 'dayjs'
 import useAxiosInstance from '../axios/axiosInstance'
 import { Toaster, showSuccessToast } from 'authMF/toastFunction';
+import { designRecipes } from 'hostApp/designRecipes';
 
 interface SavedPosts {
     postID: string
@@ -30,7 +31,7 @@ function SavedFeedCard({postID, profilepic, username, createdAt, content, imageU
     }
 
   return (
-        <div className="bg-white rounded-xl shadow-sm overflow-hidden pb-4">
+        <div className={`${designRecipes.panel} overflow-hidden pb-4`}>
             <Toaster />
             {/* Post Header */}
             <div className="p-4 flex items-center justify-between">
@@ -41,8 +42,8 @@ function SavedFeedCard({postID, profilepic, username, createdAt, content, imageU
                   className="w-10 h-10 rounded-full object-cover"
                 />
                 <div>
-                    <h3 className="font-semibold text-gray-800">{username}</h3>
-                    <p className="text-sm text-gray-500">
+                    <h3 className="font-semibold text-ds-text-primary">{username}</h3>
+                    <p className="text-sm text-ds-text-muted">
                         {dayjs(createdAt).format('MMMM D, YYYY h:mm A')}
                     </p>
                 </div>
@@ -50,19 +51,19 @@ function SavedFeedCard({postID, profilepic, username, createdAt, content, imageU
               <div className="relative group">
                 <button
                     onClick={handleUnsavePost}
-                    className="p-2 hover:bg-gray-300 rounded-full transition-colors"
+                    className="p-2 hover:bg-ds-surface-muted rounded-full transition-colors"
                     title='Unsave post'
                 >
-                    <Bookmark className="w-5 h-5 text-red-500 " />
+                    <Bookmark className="w-5 h-5 text-ds-state-danger " />
                 </button>
               </div>
             </div>
 
             {/* Post Content */}
-            <p className="mt-3 p-4 text-gray-800 break-words text-sm max-w-full overflow-hidden whitespace-normal">
+            <p className="mt-3 p-4 text-ds-text-primary break-words text-sm max-w-full overflow-hidden whitespace-normal">
                 {isExpanded ? content : `${content.substring(0, 200)}...`}
                 {content.length > 200 && (
-                <button onClick={toggleContent} className="text-blue-500 ml-1">
+                <button onClick={toggleContent} className="text-ds-state-info ml-1">
                     {isExpanded ? 'Read less' : 'Read more...'}
                 </button>
                 )}

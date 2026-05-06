@@ -14,6 +14,7 @@ import { showSuccessToast, showErrorToast, Toaster } from 'authMF/toastFunction'
 
 import { DEFAULT_PROFILE_IMAGE } from '../constants/constants';
 import ReportModal from '../modals/ReportModal';
+import { designRecipes } from 'hostApp/designRecipes';
 
 type Profile = {
   username: string | null;
@@ -156,14 +157,14 @@ export default function ProfileHeader({self}: {self: boolean}) {
   const profileImage = profile.profilePicture || DEFAULT_PROFILE_IMAGE;
   const coverStyle = profile.coverPicture
     ? { backgroundImage: `url(${profile.coverPicture})` }
-    : { backgroundImage: "linear-gradient(120deg, #0f172a 0%, #1f2937 35%, #065f46 100%)" };
+    : { backgroundImage: "linear-gradient(120deg, var(--ds-color-text-primary) 0%, var(--ds-color-text-secondary) 35%, var(--ds-color-brand-700) 100%)" };
 
   const renderActionButtons = () => {
     if (self) {
       return (
         <button
           onClick={handleLogout}
-          className="inline-flex items-center gap-2 rounded-xl border border-red-200 bg-red-50 px-4 py-2 text-sm font-semibold text-red-600 transition-colors hover:bg-red-100"
+          className={`${designRecipes.buttonSecondary} inline-flex items-center gap-2 border-ds-state-danger/30 bg-ds-state-dangerSoft text-ds-state-danger hover:bg-ds-state-dangerSoft`}
         >
           <LogOut className="h-4 w-4" />
           Logout
@@ -173,7 +174,7 @@ export default function ProfileHeader({self}: {self: boolean}) {
 
     if (profile.isFriend) {
       return (
-        <div className="inline-flex items-center rounded-xl border border-green-200 bg-green-50 px-4 py-2 text-sm font-semibold text-green-700">
+        <div className={designRecipes.statusSuccess}>
           Friends
         </div>
       );
@@ -184,14 +185,14 @@ export default function ProfileHeader({self}: {self: boolean}) {
         <div className="flex items-center gap-2">
           <button
             onClick={handleRejectFriendship}
-            className="inline-flex items-center gap-2 rounded-xl border border-yellow-200 bg-yellow-50 px-4 py-2 text-sm font-semibold text-yellow-700 transition-colors hover:bg-yellow-100"
+            className={`${designRecipes.statusWarning} hover:bg-ds-state-warningSoft`}
           >
             <Hourglass className="h-4 w-4" />
             Reject
           </button>
           <button
             onClick={handleAcceptFriendship}
-            className="inline-flex items-center gap-2 rounded-xl bg-green-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-green-700"
+            className={`${designRecipes.buttonPrimary} inline-flex items-center gap-2 px-4`}
           >
             <Hourglass className="h-4 w-4" />
             Accept
@@ -203,7 +204,7 @@ export default function ProfileHeader({self}: {self: boolean}) {
     return (
       <button
         onClick={handleSendFriendRequest}
-        className="inline-flex items-center gap-2 rounded-xl bg-green-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-green-700"
+        className={`${designRecipes.buttonPrimary} inline-flex items-center gap-2 px-4`}
       >
         <UserPlus className="h-4 w-4" />
         Add Friend
@@ -212,21 +213,21 @@ export default function ProfileHeader({self}: {self: boolean}) {
   };
 
   return (
-    <div className="-mx-4 overflow-hidden border-y border-gray-200 bg-white font-sans shadow-sm sm:mx-0 sm:rounded-2xl sm:border sm:border-gray-200">
+    <div className="-mx-4 overflow-hidden border-y border-ds-border-subtle bg-ds-surface-card font-sans shadow-dsSm sm:mx-0 sm:rounded-2xl sm:border sm:border-ds-border-subtle">
       <Toaster />
       <div className="relative">
         <div 
           className="h-36 bg-cover bg-center sm:h-48 lg:h-56"
           style={coverStyle}
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-black/10 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-ds-text-primary/35 via-ds-text-primary/10 to-transparent" />
         {
           self && (
             <button 
               onClick={openCoverModal}
-              className="absolute right-3 top-3 rounded-full border border-white/60 bg-white/85 p-2 shadow-sm backdrop-blur transition-colors hover:bg-white sm:right-4 sm:top-4"
+              className="absolute right-3 top-3 rounded-full border border-ds-surface-card/60 bg-ds-surface-card/90 p-2 shadow-dsSm backdrop-blur transition-colors hover:bg-ds-surface-card sm:right-4 sm:top-4"
             >
-              <Edit className="h-4 w-4 text-gray-700" />
+              <Edit className="h-4 w-4 text-ds-text-secondary" />
             </button>
           )
         }
@@ -240,42 +241,42 @@ export default function ProfileHeader({self}: {self: boolean}) {
                 <img
                   src={profileImage}
                   alt="Profile"
-                  className="h-24 w-24 rounded-full border-4 border-white object-cover shadow-md sm:h-28 sm:w-28 lg:h-32 lg:w-32"
+                  className="h-24 w-24 rounded-full border-4 border-ds-surface-card object-cover shadow-dsMd sm:h-28 sm:w-28 lg:h-32 lg:w-32"
                 />
                 {
                   self && (
                     <button 
                       onClick={openProfileModal}
-                      className="absolute bottom-1 right-1 rounded-full bg-white p-2 shadow-sm ring-1 ring-gray-200 transition-colors hover:bg-gray-50"
+                      className="absolute bottom-1 right-1 rounded-full bg-ds-surface-card p-2 shadow-dsSm ring-1 ring-ds-border-subtle transition-colors hover:bg-ds-surface-muted"
                     >
-                      <Edit className="h-4 w-4 text-gray-700" />
+                      <Edit className="h-4 w-4 text-ds-text-secondary" />
                     </button>
                   )
                 }
               </div>
               <div className="pb-1">
                 <div className="flex items-center">
-                  <h1 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">{displayName}</h1>
+                  <h1 className="text-2xl font-bold tracking-tight text-ds-text-primary sm:text-3xl">{displayName}</h1>
                   {
                     self && (
                       <button 
                         onClick={() => setEditModal({ type: 'username', isOpen: true })}
-                        className="rounded-md p-1.5 text-gray-500 transition-colors hover:bg-gray-100 hover:text-green-600"
+                        className="rounded-md p-1.5 text-ds-text-muted transition-colors hover:bg-ds-surface-muted hover:text-ds-brand-600"
                       >
                         <Edit className="h-4 w-4" />
                       </button>
                     )
                   }
                 </div>
-                <div className="mt-1 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-gray-600">
+                <div className="mt-1 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-ds-text-secondary">
                   <div className="inline-flex items-center gap-1.5">
-                    <MapPin className="h-4 w-4 text-gray-500" />
+                    <MapPin className="h-4 w-4 text-ds-text-muted" />
                     <span>{displayLocation}</span>
                     {
                       self && (
                         <button 
                           onClick={() => setEditModal({ type: 'location', isOpen: true })}
-                          className="rounded p-1 text-gray-500 transition-colors hover:bg-gray-100 hover:text-green-600"
+                          className="rounded p-1 text-ds-text-muted transition-colors hover:bg-ds-surface-muted hover:text-ds-brand-600"
                         >
                           <Edit className="h-3.5 w-3.5" />
                         </button>
@@ -283,7 +284,7 @@ export default function ProfileHeader({self}: {self: boolean}) {
                     }
                   </div>
                   <div className="inline-flex items-center gap-1.5">
-                    <Calendar className="h-4 w-4 text-gray-500" />
+                    <Calendar className="h-4 w-4 text-ds-text-muted" />
                     <span>Joined {displayJoinDate}</span>
                   </div>
                 </div>
@@ -299,7 +300,7 @@ export default function ProfileHeader({self}: {self: boolean}) {
                     {/* <MessageBtn userTwoID={ userID } /> */}
                     <button
                       onClick={openReportModal}
-                      className="inline-flex items-center gap-2 rounded-xl border border-red-200 bg-white px-4 py-2 text-sm font-semibold text-red-600 transition-colors hover:bg-red-50"
+                  className="inline-flex items-center gap-2 rounded-xl border border-ds-state-danger/30 bg-ds-surface-card px-4 py-2 text-sm font-semibold text-ds-state-danger transition-colors hover:bg-ds-state-dangerSoft"
                     >
                       <Flag className="h-4 w-4" />
                       Report
@@ -311,16 +312,16 @@ export default function ProfileHeader({self}: {self: boolean}) {
             </div>
           </div>
 
-          <div className="mt-5 rounded-xl border border-gray-100 bg-gray-50/60 p-4 sm:p-5">
+          <div className="mt-5 rounded-xl border border-ds-border-subtle bg-ds-surface-muted/60 p-4 sm:p-5">
             <div className="flex items-start justify-between gap-3">
-              <p className="max-w-3xl text-sm leading-relaxed text-gray-700 sm:text-base">
+              <p className="max-w-3xl text-sm leading-relaxed text-ds-text-secondary sm:text-base">
                 {displayDescription}
               </p>
               {
                 self && (
                   <button 
                     onClick={() => setEditModal({ type: 'description', isOpen: true })}
-                    className="shrink-0 rounded-md p-2 text-gray-500 transition-colors hover:bg-white hover:text-green-600"
+                    className="shrink-0 rounded-md p-2 text-ds-text-muted transition-colors hover:bg-ds-surface-card hover:text-ds-brand-600"
                   >
                     <Edit className="h-4 w-4" />
                   </button>

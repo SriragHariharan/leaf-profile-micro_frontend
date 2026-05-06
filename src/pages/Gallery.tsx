@@ -2,6 +2,7 @@ import React from 'react';
 import { useParams } from 'react-router';
 import { Plus } from 'lucide-react';
 import '../index.scss';
+import { designRecipes } from 'hostApp/designRecipes';
 
 const mockPhotos = [
   'https://images.unsplash.com/photo-1527254432336-ea5d55ebf3c0',
@@ -20,10 +21,10 @@ export default function Gallery() {
     <div className="max-w-4xl mx-auto py-6 px-4">
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Swiss Alps 2024</h1>
-          <p className="text-gray-600">A collection of memories from our Swiss adventure</p>
+          <h1 className="text-2xl font-bold text-ds-text-primary">Swiss Alps 2024</h1>
+          <p className="text-ds-text-secondary">A collection of memories from our Swiss adventure</p>
         </div>
-        <button className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">
+        <button className={`${designRecipes.buttonPrimary} flex items-center gap-2 px-4`}>
           <Plus className="h-4 w-4" />
           Add Photos
         </button>

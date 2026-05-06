@@ -3,6 +3,7 @@ import InfoCard from './InfoCard'
 import useAxiosInstance from '../axios/axiosInstance';
 import { User } from '../interfaces/User.interface';
 import UserCard from './UserCard';
+import { designRecipes } from 'hostApp/designRecipes';
 
 function MyFriends() {
     const axiosInstance = useAxiosInstance();
@@ -14,7 +15,7 @@ function MyFriends() {
     },[]);
     console.log(friendsArray[0])
   return (
-    <div>
+    <div className={`${designRecipes.panel} space-y-3 p-3`}>
         {
             friendsArray?.length > 0 ? 
                 ( friendsArray.map(user => <UserCard user={user?.friendProfile} key={user?.userID} /> )  ) 

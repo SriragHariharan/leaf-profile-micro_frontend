@@ -1,5 +1,6 @@
 import React from "react";
 import { X, AlertCircle } from "lucide-react";
+import { designRecipes } from "hostApp/designRecipes";
 
 interface ReportPostModalProps {
   isOpen: boolean;
@@ -20,22 +21,22 @@ const ReportPostModal: React.FC<ReportPostModalProps> = ({ isOpen, onClose, repo
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/55 p-4 backdrop-blur-[2px]"
+      className={designRecipes.modalOverlay}
       onClick={onClose}
     >
       <div
-        className="relative w-full max-w-lg overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-2xl"
+        className={`${designRecipes.modalContainer} relative max-w-lg`}
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex items-center justify-between border-b border-gray-100 px-5 py-4">
+        <div className={designRecipes.modalHeader}>
           <div className="flex items-center gap-2">
-            <div className="rounded-full bg-red-50 p-2 text-red-600">
+            <div className="rounded-full bg-ds-state-dangerSoft p-2 text-ds-state-danger">
               <AlertCircle className="h-4 w-4" />
             </div>
-            <h2 className="text-lg font-semibold text-gray-900">Report Post</h2>
+            <h2 className="text-lg font-semibold text-ds-text-primary">Report Post</h2>
           </div>
           <button
-            className="rounded-full p-2 text-gray-500 hover:bg-gray-100 hover:text-gray-700"
+            className={designRecipes.iconButton}
             onClick={onClose}
           >
             <X className="h-5 w-5" />
@@ -44,9 +45,9 @@ const ReportPostModal: React.FC<ReportPostModalProps> = ({ isOpen, onClose, repo
 
         <div className="space-y-4 p-5">
           <div>
-            <p className="mb-1.5 text-sm font-medium text-gray-700">Select a reason for reporting</p>
+            <p className="mb-1.5 text-sm font-medium text-ds-text-secondary">Select a reason for reporting</p>
             <select
-              className="w-full rounded-xl border border-gray-200 bg-gray-50/70 p-2.5 text-sm text-gray-900 outline-none transition-all focus:border-green-500 focus:bg-white focus:ring-2 focus:ring-green-500/20"
+              className={designRecipes.inputBase}
               value={reason}
               onChange={(e) => setReason(e.target.value)}
             >
@@ -60,7 +61,7 @@ const ReportPostModal: React.FC<ReportPostModalProps> = ({ isOpen, onClose, repo
 
           {reason === "other" && (
             <textarea
-              className="w-full resize-none rounded-xl border border-gray-200 bg-gray-50/70 p-3 text-sm text-gray-900 outline-none transition-all focus:border-green-500 focus:bg-white focus:ring-2 focus:ring-green-500/20"
+              className={`${designRecipes.inputBase} resize-none`}
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               placeholder="Describe the reason for reporting..."
@@ -70,13 +71,13 @@ const ReportPostModal: React.FC<ReportPostModalProps> = ({ isOpen, onClose, repo
 
           <div className="flex gap-3">
             <button
-              className="w-full rounded-xl border border-gray-200 p-2.5 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50"
+              className={`${designRecipes.buttonSecondary} w-full`}
               onClick={onClose}
             >
               Cancel
             </button>
             <button
-              className="w-full rounded-xl bg-red-600 p-2.5 text-sm font-semibold text-white transition-colors hover:bg-red-700 disabled:cursor-not-allowed disabled:bg-red-300"
+              className="w-full rounded-xl bg-ds-state-danger p-2.5 text-sm font-semibold text-ds-text-inverse transition-colors hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
               onClick={handleReportPost}
               disabled={!reason}
             >

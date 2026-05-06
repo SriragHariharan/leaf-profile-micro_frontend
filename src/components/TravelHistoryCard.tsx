@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import AddTravelHistoryModal from '../modals/AddTravelHistoryModal';
 import { Plus } from 'lucide-react';
 import useAxiosInstance from '../axios/axiosInstance';
+import { designRecipes } from 'hostApp/designRecipes';
 
 interface TravelHistory {
   id: number;
@@ -37,7 +38,7 @@ function TravelHistoryCard({ userID, self }: {userID: string|undefined, self: bo
                     {self && (
                     <button
                         onClick={() => setShowTravelModal(true)}
-                        className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
+                        className={`${designRecipes.buttonPrimary} flex items-center gap-2 px-4`}
                     >
                         <Plus className="h-4 w-4" />
                         Add Trip
@@ -46,18 +47,18 @@ function TravelHistoryCard({ userID, self }: {userID: string|undefined, self: bo
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {travelHistory?.length && travelHistory?.map((trip) => (
-                        <div key={trip.id} className="bg-white p-4 rounded-lg shadow-sm">
+                        <div key={trip.id} className={`${designRecipes.panel} p-4`}>
                             <div className="flex justify-between items-start">
                                 <h3 className="text-lg font-semibold">{trip.destination}</h3>
-                                <span className="text-sm text-gray-500">{trip.yearVisited}</span>
+                                <span className="text-sm text-ds-text-muted">{trip.yearVisited}</span>
                             </div>
                             <div className="mt-2">
-                                <h4 className="text-sm font-medium text-gray-700">Places visited:</h4>
+                                <h4 className="text-sm font-medium text-ds-text-secondary">Places visited:</h4>
                             <div className="flex flex-wrap gap-2 mt-1">
                                 {trip?.Places?.map((place, index) => (
                                 <span
                                     key={index}
-                                    className="px-2 py-1 bg-gray-100 rounded-full text-sm text-gray-600"
+                                    className="px-2 py-1 bg-ds-surface-muted rounded-full text-sm text-ds-text-secondary"
                                 >
                                     {place?.placeName}
                                 </span>

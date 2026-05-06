@@ -8,6 +8,7 @@ import TravelHistoryCard from '../components/TravelHistoryCard';
 import BucketListCard from '../components/BucketListCard';
 import { useParams } from 'react-router';
 import ProfileFeed from '../components/ProfileFeed';
+import { designRecipes } from 'hostApp/designRecipes';
 
 const tabs = [
   { id: 'feed', label: 'Feed', icon: Film },
@@ -30,7 +31,7 @@ export default function Profile({self}: {self: boolean}) {
     <div className="max-w-3xl mx-auto space-y-6 pt-4 px-4 md:px-0">
       <ProfileHeader self={self} />
 
-      <div className="bg-white rounded-lg shadow-sm p-1">
+      <div className={`${designRecipes.panel} p-1`}>
         <div className="flex overflow-x-auto">
           {tabs.map((tab) => (
             <button
@@ -39,8 +40,8 @@ export default function Profile({self}: {self: boolean}) {
               className={clsx(
                 'flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-lg transition-colors whitespace-nowrap',
                 activeTab === tab.id
-                  ? 'bg-green-50 text-green-600'
-                  : 'text-gray-600 hover:text-green-600 hover:bg-green-50'
+                  ? 'bg-ds-brand-50 text-ds-brand-600'
+                  : 'text-ds-text-secondary hover:text-ds-brand-600 hover:bg-ds-brand-50'
               )}
             >
               {tab.icon && <tab.icon className="h-4 w-4" />}

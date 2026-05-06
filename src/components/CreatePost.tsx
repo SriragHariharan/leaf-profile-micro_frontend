@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Image } from 'lucide-react';
 import CreatePostModal from '../modals/CreatePostModal';
+import { designRecipes } from 'hostApp/designRecipes';
 
 import useStore from "hostApp/GlobalStore";
 import { DEFAULT_PROFILE_IMAGE } from '../constants/constants';
@@ -16,21 +17,21 @@ const CreatePost: React.FC = () => {
   return (
     <>
       <div
-        className="group mb-4 cursor-pointer rounded-2xl border border-gray-200 bg-white/95 p-4 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md"
+        className={`${designRecipes.panel} group mb-4 cursor-pointer bg-ds-surface-card p-4 transition-all duration-ds hover:-translate-y-0.5 hover:shadow-dsMd`}
         onClick={() => setIsModalOpen(true)}
       >
         <div className="flex items-center gap-3">
           <img
             src={profileImageSrc}
             alt="Profile"
-            className="h-11 w-11 rounded-full object-cover ring-2 ring-white shadow-sm"
+            className="h-11 w-11 rounded-full object-cover ring-2 ring-ds-surface-card shadow-dsSm"
           />
-          <div className="flex-1 rounded-full border border-gray-200 bg-gradient-to-r from-gray-50 to-white px-4 py-2.5 shadow-inner transition-colors group-hover:border-gray-300">
-            <p className="text-sm font-medium text-gray-500">What&apos;s on your mind?</p>
+          <div className="flex-1 rounded-full border border-ds-border-subtle bg-gradient-to-r from-ds-surface-muted to-ds-surface-card px-4 py-2.5 shadow-inner transition-colors group-hover:border-ds-border-strong">
+            <p className="text-sm font-medium text-ds-text-muted">What&apos;s on your mind?</p>
           </div>
           <button
             type="button"
-            className="rounded-full border border-green-100 bg-green-50/70 p-2.5 text-green-600 transition-all hover:bg-green-100 hover:text-green-700 focus:outline-none focus:ring-2 focus:ring-green-500/30"
+            className="rounded-full border border-ds-brand-100 bg-ds-brand-50/70 p-2.5 text-ds-brand-600 transition-all hover:bg-ds-brand-100 hover:text-ds-brand-700 focus:outline-none focus:ring-2 focus:ring-ds-brand-500/30"
           >
             <Image size={20} />
           </button>
