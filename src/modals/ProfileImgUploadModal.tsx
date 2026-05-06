@@ -2,6 +2,7 @@ import React, { useState, ChangeEvent } from "react";
 import useAxiosInstance from "../axios/axiosInstance";
 import useStore from "hostApp/GlobalStore";
 import { showErrorToast, showSuccessToast } from "authMF/toastFunction";
+import { ImagePlus, Loader2, X } from "lucide-react";
 
 interface ModalProps {
   closeModal: () => void;
@@ -45,50 +46,52 @@ const ProfileImgUploadModal: React.FC<ModalProps> = ({ closeModal }) => {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="w-96 bg-white rounded-lg shadow-lg">
-        <div className="flex items-center justify-between px-4 py-2 border-b">
-          <h2 className="text-lg font-semibold">Upload Profile Image</h2>
-          <button
-            onClick={closeModal}
-            className="text-gray-500 hover:text-gray-800"
-          >
-            &times;
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/55 p-4 backdrop-blur-[2px]">
+      <div className="w-full max-w-md overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-2xl">
+        <div className="flex items-center justify-between border-b border-gray-100 px-5 py-4">
+          <div className="flex items-center gap-2">
+            <div className="rounded-full bg-green-50 p-2 text-green-600">
+              <ImagePlus className="h-4 w-4" />
+            </div>
+            <h2 className="text-lg font-semibold text-gray-900">Upload Profile Image</h2>
+          </div>
+          <button onClick={closeModal} className="rounded-full p-2 text-gray-500 hover:bg-gray-100 hover:text-gray-700">
+            <X className="h-5 w-5" />
           </button>
         </div>
-        <div className="p-4">
+        <div className="space-y-4 p-5">
           <input
             type="file"
             accept="image/*"
             onChange={handleImageChange}
-            className="block w-full px-4 py-2 mb-4 text-sm text-gray-700 border rounded focus:outline-none"
+            className="block w-full rounded-xl border border-gray-200 bg-gray-50/70 px-4 py-2.5 text-sm text-gray-700 outline-none file:mr-3 file:rounded-lg file:border-0 file:bg-green-100 file:px-3 file:py-1.5 file:text-sm file:font-medium file:text-green-700 focus:border-green-500 focus:bg-white focus:ring-2 focus:ring-green-500/20"
           />
           {selectedImage && (
-            <div className="mb-4">
-              <p className="text-sm font-semibold text-gray-700">Preview:</p>
+            <div className="rounded-xl border border-gray-200 bg-white p-3">
+              <p className="text-sm font-semibold text-gray-700">Preview</p>
               <img
                 src={selectedImage}
                 alt="Preview"
-                className="w-full h-auto mt-2 rounded-md"
+                className="mt-2 h-56 w-full rounded-lg object-cover"
               />
             </div>
           )}
         </div>
-        <div className="flex justify-end px-4 py-2 border-t">
+        <div className="flex justify-end gap-2 border-t border-gray-100 px-5 py-4">
           <button
             onClick={closeModal}
-            className="px-4 py-2 text-sm text-gray-700 bg-gray-200 rounded hover:bg-gray-300"
+            className="rounded-xl border border-gray-200 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
           >
             Close
           </button>
           <button
             onClick={handleSave}
             disabled={isLoading}
-            className={`px-4 py-2 ml-2 text-sm ${isLoading ? 'text-gray-500 bg-gray-300' : 'text-white bg-green-500'} rounded hover:${isLoading ? '' : 'bg-green-600'}`}
+            className="inline-flex items-center rounded-xl bg-green-600 px-4 py-2 text-sm font-semibold text-white hover:bg-green-700 disabled:cursor-not-allowed disabled:bg-green-300"
           >
             {isLoading ? (
-              <div className="flex items-center justify-center">
-                <svg className="animate-spin h-5 w-5 mr-3 border-4 border-gray-200 rounded-full border-t-gray-600" viewBox="0 0 24 24"></svg>
+              <div className="flex items-center justify-center gap-2">
+                <Loader2 className="h-4 w-4 animate-spin" />
                 Uploading...
               </div>
             ) : (

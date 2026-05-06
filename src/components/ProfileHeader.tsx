@@ -14,7 +14,6 @@ import { showSuccessToast, showErrorToast, Toaster } from 'authMF/toastFunction'
 
 import { DEFAULT_PROFILE_IMAGE } from '../constants/constants';
 import ReportModal from '../modals/ReportModal';
-import MessageBtn from './MessageBtn';
 
 type Profile = {
   username: string | null;
@@ -150,21 +149,82 @@ export default function ProfileHeader({self}: {self: boolean}) {
     .catch(_err => showErrorToast("Unable to report profile"));
   };
 
+  const displayName = profile.username || "User";
+  const displayDescription = profile.description || "No bio added yet.";
+  const displayLocation = profile.location || "Location not added";
+  const displayJoinDate = profile.joinDate || "Date not available";
+  const profileImage = profile.profilePicture || DEFAULT_PROFILE_IMAGE;
+  const coverStyle = profile.coverPicture
+    ? { backgroundImage: `url(${profile.coverPicture})` }
+    : { backgroundImage: "linear-gradient(120deg, #0f172a 0%, #1f2937 35%, #065f46 100%)" };
+
+  const renderActionButtons = () => {
+    if (self) {
+      return (
+        <button
+          onClick={handleLogout}
+          className="inline-flex items-center gap-2 rounded-xl border border-red-200 bg-red-50 px-4 py-2 text-sm font-semibold text-red-600 transition-colors hover:bg-red-100"
+        >
+          <LogOut className="h-4 w-4" />
+          Logout
+        </button>
+      );
+    }
+
+    if (profile.isFriend) {
+      return (
+        <div className="inline-flex items-center rounded-xl border border-green-200 bg-green-50 px-4 py-2 text-sm font-semibold text-green-700">
+          Friends
+        </div>
+      );
+    }
+
+    if (profile?.friendStatus === 'pending') {
+      return (
+        <div className="flex items-center gap-2">
+          <button
+            onClick={handleRejectFriendship}
+            className="inline-flex items-center gap-2 rounded-xl border border-yellow-200 bg-yellow-50 px-4 py-2 text-sm font-semibold text-yellow-700 transition-colors hover:bg-yellow-100"
+          >
+            <Hourglass className="h-4 w-4" />
+            Reject
+          </button>
+          <button
+            onClick={handleAcceptFriendship}
+            className="inline-flex items-center gap-2 rounded-xl bg-green-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-green-700"
+          >
+            <Hourglass className="h-4 w-4" />
+            Accept
+          </button>
+        </div>
+      );
+    }
+
+    return (
+      <button
+        onClick={handleSendFriendRequest}
+        className="inline-flex items-center gap-2 rounded-xl bg-green-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-green-700"
+      >
+        <UserPlus className="h-4 w-4" />
+        Add Friend
+      </button>
+    );
+  };
+
   return (
-    <div className="bg-white rounded-lg shadow-sm overflow-hidden">
+    <div className="-mx-4 overflow-hidden border-y border-gray-200 bg-white font-sans shadow-sm sm:mx-0 sm:rounded-2xl sm:border sm:border-gray-200">
       <Toaster />
       <div className="relative">
         <div 
-          className="h-48 sm:h-64 bg-cover bg-center"
-          style={{
-            backgroundImage: `url(${profile?.coverPicture})`
-          }}
+          className="h-36 bg-cover bg-center sm:h-48 lg:h-56"
+          style={coverStyle}
         />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-black/10 to-transparent" />
         {
           self && (
             <button 
               onClick={openCoverModal}
-              className="absolute right-4 top-4 bg-white/80 p-2 rounded-full hover:bg-white"
+              className="absolute right-3 top-3 rounded-full border border-white/60 bg-white/85 p-2 shadow-sm backdrop-blur transition-colors hover:bg-white sm:right-4 sm:top-4"
             >
               <Edit className="h-4 w-4 text-gray-700" />
             </button>
@@ -172,131 +232,104 @@ export default function ProfileHeader({self}: {self: boolean}) {
         }
       </div>
       
-      <div className="px-4 sm:px-6 pb-6">
-        <div className="flex justify-between items-end -mt-12 sm:-mt-16">
-          <div className="relative">
-            <img
-              src={profile?.profilePicture || DEFAULT_PROFILE_IMAGE }
-              alt="Profile"
-              className="w-24 h-24 sm:w-32 sm:h-32 rounded-full border-4 border-white"
-            />
-            {
-              self && (
-                <button 
-                  onClick={openProfileModal}
-                  className="absolute bottom-0 right-0 bg-white p-2 rounded-full shadow-sm hover:bg-gray-50"
-                >
-                  <Edit className="h-4 w-4 text-gray-700" />
-                </button>
-              )
-            }
-          </div>
-          {
-            !self && (
-              <button
-                onClick={openReportModal}
-                className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600"
-              >
-                <Flag className="h-4 w-4" />
-                <span className="hidden sm:inline">Report</span>
-              </button>
-            )
-          }
-          {
-            self ? (
-              <button
-                onClick={handleLogout}
-                className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600"
-              >
-                <LogOut className="h-4 w-4" />
-                <span className="hidden sm:inline">Logout</span>
-              </button>
-              ) : profile.isFriend ? (
-                <div className="h2">Friends</div>
-                /* uncomment this when message feature is implemented correctly */
-                /* on clicking it will take to the message page where we can send message */
-                // <MessageBtn userTwoID={ userID } />
-              ) : profile?.friendStatus === 'pending' ? (
-                <div className="flex">
-                  <button
-                    onClick={handleRejectFriendship}
-                    className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600"
-                  >
-                    <Hourglass className="h-4 w-4 spin" />
-                    <span className="hidden sm:inline">Reject</span>
-                  </button>
-
-                  <button
-                    onClick={handleAcceptFriendship}
-                    className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600"
-                  >
-                    <Hourglass className="h-4 w-4 spin" />
-                    <span className="hidden sm:inline">Accept</span>
-                  </button>
-
-                </div>
-              ) : (
-                <button
-                  onClick={handleSendFriendRequest}
-                  className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
-                >
-                  <UserPlus className="h-4 w-4" />
-                  <span className="hidden sm:inline">Add Friend</span>
-                </button>
-            )
-          }
-        </div>
-        
-        <div className="mt-4">
-          <div className="flex items-center justify-start">
-            {
-              self && (
-                <button 
-                  onClick={() => setEditModal({ type: 'username', isOpen: true })}
-                  className="p-2 text-gray-600 hover:text-green-600"
-                >
-                  <Edit className="h-4 w-4" />
-                </button>
-              )
-            }
-            <h1 className="text-xl sm:text-2xl font-bold text-gray-900">{profile.username}</h1>
-          </div>
-          
-          <div className="mt-2 flex items-center justify-between overflow-wrap break-words">
-            {
-              self && (
-                <button 
-                  onClick={() => setEditModal({ type: 'description', isOpen: true })}
-                  className="p-2 text-gray-600 hover:text-green-600"
-                >
-                  <Edit className="h-4 w-4" />
-                </button>
-              )
-            }
-            <p className="text-sm sm:text-base text-gray-600 flex-1 pr-4 ">{profile.description}</p>
-          </div>
-          <div className="flex flex-start">
-            <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 mt-4 text-sm text-gray-600">
-              <div className="flex items-center gap-1">
-                <MapPin className="h-4 w-4" />
-                <span>{profile.location}</span>
+      <div className="px-4 pb-6 sm:px-6 lg:px-8">
+        <div className="-mt-12 sm:-mt-16">
+          <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+            <div className="flex items-end gap-4">
+              <div className="relative shrink-0">
+                <img
+                  src={profileImage}
+                  alt="Profile"
+                  className="h-24 w-24 rounded-full border-4 border-white object-cover shadow-md sm:h-28 sm:w-28 lg:h-32 lg:w-32"
+                />
                 {
                   self && (
                     <button 
-                      onClick={() => setEditModal({ type: 'location', isOpen: true })}
-                      className="p-1 text-gray-600 hover:text-green-600"
+                      onClick={openProfileModal}
+                      className="absolute bottom-1 right-1 rounded-full bg-white p-2 shadow-sm ring-1 ring-gray-200 transition-colors hover:bg-gray-50"
                     >
-                      <Edit className="h-3 w-3" />
+                      <Edit className="h-4 w-4 text-gray-700" />
                     </button>
                   )
                 }
               </div>
-              <div className="flex items-center gap-1">
-                <Calendar className="h-4 w-4" />
-                <span>Joined {profile?.joinDate}</span>
+              <div className="pb-1">
+                <div className="flex items-center">
+                  <h1 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">{displayName}</h1>
+                  {
+                    self && (
+                      <button 
+                        onClick={() => setEditModal({ type: 'username', isOpen: true })}
+                        className="rounded-md p-1.5 text-gray-500 transition-colors hover:bg-gray-100 hover:text-green-600"
+                      >
+                        <Edit className="h-4 w-4" />
+                      </button>
+                    )
+                  }
+                </div>
+                <div className="mt-1 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-gray-600">
+                  <div className="inline-flex items-center gap-1.5">
+                    <MapPin className="h-4 w-4 text-gray-500" />
+                    <span>{displayLocation}</span>
+                    {
+                      self && (
+                        <button 
+                          onClick={() => setEditModal({ type: 'location', isOpen: true })}
+                          className="rounded p-1 text-gray-500 transition-colors hover:bg-gray-100 hover:text-green-600"
+                        >
+                          <Edit className="h-3.5 w-3.5" />
+                        </button>
+                      )
+                    }
+                  </div>
+                  <div className="inline-flex items-center gap-1.5">
+                    <Calendar className="h-4 w-4 text-gray-500" />
+                    <span>Joined {displayJoinDate}</span>
+                  </div>
+                </div>
               </div>
             </div>
+
+            <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+              {
+                !self && (
+                  <>
+                    {renderActionButtons()}
+                    {/* on clicking it will take to the message page where we can send message */}
+                    {/* <MessageBtn userTwoID={ userID } /> */}
+                    <button
+                      onClick={openReportModal}
+                      className="inline-flex items-center gap-2 rounded-xl border border-red-200 bg-white px-4 py-2 text-sm font-semibold text-red-600 transition-colors hover:bg-red-50"
+                    >
+                      <Flag className="h-4 w-4" />
+                      Report
+                    </button>
+                  </>
+                )
+              }
+              {self && renderActionButtons()}
+            </div>
           </div>
+
+          <div className="mt-5 rounded-xl border border-gray-100 bg-gray-50/60 p-4 sm:p-5">
+            <div className="flex items-start justify-between gap-3">
+              <p className="max-w-3xl text-sm leading-relaxed text-gray-700 sm:text-base">
+                {displayDescription}
+              </p>
+              {
+                self && (
+                  <button 
+                    onClick={() => setEditModal({ type: 'description', isOpen: true })}
+                    className="shrink-0 rounded-md p-2 text-gray-500 transition-colors hover:bg-white hover:text-green-600"
+                  >
+                    <Edit className="h-4 w-4" />
+                  </button>
+                )
+              }
+            </div>
+
+          </div>
+
         </div>
       </div>
 
