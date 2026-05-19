@@ -8,7 +8,7 @@
  * Friendship state is read from `profile`; handlers call the API via useProfileHeader.
  */
 import React from 'react';
-import { UserPlus, LogOut, Hourglass, Flag, X } from 'lucide-react';
+import { UserPlus, LogOut, Hourglass, Flag, X, UserMinus } from 'lucide-react';
 import type { Profile } from '../../types/profile.types';
 import {
   compactBtnPrimary,
@@ -26,6 +26,7 @@ type ProfileHeaderActionsProps = {
   onCancelFriendRequest: () => void;
   onAcceptFriendship: () => void;
   onRejectFriendship: () => void;
+  onUnfriend: () => void;
   onReport: () => void;
 };
 
@@ -35,6 +36,7 @@ function FriendActionButtons({
   onCancelFriendRequest,
   onAcceptFriendship,
   onRejectFriendship,
+  onUnfriend,
 }: Pick<
   ProfileHeaderActionsProps,
   | 'profile'
@@ -42,9 +44,18 @@ function FriendActionButtons({
   | 'onCancelFriendRequest'
   | 'onAcceptFriendship'
   | 'onRejectFriendship'
+  | 'onUnfriend'
 >) {
   if (profile.isFriend || profile.friendStatus === 'friends') {
-    return <span className={compactStatusSuccess}>Friends</span>;
+    return (
+      <div className="flex flex-wrap items-center gap-2 sm:flex-nowrap sm:gap-2">
+        <span className={compactStatusSuccess}>Friends</span>
+        <button onClick={onUnfriend} className={compactBtnWarning}>
+          <UserMinus className={compactIcon} />
+          Unfriend
+        </button>
+      </div>
+    );
   }
 
   if (profile.friendStatus === 'pending_received') {
@@ -87,6 +98,7 @@ export default function ProfileHeaderActions({
   onCancelFriendRequest,
   onAcceptFriendship,
   onRejectFriendship,
+  onUnfriend,
   onReport,
 }: ProfileHeaderActionsProps) {
   if (self) {
@@ -108,6 +120,7 @@ export default function ProfileHeaderActions({
         onCancelFriendRequest={onCancelFriendRequest}
         onAcceptFriendship={onAcceptFriendship}
         onRejectFriendship={onRejectFriendship}
+        onUnfriend={onUnfriend}
       />
       {/* on clicking it will take to the message page where we can send message */}
       {/* <MessageBtn userTwoID={ userID } /> */}

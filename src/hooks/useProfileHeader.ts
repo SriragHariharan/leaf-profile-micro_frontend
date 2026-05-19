@@ -176,6 +176,20 @@ export function useProfileHeader() {
       );
   };
 
+  const handleUnfriend = () => {
+    if (!userID) return;
+    axiosInstance
+      .delete(friendUrl(`/friends/${userID}`))
+      .then(() => {
+        showSuccessToast('Unfriended');
+        setProfile((p) => ({ ...p, isFriend: false, friendStatus: '' }));
+        setFriendRequestId(null);
+      })
+      .catch((err) =>
+        showErrorToast(err?.response?.data?.error?.message ?? 'Unable to unfriend'),
+      );
+  };
+
   const handleReportSubmit = (reportData: {
     issue: string;
     description: string;
@@ -226,6 +240,7 @@ export function useProfileHeader() {
     handleCancelFriendRequest,
     handleAcceptFriendship,
     handleRejectFriendship,
+    handleUnfriend,
     handleReportSubmit,
   };
 }

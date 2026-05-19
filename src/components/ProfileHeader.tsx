@@ -47,6 +47,7 @@ export default function ProfileHeader({ self }: { self: boolean }) {
               onCancelFriendRequest={h.handleCancelFriendRequest}
               onAcceptFriendship={h.handleAcceptFriendship}
               onRejectFriendship={h.handleRejectFriendship}
+              onUnfriend={h.handleUnfriend}
               onReport={h.openReportModal}
             />
           </div>

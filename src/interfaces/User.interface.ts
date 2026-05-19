@@ -6,5 +6,6 @@ export interface User {
   isFriend: boolean;
   friendStatus: string;
   FriendOf?: Object;
-  Profile: Object;
+  Profile?: Object;
+  friendProfile?: User;
 }
