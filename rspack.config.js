@@ -6,6 +6,8 @@ require('dotenv').config();
 
 const printCompilationMessage = require('./compilation.config.js');
 
+const port = 8082;
+
 /**
  * @type {import('@rspack/cli').Configuration}
  */
@@ -14,9 +16,13 @@ module.exports = {
   entry: {
     main: './src/index.ts',
   },
+
+  output: {
+    publicPath: isDev ? `http://localhost:${port}/` : 'https://profile.leaf.monster/',
+  },
   
   devServer: {
-    port: 8082,
+    port,
     historyApiFallback: true,
     watchFiles: [path.resolve(__dirname, 'src')],
     onListening: function (devServer) {
@@ -106,7 +112,7 @@ module.exports = {
         "./FriendsPage": "./src/pages/Friends",
         "./FeedsPage": "./src/pages/Feed",
         "./PostsPage": "./src/pages/Post",
-        "./SearchPosts": "./src/pages/SearchPost",
+        "./SearchPage": "./src/pages/SearchPage",
         "./useAxiosInstance":"./src/axios/axiosInstance"
       },
       remotes: {
@@ -128,6 +134,7 @@ module.exports = {
       'process.env.REACT_APP_LEAF_USER_BASE_URL': JSON.stringify(process.env.REACT_APP_LEAF_USER_BASE_URL),
       'process.env.REACT_APP_LEAF_PROFILE_REFRESH_TOKEN_URL': JSON.stringify(process.env.REACT_APP_LEAF_PROFILE_REFRESH_TOKEN_URL),
       'process.env.REACT_APP_LEAF_POST_BASE_URL': JSON.stringify(process.env.REACT_APP_LEAF_POST_BASE_URL),
+      'process.env.REACT_APP_LEAF_FRIEND_BASE_URL': JSON.stringify(process.env.REACT_APP_LEAF_FRIEND_BASE_URL),
       'process.env.REACT_APP_HOST_REMOTE': JSON.stringify(process.env.REACT_APP_HOST_REMOTE),
       'process.env.REACT_APP_AUTH_MF_REMOTE': JSON.stringify(process.env.REACT_APP_AUTH_MF_REMOTE),
       'process.env.REACT_APP_CHAT_MF_REMOTE': JSON.stringify(process.env.REACT_APP_CHAT_MF_REMOTE),

@@ -1,10 +1,10 @@
 import axios from 'axios';
 import { jwtDecode } from "jwt-decode";
+import { useMemo, useRef } from 'react';
 import useStore from "hostApp/GlobalStore";
 import dayjs from 'dayjs'
 import { LEAF_PROFILE_REFRESH_TOKEN_URL, LEAF_USER_BASE_URL } from '../constants/constants';
 
-// Helper function to check if token is expired
 const isTokenExpired = (token) => {
     try {
         const user = jwtDecode(token)
@@ -12,65 +12,69 @@ const isTokenExpired = (token) => {
         return isExpired;
     } catch (error) {
         console.error("Error decoding token:", error);
-        return true; // Treat as expired if decoding fails
+        return true;
     }
 };
 
-// Custom hook to create axios instance
 const useAxiosInstance = () => {
-    const { accessToken, refreshToken, setAccessToken, setRefreshToken, logout } = useStore();
-    const getAccessToken = () => accessToken;
+    const store = useStore();
+    const storeRef = useRef(store);
+    storeRef.current = store;
 
-    const refreshAccessToken = async () => {
-        try {
-            const response = await axios.post(LEAF_PROFILE_REFRESH_TOKEN_URL, {
-                refreshToken
-            });
-            console.log("new tokens set generated");
-            const { accessToken, refreshToken: newRefreshToken } = response.data?.data;
-            setAccessToken(accessToken);
-            setRefreshToken(newRefreshToken);
-            return accessToken;
-        } catch (error) {
-            window.alert("Session expired. Login to continue");
-            console.error("Error refreshing tokens");
-            logout();
-        }
-    };
+    return useMemo(() => {
+        const refreshPromiseRef = { current: null };
 
-    const axiosInstance = axios.create({
-        baseURL: LEAF_USER_BASE_URL // "/profile endpoint removed from here. Add it to the profiles component later."
-    });
+        const refreshAccessToken = async () => {
+            if (refreshPromiseRef.current) {
+                return refreshPromiseRef.current;
+            }
 
-    // Request interceptor to add access token and refresh token logic
-    axiosInstance.interceptors.request.use(
-        async (config) => {
-            let accessToken = getAccessToken();
-
-            // Check if access token is expired
-            if (!accessToken || isTokenExpired(accessToken)) {
+            refreshPromiseRef.current = (async () => {
+                const { refreshToken, setAccessToken, setRefreshToken, logout } = storeRef.current;
                 try {
-                    console.log("access token is expired");
-                    accessToken = await refreshAccessToken();
+                    const response = await axios.post(LEAF_PROFILE_REFRESH_TOKEN_URL, {
+                        refreshToken,
+                    });
+                    const { accessToken, refreshToken: newRefreshToken } = response.data?.data;
+                    setAccessToken(accessToken);
+                    setRefreshToken(newRefreshToken);
+                    return accessToken;
                 } catch (error) {
-                    console.log("Failed to get refresh token");
-                    return Promise.reject(error);
+                    window.alert("Session expired. Login to continue");
+                    console.error("Error refreshing tokens");
+                    logout();
+                    throw error;
+                } finally {
+                    refreshPromiseRef.current = null;
                 }
-            }
+            })();
 
-            // Add access token to request header
-            if (accessToken) {
-                config.headers['Authorization'] = `Bearer ${accessToken}`;
-            } else {
-                console.log("Access token is required");
-            }
+            return refreshPromiseRef.current;
+        };
 
-            return config;
-        },
-        (error) => Promise.reject(error)
-    );
+        const axiosInstance = axios.create({
+            baseURL: LEAF_USER_BASE_URL,
+        });
 
-    return axiosInstance;
+        axiosInstance.interceptors.request.use(
+            async (config) => {
+                let accessToken = storeRef.current.accessToken;
+
+                if (!accessToken || isTokenExpired(accessToken)) {
+                    accessToken = await refreshAccessToken();
+                }
+
+                if (accessToken) {
+                    config.headers['Authorization'] = `Bearer ${accessToken}`;
+                }
+
+                return config;
+            },
+            (error) => Promise.reject(error)
+        );
+
+        return axiosInstance;
+    }, []);
 };
 
 export default useAxiosInstance;

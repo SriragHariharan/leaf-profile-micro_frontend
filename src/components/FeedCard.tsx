@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { Heart, MessageCircle, Share2, MoreVertical, Bookmark, Flag, Trash, Save } from 'lucide-react';
+import React, { useEffect, useRef, useState } from 'react';
+import { Heart, MessageCircle, Share2, MoreVertical, Bookmark, Flag, Trash } from 'lucide-react';
 import { clsx } from 'clsx';
 import CommentsModal from '../modals/CommentsModal';
 import useAxiosInstance from '../axios/axiosInstance';
@@ -7,7 +7,10 @@ import { showSuccessToast, Toaster, showErrorToast } from 'authMF/toastFunction'
 import ReportPostModal from '../modals/ReportPostModal';
 import { DEFAULT_PROFILE_IMAGE } from '../constants/constants';
 import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
 import { designRecipes } from 'hostApp/designRecipes';
+
+dayjs.extend(relativeTime);
 
 interface FeedCardProps {
   postID: string;
@@ -18,204 +21,298 @@ interface FeedCardProps {
   image?: string | null;
   isLiked: boolean;
   isCommented: boolean;
-  type: string
+  type: string;
   handleDeletePost: (postID: string) => void;
 }
 
-export default function FeedCard({ username, userImage, content, timestamp, image, postID, type, handleDeletePost, isLiked }: FeedCardProps) {
+const actionButtonClass = clsx(
+  designRecipes.iconButton,
+  'transition-all duration-ds hover:text-ds-text-primary active:scale-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ds-brand-500/50'
+);
+
+const actionWithCountClass = clsx(
+  actionButtonClass,
+  'inline-flex items-center gap-1 px-1.5'
+);
+
+export default function FeedCard({
+  username,
+  userImage,
+  content,
+  timestamp,
+  image,
+  postID,
+  type,
+  handleDeletePost,
+  isLiked,
+}: FeedCardProps) {
   const [postLiked, setIsPostLiked] = useState(isLiked);
   const [showMenu, setShowMenu] = useState(false);
   const [likes, setLikes] = useState(0);
-  const [comments, setComments] = useState(0)
+  const [comments, setComments] = useState(0);
   const [showComments, setShowComments] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
-  console.log(isLiked, " isliked the post ???")
+  const [showReportModal, setShowReportModal] = useState(false);
+  const [isSaved, setIsSaved] = useState(type === 'save');
+  const menuRef = useRef<HTMLDivElement>(null);
 
-  const toggleContent = () => {
-    setIsExpanded(!isExpanded);
-  };
+  const handle = `@${username.replace(/\s+/g, '').toLowerCase()}`;
+  const shouldTruncate = content.length > 200;
+  const displayText =
+    isExpanded || !shouldTruncate ? content : `${content.slice(0, 200)}…`;
 
-  /* get interactions */
+  const toggleContent = () => setIsExpanded(!isExpanded);
+
   const axiosInstance = useAxiosInstance();
-  useEffect(() => {
-    axiosInstance.get("../post/interaction/" + postID)
-    .then(resp => {
-      setLikes(Number(resp?.data?.data?.likesCount));
-      setComments(Number(resp?.data?.data?.commentsCount));
-    })
-    .catch(err => console.log(err))
-  }, [])
 
-  /* share a post(copy link to clipboard) */
+  useEffect(() => {
+    axiosInstance
+      .get('../post/interaction/' + postID)
+      .then((resp) => {
+        setLikes(Number(resp?.data?.data?.likesCount));
+        setComments(Number(resp?.data?.data?.commentsCount));
+      })
+      .catch(() => {});
+  }, [postID]);
+
+  useEffect(() => {
+    if (!showMenu) return;
+    const handleClickOutside = (e: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+        setShowMenu(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [showMenu]);
+
   const handleShare = () => {
     const shareableLink = `${window.location.origin}/post?postID=${postID}`;
-    navigator.clipboard.writeText(shareableLink)
-      .then(() => {
-        showSuccessToast('Link copied to clipboard!');
-      })
-      .catch(() => {
-        showErrorToast('Failed to copy link.');
-      });
+    navigator.clipboard
+      .writeText(shareableLink)
+      .then(() => showSuccessToast('Link copied to clipboard!'))
+      .catch(() => showErrorToast('Failed to copy link.'));
   };
-
-  /* report post modal */
-   const [showReportModal, setShowReportModal] = useState(false);
 
   const handleReportPost = (reason: string, description: string) => {
-    axiosInstance.post("../post/report/" + postID, {reason, description})
-      .then(_ => {
-        showSuccessToast("Post reported");
+    axiosInstance
+      .post('../post/report/' + postID, { reason, description })
+      .then(() => {
+        showSuccessToast('Post reported');
         setShowReportModal(false);
       })
-      .catch(_ =>showErrorToast("Unable to report post"))
+      .catch(() => showErrorToast('Unable to report post'));
   };
 
-  /* save the post */
   const handleSavePost = () => {
-    axiosInstance.post("../post/save/" + postID)
-      .then(_ => {
-        showSuccessToast("Post saved");
-        setShowReportModal(false);
+    axiosInstance
+      .post('../post/save/' + postID)
+      .then(() => {
+        setIsSaved(true);
+        showSuccessToast('Post saved');
+        setShowMenu(false);
       })
-      .catch(err => showErrorToast(err?.response?.data?.error?.message));
-  }
+      .catch((err) => showErrorToast(err?.response?.data?.error?.message));
+  };
 
-  /* unsave post */
   const handleUnsavePost = () => {
-      axiosInstance.delete("../post/save/" + postID)
-      .then(_resp => showSuccessToast("Post unsaved"))
-      .catch(err => console.log(err?.response?.data?.message ?? "Unable to Unsave post"));
-  }
+    axiosInstance
+      .delete('../post/save/' + postID)
+      .then(() => {
+        setIsSaved(false);
+        showSuccessToast('Post unsaved');
+      })
+      .catch(() => showErrorToast('Unable to unsave post'));
+  };
 
-  /* handle delete post */
-  const handleDelete = () => {
-    handleDeletePost(postID);
-  }
+  const handleToggleSave = () => {
+    if (isSaved) handleUnsavePost();
+    else handleSavePost();
+  };
 
-  /* add interaction(like or unlike) */
+  const handleDelete = () => handleDeletePost(postID);
+
   const handleLikeInteraction = async () => {
-      try {
-          setIsPostLiked(!postLiked);
-          setLikes(postLiked ? likes - 1 : likes + 1);
-
-          await Promise.all([
-              axiosInstance.put("../feed/like/" + postID), // Send to timeline service
-              axiosInstance.post("../post/like/" + postID),     // Send to post service
-          ]);
-          console.log("post liked")
-
-      } catch (error) {
-          console.log(error)
-          setIsPostLiked(postLiked);
-          setLikes(postLiked ? likes + 1 : likes - 1);
-      }
+    try {
+      setIsPostLiked(!postLiked);
+      setLikes(postLiked ? likes - 1 : likes + 1);
+      await Promise.all([
+        axiosInstance.put('../feed/like/' + postID),
+        axiosInstance.post('../post/like/' + postID),
+      ]);
+    } catch {
+      setIsPostLiked(postLiked);
+      setLikes(postLiked ? likes + 1 : likes - 1);
+    }
   };
 
   return (
     <>
       <Toaster />
-      <div className={`${designRecipes.panel} mb-4 overflow-hidden max-w-4xl`}>
-        <div className="p-4">
-          <div className="flex items-center justify-between flex-wrap">
-            <div className="flex items-center gap-3">
-              <img
-                src={userImage ?? DEFAULT_PROFILE_IMAGE}
-                alt={username}
-                className="w-12 h-12 rounded-full object-cover"  // Fixed size for profile image
-              />
-              <div>
-                <h3 className="font-semibold text-ds-text-primary text-base md:text-lg">{username}</h3>
-                <p className="text-sm text-ds-text-muted">{dayjs(timestamp).format('MMMM D, YYYY h:mm A')}</p>
-                
-              </div>
-            </div>
-            
-            <div className="relative">
-              {
-                type === "self" && <Trash onClick={handleDelete} className='text-ds-state-danger cursor-pointer' />
-              }
-              {
-                type === "common" && (
-                  <button 
-                    onClick={() => setShowMenu(!showMenu)}
-                    className="p-2 hover:bg-ds-surface-muted rounded-full"
-                  >
-                    <MoreVertical className="h-5 w-5 text-ds-text-secondary" />
-                  </button>
-                )
-              }
-              {
-                type === "save" && <Save onClick={handleUnsavePost} className='text-ds-state-danger cursor-pointer' />
-              }
-              
-              {showMenu && (
-                <div className="absolute right-0 mt-2 w-48 bg-ds-surface-card rounded-lg shadow-dsLg py-1">
-                  <button onClick={handleSavePost} className="w-full px-4 py-2 text-left text-sm hover:bg-ds-surface-muted flex items-center gap-2">
-                    <Bookmark className="h-4 w-4" />
-                    Save post
-                  </button>
-                  <button onClick={() => setShowReportModal(true)} className="w-full px-4 py-2 text-left text-sm hover:bg-ds-surface-muted flex items-center gap-2 text-ds-state-danger">
-                    <Flag className="h-4 w-4" />
-                    Report post
-                  </button>
-                </div>
-              )}
-            </div>
+      <article
+        className={clsx(
+          designRecipes.panel,
+          'mb-4 mx-auto max-w-2xl overflow-hidden'
+        )}
+      >
+        {/* Header */}
+        <header className="flex items-center gap-3 px-4 py-3">
+          <img
+            src={userImage ?? DEFAULT_PROFILE_IMAGE}
+            alt={username}
+            className="h-10 w-10 shrink-0 rounded-full object-cover ring-2 ring-ds-border-subtle"
+          />
+          <div className="min-w-0 flex-1">
+            <h3 className="truncate text-sm font-semibold text-ds-text-primary">
+              {username}
+            </h3>
+            <p
+              className="truncate text-xs text-ds-text-muted"
+              title={dayjs(timestamp).format('MMM D, YYYY · h:mm A')}
+            >
+              {handle}
+              <span className="mx-1">·</span>
+              {dayjs(timestamp).fromNow()}
+            </p>
           </div>
 
-          <p className="mt-3 text-ds-text-primary break-words text-sm max-w-full overflow-hidden whitespace-normal">
-            {isExpanded ? content : `${content.substring(0, 200)}...`}
-            {content.length > 200 && (
-              <button onClick={toggleContent} className="text-ds-state-info ml-1">
-                {isExpanded ? 'Read less' : 'Read more...'}
+          <div className="relative shrink-0" ref={menuRef}>
+            {type === 'self' && (
+              <button
+                type="button"
+                onClick={handleDelete}
+                className={clsx(actionButtonClass, 'hover:text-ds-state-danger')}
+                aria-label="Delete post"
+              >
+                <Trash className="h-5 w-5" />
               </button>
             )}
-          </p>
-          
-          {image && (
-            <div className="mt-3 -mx-4">
-              <img 
-                src={image} 
-                alt="Post" 
-                className="w-screen h-96 object-contain"
-              /> 
-            </div>
-          )}
+            {type === 'common' && (
+              <button
+                type="button"
+                onClick={() => setShowMenu(!showMenu)}
+                className={actionButtonClass}
+                aria-label="Post options"
+                aria-expanded={showMenu}
+              >
+                <MoreVertical className="h-5 w-5 text-ds-text-secondary" />
+              </button>
+            )}
+            {showMenu && (
+              <div
+                className="absolute right-0 z-dsOverlay mt-1 w-48 overflow-hidden rounded-dsMd border border-ds-border-subtle bg-ds-surface-card py-1 shadow-dsLg"
+                role="menu"
+              >
+                <button
+                  type="button"
+                  role="menuitem"
+                  onClick={() => {
+                    setShowReportModal(true);
+                    setShowMenu(false);
+                  }}
+                  className="flex w-full items-center gap-2 px-4 py-2 text-left text-sm text-ds-state-danger hover:bg-ds-surface-muted"
+                >
+                  <Flag className="h-4 w-4" />
+                  Report post
+                </button>
+              </div>
+            )}
+          </div>
+        </header>
 
-          <div className="mt-4 flex items-center justify-between pt-3 border-t flex-wrap">
-            <button 
+        {/* Content body */}
+        {content && (
+          <div className="px-4 pb-3">
+            <p className="break-words text-[15px] leading-6 text-ds-text-primary">
+              {displayText}
+              {shouldTruncate && (
+                <button
+                  type="button"
+                  onClick={toggleContent}
+                  className="ml-1 font-medium text-ds-state-info hover:underline"
+                >
+                  {isExpanded ? 'Read less' : 'Read more'}
+                </button>
+              )}
+            </p>
+          </div>
+        )}
+
+        {/* Media */}
+        {image && (
+          <figure className="border-y border-ds-border-subtle bg-ds-surface-muted">
+            <img
+              src={image}
+              alt="Post media"
+              className="w-full max-h-[28rem] object-cover"
+              loading="lazy"
+            />
+          </figure>
+        )}
+
+        {/* Action footer — Instagram-style single row */}
+        <footer className="flex items-center justify-between px-3 py-2">
+          <div className="flex items-center gap-0.5">
+            <button
+              type="button"
               onClick={handleLikeInteraction}
-              className="flex items-center gap-2 text-sm hover:bg-ds-surface-muted px-3 py-2 rounded-lg"
+              className={actionWithCountClass}
+              aria-label={postLiked ? 'Unlike post' : 'Like post'}
             >
-              <Heart 
+              <Heart
                 className={clsx(
-                  "h-5 w-5 transition-colors",
-                  postLiked ? "fill-ds-state-danger text-ds-state-danger" : "text-ds-text-secondary"
-                )} 
-              />
-              <span>{likes} Likes</span>
-            </button>
-            
-            <button 
-              onClick={() => setShowComments(true)}
-              className="flex items-center gap-2 text-sm hover:bg-ds-surface-muted px-3 py-2 rounded-lg text-ds-text-secondary"
-            >
-              <MessageCircle 
-                className={clsx(
-                  "h-5 w-5",
-                "text-ds-text-secondary"
+                  'h-[22px] w-[22px] transition-colors duration-ds',
+                  postLiked
+                    ? 'fill-ds-state-danger text-ds-state-danger'
+                    : 'text-ds-text-secondary'
                 )}
               />
-              <span>{comments} Comment</span>
+              <span className="min-w-[1ch] text-sm font-semibold tabular-nums text-ds-text-primary">
+                {likes}
+              </span>
             </button>
-            
-            <button onClick={handleShare} className="flex items-center gap-2 text-sm hover:bg-ds-surface-muted px-3 py-2 rounded-lg text-ds-text-secondary">
-              <Share2 className="h-5 w-5" />
-              <span>Share</span>
+
+            <button
+              type="button"
+              onClick={() => setShowComments(true)}
+              className={actionWithCountClass}
+              aria-label="View comments"
+            >
+              <MessageCircle className="h-[22px] w-[22px] text-ds-text-secondary" />
+              <span className="min-w-[1ch] text-sm font-semibold tabular-nums text-ds-text-primary">
+                {comments}
+              </span>
+            </button>
+
+            <button
+              type="button"
+              onClick={handleShare}
+              className={actionButtonClass}
+              aria-label="Share post"
+            >
+              <Share2 className="h-[22px] w-[22px] text-ds-text-secondary" />
             </button>
           </div>
-        </ div>
-      </div>
+
+          {(type === 'common' || type === 'save') && (
+            <button
+              type="button"
+              onClick={handleToggleSave}
+              className={actionButtonClass}
+              aria-label={isSaved ? 'Unsave post' : 'Save post'}
+            >
+              <Bookmark
+                className={clsx(
+                  'h-[22px] w-[22px] transition-colors duration-ds',
+                  isSaved
+                    ? 'fill-ds-text-primary text-ds-text-primary'
+                    : 'text-ds-text-secondary'
+                )}
+              />
+            </button>
+          )}
+        </footer>
+      </article>
 
       <CommentsModal
         isOpen={showComments}
@@ -231,4 +328,3 @@ export default function FeedCard({ username, userImage, content, timestamp, imag
     </>
   );
 }
-

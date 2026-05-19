@@ -1,29 +1,38 @@
-import React, { useEffect, useState } from 'react'
-import InfoCard from './InfoCard'
-import useAxiosInstance from '../axios/axiosInstance';
+import React from 'react';
 import { User } from '../interfaces/User.interface';
 import UserCard from './UserCard';
 import { designRecipes } from 'hostApp/designRecipes';
 
-function FriendRequests() {
-    const axiosInstance = useAxiosInstance();
-    const [friendRequests, setFriendRequests] = useState<User[]>([]);
-    console.log(friendRequests[0]);
-    /* fetch friend requests from server */
-    useEffect(() => {
-        axiosInstance.get("/friend/request")
-        .then(resp => setFriendRequests(resp?.data?.data?.friendRequests))
-        .catch(err => console.log(err));
-    }, []);
-  return (
-    <div className={`${designRecipes.panel} space-y-3 p-3`}>
-        {
-            friendRequests?.length > 0 ? (
-                friendRequests?.map((user) => ( <UserCard user={user?.Profile} /> ))
-            ) : (<InfoCard message='No New Friend Requests has been received.' />)
-        }
-    </div>
-  )
+interface FriendRequestsProps {
+  users: User[];
+  loading?: boolean;
 }
 
-export default FriendRequests
+function FriendRequests({ users, loading = false }: FriendRequestsProps) {
+  if (loading) {
+    return (
+      <div className="flex justify-center py-12">
+        <div className="h-10 w-10 animate-spin rounded-full border-2 border-ds-border-subtle border-t-ds-brand-600" />
+      </div>
+    );
+  }
+
+  return (
+    <div className={`${designRecipes.panel} divide-y divide-ds-border-subtle`}>
+      {users.length > 0 ? (
+        users.map((user) => (
+          <UserCard
+            key={user?.userID ?? (user?.Profile as User)?.userID}
+            user={user?.Profile as User}
+          />
+        ))
+      ) : (
+        <p className="py-10 text-center text-sm text-ds-text-muted">
+          No pending friend requests.
+        </p>
+      )}
+    </div>
+  );
+}
+
+export default FriendRequests;
