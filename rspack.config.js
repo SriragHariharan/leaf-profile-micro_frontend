@@ -108,7 +108,6 @@ module.exports = {
       filename: 'remoteEntry.js',
       exposes: {
         "./ProfilePage": "./src/pages/Profile",
-        "./GalleryPage": "./src/pages/Gallery",
         "./FriendsPage": "./src/pages/Friends",
         "./FeedsPage": "./src/pages/Feed",
         "./PostsPage": "./src/pages/Post",
