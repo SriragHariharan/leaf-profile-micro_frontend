@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
-import ProfileHeader from '../components/ProfileHeader';
-import FeedCard from '../components/FeedCard';
+import ProfileHeader from '../features/profile/components/ProfileHeader';
 import { MapPin, Calendar, Film } from 'lucide-react';
 import { clsx } from 'clsx';
 import '../index.scss';
-import TravelHistoryCard from '../components/TravelHistoryCard';
-import BucketListCard from '../components/BucketListCard';
+import TravelHistoryCard from '../features/profile/components/TravelHistoryCard';
+import BucketListCard from '../features/profile/components/BucketListCard';
 import { useParams } from 'react-router';
-import ProfileFeed from '../components/ProfileFeed';
+import ProfileFeed from '../features/feed/components/ProfileFeed';
 import { designRecipes } from 'hostApp/designRecipes';
 
 const tabs = [
@@ -16,16 +15,9 @@ const tabs = [
   { id: 'bucket-list', label: 'Bucket List', icon: Calendar },
 ];
 
-
-
-
-
-
-export default function Profile({self}: {self: boolean}) {
-
+export default function Profile({ self }: { self: boolean }) {
   const [activeTab, setActiveTab] = useState('feed');
-
-  const { userID } = useParams()  ;
+  const { userID } = useParams();
 
   return (
     <div className="max-w-3xl mx-auto space-y-6 pt-4 px-4 md:px-0">
@@ -41,7 +33,7 @@ export default function Profile({self}: {self: boolean}) {
                 'flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-lg transition-colors whitespace-nowrap',
                 activeTab === tab.id
                   ? 'bg-ds-brand-50 text-ds-brand-600'
-                  : 'text-ds-text-secondary hover:text-ds-brand-600 hover:bg-ds-brand-50'
+                  : 'text-ds-text-secondary hover:text-ds-brand-600 hover:bg-ds-brand-50',
               )}
             >
               {tab.icon && <tab.icon className="h-4 w-4" />}
@@ -52,16 +44,10 @@ export default function Profile({self}: {self: boolean}) {
       </div>
 
       <div className="space-y-4">
-        {activeTab === 'feed' && <ProfileFeed userID={userID} self={self} /> }
-
-        { activeTab === 'travel-history' && <TravelHistoryCard userID={userID} self={self} /> }
-
-        { activeTab === 'bucket-list' && <BucketListCard userID={userID} self={self}  /> }
+        {activeTab === 'feed' && <ProfileFeed userID={userID} self={self} />}
+        {activeTab === 'travel-history' && <TravelHistoryCard userID={userID} self={self} />}
+        {activeTab === 'bucket-list' && <BucketListCard userID={userID} self={self} />}
       </div>
-
-      
-
-      
     </div>
   );
 }

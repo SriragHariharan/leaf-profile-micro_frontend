@@ -4,11 +4,11 @@ import axios from 'axios';
 import { Search, Bookmark } from 'lucide-react';
 import { clsx } from 'clsx';
 import useAxiosInstance from '../axios/axiosInstance';
-import FeedCard from '../components/FeedCard';
-import SavedFeedCard from '../components/SavedFeedCard';
-import SearchSegmentedControl from '../components/SearchSegmentedControl';
-import SearchUserCard from '../components/SearchUserCard';
-import InfoCard from '../components/InfoCard';
+import FeedCard from '../features/feed/components/FeedCard';
+import SavedFeedCard from '../features/feed/components/SavedFeedCard';
+import SearchSegmentedControl from '../features/search/components/SearchSegmentedControl';
+import SearchUserCard from '../features/search/components/SearchUserCard';
+import InfoCard from '../features/search/components/InfoCard';
 import { Toaster, showErrorToast } from 'authMF/toastFunction';
 import { designRecipes } from 'hostApp/designRecipes';
 import type {
@@ -17,7 +17,7 @@ import type {
   SearchType,
   SearchUserResult,
   ViewMode,
-} from '../types/search.types';
+} from '../features/search/types/search.types';
 
 function isCanceledError(err: unknown): boolean {
   return (

@@ -23,8 +23,6 @@ declare module 'authMF/toastFunction' {
   export const showSuccessToast: (message: string) => void;
 }
 
-declare module 'chatMF/MessageButton' {}
-
 declare module "hostApp/themeBootstrap" {
   export const themeBootstrapReady: boolean;
 }

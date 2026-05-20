@@ -117,8 +117,7 @@ module.exports = {
       },
       remotes: {
         hostApp: `host@${process.env.REACT_APP_HOST_REMOTE}`,
-        authMF: `authMF@${process.env.REACT_APP_AUTH_MF_REMOTE}`,
-        chatMF: `chatMF@${process.env.REACT_APP_CHAT_MF_REMOTE}`
+        authMF: `authMF@${process.env.REACT_APP_AUTH_MF_REMOTE}`
       },
       shared: {
         react: { eager: true },
@@ -137,7 +136,6 @@ module.exports = {
       'process.env.REACT_APP_LEAF_FRIEND_BASE_URL': JSON.stringify(process.env.REACT_APP_LEAF_FRIEND_BASE_URL),
       'process.env.REACT_APP_HOST_REMOTE': JSON.stringify(process.env.REACT_APP_HOST_REMOTE),
       'process.env.REACT_APP_AUTH_MF_REMOTE': JSON.stringify(process.env.REACT_APP_AUTH_MF_REMOTE),
-      'process.env.REACT_APP_CHAT_MF_REMOTE': JSON.stringify(process.env.REACT_APP_CHAT_MF_REMOTE),
     }),
     new rspack.ProgressPlugin({}),
     new rspack.HtmlRspackPlugin({

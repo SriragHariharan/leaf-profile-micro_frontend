@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import '../index.scss';
-import MyFriends from '../components/MyFriends';
-import FriendRequests from '../components/FriendRequests';
+import MyFriends from '../features/friends/components/MyFriends';
+import FriendRequests from '../features/friends/components/FriendRequests';
 import FriendsSegmentedControl, {
   type FriendsTab,
-} from '../components/FriendsSegmentedControl';
-import { useFriendsLists } from '../hooks/useFriendsLists';
+} from '../features/friends/components/FriendsSegmentedControl';
+import { useFriendsLists } from '../features/friends/hooks/useFriendsLists';
 
 export default function PeoplePage() {
   const [activeTab, setActiveTab] = useState<FriendsTab>('requests');
@@ -38,9 +38,7 @@ export default function PeoplePage() {
         {activeTab === 'requests' && (
           <FriendRequests users={friendRequests} loading={loading} />
         )}
-        {activeTab === 'friends' && (
-          <MyFriends users={friends} loading={loading} />
-        )}
+        {activeTab === 'friends' && <MyFriends users={friends} loading={loading} />}
       </div>
     </div>
   );
