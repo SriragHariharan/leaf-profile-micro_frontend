@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import AddTravelHistoryModal from '../modals/AddTravelHistoryModal';
 import { Plus } from 'lucide-react';
-import useAxiosInstance from '../../../axios/axiosInstance';
+import useAxiosInstance from 'hostApp/useAxiosInstance';
 import { designRecipes } from 'hostApp/designRecipes';
 
 interface TravelHistory {

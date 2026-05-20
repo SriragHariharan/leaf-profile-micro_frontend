@@ -113,11 +113,9 @@ module.exports = {
         "./FeedsPage": "./src/pages/Feed",
         "./PostsPage": "./src/pages/Post",
         "./SearchPage": "./src/pages/SearchPage",
-        "./useAxiosInstance":"./src/axios/axiosInstance"
       },
       remotes: {
         hostApp: `host@${process.env.REACT_APP_HOST_REMOTE}`,
-        authMF: `authMF@${process.env.REACT_APP_AUTH_MF_REMOTE}`
       },
       shared: {
         react: { eager: true },
@@ -125,6 +123,10 @@ module.exports = {
         'react-router': { eager: true },
         clsx: {eager: true},
         "lucide-react": {eager: true},
+        'react-hot-toast': {
+          singleton: true,
+          requiredVersion: '^2.5.2',
+        },
       },
     }),
     new rspack.DefinePlugin({
@@ -135,7 +137,6 @@ module.exports = {
       'process.env.REACT_APP_LEAF_POST_BASE_URL': JSON.stringify(process.env.REACT_APP_LEAF_POST_BASE_URL),
       'process.env.REACT_APP_LEAF_FRIEND_BASE_URL': JSON.stringify(process.env.REACT_APP_LEAF_FRIEND_BASE_URL),
       'process.env.REACT_APP_HOST_REMOTE': JSON.stringify(process.env.REACT_APP_HOST_REMOTE),
-      'process.env.REACT_APP_AUTH_MF_REMOTE': JSON.stringify(process.env.REACT_APP_AUTH_MF_REMOTE),
     }),
     new rspack.ProgressPlugin({}),
     new rspack.HtmlRspackPlugin({

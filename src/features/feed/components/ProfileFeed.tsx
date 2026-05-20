@@ -1,7 +1,7 @@
 import React from 'react';
-import useAxiosInstance from '../../../axios/axiosInstance';
+import useAxiosInstance from 'hostApp/useAxiosInstance';
 import FeedCard from './FeedCard';
-import { showErrorToast, showSuccessToast } from 'authMF/toastFunction';
+import { showErrorToast, showSuccessToast } from 'hostApp/toast';
 import { DEFAULT_PROFILE_IMAGE } from '../../../constants/constants';
 import { designRecipes } from 'hostApp/designRecipes';
 import { useInfiniteFeed } from '../hooks/useInfiniteFeed';

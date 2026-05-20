@@ -17,7 +17,6 @@
  * @param onReportSubmit - Submits report payload to the API
  */
 import React from 'react';
-import { Toaster } from 'authMF/toastFunction';
 import EditProfileModal from '../../modals/EditProfileModal';
 import ProfileImgUploadModal from '../../modals/ProfileImgUploadModal';
 import CoverImgUploadModal from '../../modals/CoverImgUploadModal';
@@ -55,7 +54,6 @@ export default function ProfileHeaderModals({
 }: ProfileHeaderModalsProps) {
   return (
     <>
-      <Toaster />
       {editModal.type && (
         <EditProfileModal
           isOpen={editModal.isOpen}

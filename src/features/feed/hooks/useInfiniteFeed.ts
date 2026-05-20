@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import useAxiosInstance from '../../../axios/axiosInstance';
-import { showErrorToast } from 'authMF/toastFunction';
+import useAxiosInstance from 'hostApp/useAxiosInstance';
+import { showErrorToast } from 'hostApp/toast';
 import type { FeedSource, MappedPost, TimelineFeedItem } from '../types/feed.types';
 import { mapFeedToPost, mergePosts } from '../utils/feedMappers';
 

@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { X, Image, Loader, Sparkles } from 'lucide-react';
-import useAxiosInstance from '../../../axios/axiosInstance';
+import useAxiosInstance from 'hostApp/useAxiosInstance';
 
 interface CreatePostModalProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
-import { showErrorToast, Toaster } from 'authMF/toastFunction';
+import { showErrorToast } from 'hostApp/toast';
 import { designRecipes } from 'hostApp/designRecipes';
 
 const CreatePostModal: React.FC<CreatePostModalProps> = ({ isOpen, onClose }) => {
@@ -60,7 +60,6 @@ const CreatePostModal: React.FC<CreatePostModalProps> = ({ isOpen, onClose }) =>
 
   return (
     <div className={designRecipes.modalOverlay}>
-      <Toaster />
       <div className={`${designRecipes.modalContainer} max-w-2xl`}>
         <div className={designRecipes.modalHeader}>
           <div className="flex items-center gap-2">

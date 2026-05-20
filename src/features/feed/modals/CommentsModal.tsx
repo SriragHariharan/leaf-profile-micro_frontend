@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { MessageCircle, Send, Trash2, X } from 'lucide-react';
-import useAxiosInstance from '../../../axios/axiosInstance';
-import { showErrorToast, showSuccessToast } from 'authMF/toastFunction';
+import useAxiosInstance from 'hostApp/useAxiosInstance';
+import { showErrorToast, showSuccessToast } from 'hostApp/toast';
 import { DEFAULT_PROFILE_IMAGE } from '../../../constants/constants';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';

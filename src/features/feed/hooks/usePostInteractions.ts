@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
-import useAxiosInstance from '../../../axios/axiosInstance';
-import { showErrorToast, showSuccessToast } from 'authMF/toastFunction';
+import useAxiosInstance from 'hostApp/useAxiosInstance';
+import { showErrorToast, showSuccessToast } from 'hostApp/toast';
 import { POST_PATHS } from '../services/postApi';
 
 export interface InteractionUpdate {

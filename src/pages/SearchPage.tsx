@@ -1,15 +1,15 @@
 import '../index.scss';
-import React, { useCallback, useRef, useState } from 'react';
-import axios from 'axios';
+import React, { useState } from 'react';
+import { type AxiosInstance } from 'axios';
 import { Search, Bookmark } from 'lucide-react';
 import { clsx } from 'clsx';
-import useAxiosInstance from '../axios/axiosInstance';
+import useAxiosInstance from 'hostApp/useAxiosInstance';
 import FeedCard from '../features/feed/components/FeedCard';
 import SavedFeedCard from '../features/feed/components/SavedFeedCard';
 import SearchSegmentedControl from '../features/search/components/SearchSegmentedControl';
 import SearchUserCard from '../features/search/components/SearchUserCard';
 import InfoCard from '../features/search/components/InfoCard';
-import { Toaster, showErrorToast } from 'authMF/toastFunction';
+import { showErrorToast } from 'hostApp/toast';
 import { designRecipes } from 'hostApp/designRecipes';
 import type {
   SavedPostResult,
@@ -19,22 +19,25 @@ import type {
   ViewMode,
 } from '../features/search/types/search.types';
 
-function isCanceledError(err: unknown): boolean {
-  return (
-    axios.isCancel(err) ||
-    (err as { code?: string })?.code === 'ERR_CANCELED'
-  );
+interface ApiResponse<T> {
+  data?: T;
+}
+
+interface SearchResultsData {
+  posts?: SearchPostResult[];
+  users?: SearchUserResult[];
+}
+
+interface SavedPostsData {
+  posts?: SavedPostResult[];
+}
+
+function getResponseStatus(err: unknown): number | undefined {
+  return (err as { response?: { status?: number } })?.response?.status;
 }
 
 function SearchPage() {
-  const axiosInstance = useAxiosInstance();
-  const axiosRef = useRef(axiosInstance);
-  axiosRef.current = axiosInstance;
-
-  const abortControllerRef = useRef<AbortController | null>(null);
-  const requestIdRef = useRef(0);
-  const loadingRef = useRef(false);
-  const lastSearchKeyRef = useRef<string | null>(null);
+  const axiosInstance = useAxiosInstance() as AxiosInstance;
 
   const [searchQuery, setSearchQuery] = useState('');
   const [searchType, setSearchType] = useState<SearchType>('user');
@@ -45,33 +48,19 @@ function SearchPage() {
   const [loading, setLoading] = useState(false);
   const [hasSearched, setHasSearched] = useState(false);
 
-  const runSearch = useCallback(async (query: string, type: SearchType) => {
+  const runSearch = async (query: string, type: SearchType) => {
     const trimmed = query.trim();
-    if (!trimmed) return;
+    if (!trimmed || loading) return;
 
-    const searchKey = `${type}:${trimmed.toLowerCase()}`;
-    if (loadingRef.current && lastSearchKeyRef.current === searchKey) {
-      return;
-    }
-
-    abortControllerRef.current?.abort();
-    const controller = new AbortController();
-    abortControllerRef.current = controller;
-
-    const requestId = ++requestIdRef.current;
-    lastSearchKeyRef.current = searchKey;
-    loadingRef.current = true;
     setLoading(true);
     setViewMode('search');
     setHasSearched(true);
 
     try {
-      const resp = await axiosRef.current.get('../post/search', {
-        params: { query: trimmed, type },
-        signal: controller.signal,
-      });
-
-      if (requestId !== requestIdRef.current) return;
+      const resp = await axiosInstance.get<ApiResponse<SearchResultsData>>(
+        '../post/search',
+        { params: { query: trimmed, type } }
+      );
 
       if (type === 'post') {
         setSearchedPosts(resp?.data?.data?.posts ?? []);
@@ -81,11 +70,7 @@ function SearchPage() {
         setSearchedPosts([]);
       }
     } catch (err: unknown) {
-      if (isCanceledError(err) || requestId !== requestIdRef.current) return;
-
-      const status = (err as { response?: { status?: number } })?.response
-        ?.status;
-      if (status === 429) {
+      if (getResponseStatus(err) === 429) {
         showErrorToast('Too many searches. Please wait a moment and try again.');
       } else {
         showErrorToast(
@@ -93,22 +78,17 @@ function SearchPage() {
         );
       }
     } finally {
-      if (requestId === requestIdRef.current) {
-        loadingRef.current = false;
-        setLoading(false);
-      }
+      setLoading(false);
     }
-  }, []);
+  };
 
   const handleSearch = (e?: React.FormEvent) => {
     e?.preventDefault();
-    const trimmed = searchQuery.trim();
-    if (!trimmed || loadingRef.current) return;
-    runSearch(trimmed, searchType);
+    runSearch(searchQuery, searchType);
   };
 
   const handleSegmentChange = (type: SearchType) => {
-    if (type === searchType) return;
+    if (type === searchType || loading) return;
     setSearchType(type);
     setViewMode('search');
     const trimmed = searchQuery.trim();
@@ -123,20 +103,19 @@ function SearchPage() {
       return;
     }
 
-    if (loadingRef.current) return;
+    if (loading) return;
 
-    abortControllerRef.current?.abort();
-    loadingRef.current = true;
     setLoading(true);
     setHasSearched(false);
 
     try {
-      const resp = await axiosRef.current.get('../post/save');
+      const resp = await axiosInstance.get<ApiResponse<SavedPostsData>>(
+        '../post/save'
+      );
       setSavedPosts(resp?.data?.data?.posts ?? []);
       setViewMode('saved');
     } catch (err: unknown) {
-      const status = (err as { response?: { status?: number } })?.response
-        ?.status;
+      const status = getResponseStatus(err);
       const message =
         status === 429
           ? 'Too many requests. Please wait a moment and try again.'
@@ -144,7 +123,6 @@ function SearchPage() {
               ?.data?.message ?? 'Unable to load saved posts');
       showErrorToast(message);
     } finally {
-      loadingRef.current = false;
       setLoading(false);
     }
   };
@@ -219,8 +197,6 @@ function SearchPage() {
 
   return (
     <div>
-      <Toaster />
-
       <div className="sticky top-0 z-10 mx-auto bg-ds-surface-card shadow-dsSm md:max-w-4xl">
         <div className="mx-auto space-y-3 px-4 py-3">
           <form onSubmit={handleSearch} className="relative flex">
@@ -231,35 +207,30 @@ function SearchPage() {
             <input
               type="text"
               placeholder={placeholder}
-              className={`${designRecipes.inputBase} w-full rounded-full py-2.5 pl-11 pr-14`}
+              disabled={loading}
+              className={`${designRecipes.inputBase} w-full rounded-full py-2.5 pl-11 pr-14 disabled:opacity-60`}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               aria-label="Search query"
             />
-            {/* <button
-              type="submit"
-              disabled={loading}
-              className={`${designRecipes.buttonPrimary} absolute right-1 top-1/2 flex h-9 -translate-y-1/2 items-center justify-center rounded-full px-4 text-sm font-medium disabled:opacity-60`}
-            >
-              Search
-            </button> */}
           </form>
 
           <div className="flex flex-wrap items-center justify-between gap-3">
             <SearchSegmentedControl
               value={searchType}
               onChange={handleSegmentChange}
-              disabled={isSavedView}
+              disabled={loading || isSavedView}
             />
 
             <button
               type="button"
               onClick={handleSavedPosts}
+              disabled={loading}
               aria-pressed={isSavedView}
               title={isSavedView ? 'Back to search' : 'Saved posts'}
               className={clsx(
                 designRecipes.buttonSecondary,
-                'inline-flex items-center gap-2 rounded-full px-3 py-2 text-sm font-medium transition-all duration-ds',
+                'inline-flex items-center gap-2 rounded-full px-3 py-2 text-sm font-medium transition-all duration-ds disabled:opacity-60',
                 isSavedView &&
                   'border-ds-brand-200 bg-ds-brand-50 text-ds-brand-700 shadow-dsBrand'
               )}

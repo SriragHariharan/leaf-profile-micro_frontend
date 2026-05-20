@@ -7,7 +7,7 @@ import { DEFAULT_PROFILE_IMAGE } from '../../../constants/constants';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { designRecipes } from 'hostApp/designRecipes';
-import { showSuccessToast, Toaster, showErrorToast } from 'authMF/toastFunction';
+import { showSuccessToast, showErrorToast } from 'hostApp/toast';
 import { usePostInteractions } from '../hooks/usePostInteractions';
 
 dayjs.extend(relativeTime);
@@ -105,7 +105,6 @@ export default function FeedCard({
 
   return (
     <>
-      <Toaster />
       <article
         className={clsx(
           designRecipes.panel,

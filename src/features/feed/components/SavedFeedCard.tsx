@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 import { DEFAULT_PROFILE_IMAGE } from '../../../constants/constants';
 import { Link } from 'react-router';
 import dayjs from 'dayjs';
-import { Toaster } from 'authMF/toastFunction';
 import { designRecipes } from 'hostApp/designRecipes';
 import { usePostInteractions } from '../hooks/usePostInteractions';
 
@@ -31,7 +30,6 @@ function SavedFeedCard({
 
   return (
     <div className={`${designRecipes.panel} overflow-hidden pb-4`}>
-      <Toaster />
       <div className="p-4 flex items-center justify-between">
         <Link to={'/view-profile/' + userID} className="flex items-center gap-3">
           <img

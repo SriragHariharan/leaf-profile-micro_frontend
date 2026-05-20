@@ -1,6 +1,6 @@
 import React, { useState, ChangeEvent } from "react";
-import useAxiosInstance from '../../../axios/axiosInstance';
-import { showErrorToast, showSuccessToast } from "authMF/toastFunction";
+import useAxiosInstance from 'hostApp/useAxiosInstance';
+import { showErrorToast, showSuccessToast } from 'hostApp/toast';
 import { ImagePlus, Loader2, X } from "lucide-react";
 import { designRecipes } from "hostApp/designRecipes";
 

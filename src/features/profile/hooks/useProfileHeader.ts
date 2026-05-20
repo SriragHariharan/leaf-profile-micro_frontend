@@ -10,8 +10,8 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import dayjs from 'dayjs';
 import useStore from 'hostApp/GlobalStore';
-import useAxiosInstance from '../../../axios/axiosInstance';
-import { showSuccessToast, showErrorToast } from 'authMF/toastFunction';
+import useAxiosInstance from 'hostApp/useAxiosInstance';
+import { showSuccessToast, showErrorToast } from 'hostApp/toast';
 import { DEFAULT_PROFILE_IMAGE } from '../../../constants/constants';
 import { FRIEND_PATHS, friendUrl } from '../../friends/api/friendApi';
 import {

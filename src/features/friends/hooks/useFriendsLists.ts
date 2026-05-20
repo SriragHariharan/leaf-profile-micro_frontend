@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import useAxiosInstance from '../../../axios/axiosInstance';
+import useAxiosInstance from 'hostApp/useAxiosInstance';
 import { User } from '../../../interfaces/User.interface';
 import { FRIEND_PATHS, friendUrl } from '../api/friendApi';
 
