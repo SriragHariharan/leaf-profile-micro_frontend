@@ -32,7 +32,7 @@ export default function FriendsSegmentedControl({
     <div
       role="tablist"
       aria-label="Friends navigation"
-      className="grid w-[320px] grid-cols-2 gap-1 rounded-dsPill border border-ds-border-subtle bg-ds-surface-muted p-1"
+      className={designRecipes.segmentedControlShellGrid}
     >
       {segments.map((segment) => {
         const isActive = value === segment.value;
@@ -45,9 +45,8 @@ export default function FriendsSegmentedControl({
             aria-selected={isActive}
             onClick={() => onChange(segment.value)}
             className={clsx(
-              'inline-flex items-center justify-center gap-2 rounded-dsPill px-3 py-1.5 text-sm font-medium transition-all duration-ds',
-              isActive ? designRecipes.navItemActive : designRecipes.navItemIdle,
-              'border-0 shadow-none hover:translate-y-0'
+              designRecipes.segmentedTab,
+              isActive ? designRecipes.segmentedTabActive : designRecipes.segmentedTabIdle
             )}
           >
             <span>{segment.label}</span>
@@ -67,4 +66,3 @@ export default function FriendsSegmentedControl({
     </div>
   );
 }
-

@@ -10,7 +10,7 @@ export default function SearchUserCard({ userID, username, profilepic }: SearchU
   return (
     <Link
       to={`/view-profile/${userID}`}
-      className={`${designRecipes.panel} mb-3 flex items-center gap-4 p-4 transition-all duration-ds hover:-translate-y-0.5 hover:shadow-dsMd`}
+      className={`${designRecipes.panelHover} mb-3 flex items-center gap-4 p-4`}
     >
       <img
         src={profilepic || DEFAULT_PROFILE_IMAGE}

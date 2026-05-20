@@ -59,7 +59,7 @@ const Post = () => {
   if (error) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <div className={`${designRecipes.panel} flex items-center gap-2 bg-ds-state-dangerSoft p-4 text-ds-state-danger`}>
+        <div className={designRecipes.statusPanelDanger}>
           <AlertCircle className="h-5 w-5" />
           {error}
         </div>
@@ -70,7 +70,7 @@ const Post = () => {
   if (!post) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <div className={`${designRecipes.panel} flex items-center gap-2 bg-ds-state-warningSoft p-4 text-ds-state-warning`}>
+        <div className={designRecipes.statusPanelWarning}>
           <AlertCircle className="h-5 w-5" />
           Post not found.
         </div>

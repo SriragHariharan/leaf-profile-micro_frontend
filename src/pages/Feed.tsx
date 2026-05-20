@@ -14,8 +14,8 @@ function Feed() {
   };
 
   return (
-    <div className="flex items-start justify-center min-h-screen">
-      <div className="max-w-3xl w-full lg:mt-10">
+    <div className={designRecipes.pageCenter}>
+      <div className={`${designRecipes.pageContainer} lg:mt-10`}>
         <CreatePost />
 
         <button

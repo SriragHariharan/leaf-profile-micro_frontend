@@ -1,22 +1,12 @@
 /**
  * ProfileHeaderActions
  *
- * Renders the action button cluster in the profile header:
- * - Own profile: Logout
- * - Other profiles: Add Friend / Cancel / Accept+Reject / Friends badge, plus Report
- *
- * Friendship state is read from `profile`; handlers call the API via useProfileHeader.
+ * Renders the action button cluster in the profile header.
  */
 import React from 'react';
 import { UserPlus, LogOut, Hourglass, Flag, X, UserMinus } from 'lucide-react';
+import { designRecipes } from 'hostApp/designRecipes';
 import type { Profile } from '../../../../types/profile.types';
-import {
-  compactBtnPrimary,
-  compactBtnReport,
-  compactBtnWarning,
-  compactStatusSuccess,
-  compactIcon,
-} from './profileHeaderStyles';
 
 type ProfileHeaderActionsProps = {
   self: boolean;
@@ -49,9 +39,9 @@ function FriendActionButtons({
   if (profile.isFriend || profile.friendStatus === 'friends') {
     return (
       <div className="flex flex-wrap items-center gap-2 sm:flex-nowrap sm:gap-2">
-        <span className={compactStatusSuccess}>Friends</span>
-        <button onClick={onUnfriend} className={compactBtnWarning}>
-          <UserMinus className={compactIcon} />
+        <span className={designRecipes.compactStatusSuccess}>Friends</span>
+        <button onClick={onUnfriend} className={designRecipes.compactBtnWarning}>
+          <UserMinus className={designRecipes.compactIcon} />
           Unfriend
         </button>
       </div>
@@ -61,12 +51,12 @@ function FriendActionButtons({
   if (profile.friendStatus === 'pending_received') {
     return (
       <div className="flex flex-wrap items-center gap-2 sm:flex-nowrap sm:gap-2">
-        <button onClick={onRejectFriendship} className={compactBtnWarning}>
-          <Hourglass className={compactIcon} />
+        <button onClick={onRejectFriendship} className={designRecipes.compactBtnWarning}>
+          <Hourglass className={designRecipes.compactIcon} />
           Reject
         </button>
-        <button onClick={onAcceptFriendship} className={compactBtnPrimary}>
-          <Hourglass className={compactIcon} />
+        <button onClick={onAcceptFriendship} className={designRecipes.compactBtnPrimary}>
+          <Hourglass className={designRecipes.compactIcon} />
           Accept
         </button>
       </div>
@@ -75,16 +65,16 @@ function FriendActionButtons({
 
   if (profile.friendStatus === 'pending_sent') {
     return (
-      <button onClick={onCancelFriendRequest} className={compactBtnWarning}>
-        <X className={compactIcon} />
+      <button onClick={onCancelFriendRequest} className={designRecipes.compactBtnWarning}>
+        <X className={designRecipes.compactIcon} />
         Cancel Request
       </button>
     );
   }
 
   return (
-    <button onClick={onSendFriendRequest} className={compactBtnPrimary}>
-      <UserPlus className={compactIcon} />
+    <button onClick={onSendFriendRequest} className={designRecipes.compactBtnPrimary}>
+      <UserPlus className={designRecipes.compactIcon} />
       Add Friend
     </button>
   );
@@ -104,8 +94,8 @@ export default function ProfileHeaderActions({
   if (self) {
     return (
       <div className="flex flex-wrap items-center gap-2 sm:flex-nowrap sm:gap-2">
-        <button onClick={onLogout} className={compactBtnReport}>
-          <LogOut className={compactIcon} />
+        <button onClick={onLogout} className={designRecipes.compactBtnReport}>
+          <LogOut className={designRecipes.compactIcon} />
           Logout
         </button>
       </div>
@@ -122,8 +112,8 @@ export default function ProfileHeaderActions({
         onRejectFriendship={onRejectFriendship}
         onUnfriend={onUnfriend}
       />
-      <button onClick={onReport} className={compactBtnReport}>
-        <Flag className={compactIcon} />
+      <button onClick={onReport} className={designRecipes.compactBtnReport}>
+        <Flag className={designRecipes.compactIcon} />
         Report
       </button>
     </div>

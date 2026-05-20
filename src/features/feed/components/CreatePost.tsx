@@ -14,7 +14,7 @@ const CreatePost: React.FC = () => {
   return (
     <>
       <div
-        className={`${designRecipes.panel} group mb-4 cursor-pointer bg-ds-surface-card p-4 transition-all duration-ds hover:-translate-y-0.5 hover:shadow-dsMd`}
+        className={`${designRecipes.panelHover} group mb-4 p-4`}
         onClick={() => setIsModalOpen(true)}
       >
         <div className="flex items-center gap-3">

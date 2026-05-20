@@ -7,6 +7,7 @@
  * @param self - true when viewing your own profile; enables edit controls and logout
  */
 import React from 'react';
+import { designRecipes } from 'hostApp/designRecipes';
 import { useProfileHeader } from '../hooks/useProfileHeader';
 import ProfileCoverBanner from './profile-header/ProfileCoverBanner';
 import ProfileIdentitySection from './profile-header/ProfileIdentitySection';
@@ -18,7 +19,7 @@ export default function ProfileHeader({ self }: { self: boolean }) {
   const h = useProfileHeader();
 
   return (
-    <div className="-mx-4 overflow-hidden border-y border-ds-border-subtle bg-ds-surface-card font-sans shadow-dsSm sm:mx-0 sm:rounded-2xl sm:border sm:border-ds-border-subtle">
+    <div className={designRecipes.profileHeaderCard}>
       <ProfileCoverBanner
         coverStyle={h.coverStyle}
         self={self}

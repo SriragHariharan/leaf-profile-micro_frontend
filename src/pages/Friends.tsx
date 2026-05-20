@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { designRecipes } from 'hostApp/designRecipes';
 import '../index.scss';
 import MyFriends from '../features/friends/components/MyFriends';
 import FriendRequests from '../features/friends/components/FriendRequests';
@@ -24,7 +25,7 @@ export default function PeoplePage() {
   };
 
   return (
-    <div className="mx-auto max-w-4xl p-6">
+    <div className={designRecipes.pageContainerWide}>
       <div className="mb-6 flex justify-center">
         <FriendsSegmentedControl
           value={activeTab}

@@ -18,7 +18,7 @@ function MyFriends({ users, loading = false }: MyFriendsProps) {
   }
 
   return (
-    <div className={`${designRecipes.panel} divide-y divide-ds-border-subtle`}>
+    <div className={designRecipes.panelList}>
       {users.length > 0 ? (
         users.map((user) => (
           <UserCard user={user?.friendProfile as User} key={user?.userID} />

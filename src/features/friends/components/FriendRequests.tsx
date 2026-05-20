@@ -18,7 +18,7 @@ function FriendRequests({ users, loading = false }: FriendRequestsProps) {
   }
 
   return (
-    <div className={`${designRecipes.panel} divide-y divide-ds-border-subtle`}>
+    <div className={designRecipes.panelList}>
       {users.length > 0 ? (
         users.map((user) => (
           <UserCard

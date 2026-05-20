@@ -198,7 +198,7 @@ function SearchPage() {
 
   return (
     <div>
-      <div className="sticky top-0 z-10 mx-auto bg-ds-surface-card shadow-dsSm md:max-w-4xl">
+      <div className={designRecipes.searchStickyHeader}>
         <div className="mx-auto space-y-3 px-4 py-3">
           <form onSubmit={handleSearch} className="relative flex">
             <Search
@@ -209,7 +209,7 @@ function SearchPage() {
               type="text"
               placeholder={placeholder}
               disabled={loading}
-              className={`${designRecipes.inputBase} w-full rounded-full py-2.5 pl-11 pr-14 disabled:opacity-60`}
+              className={designRecipes.inputSearchPill}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               aria-label="Search query"

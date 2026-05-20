@@ -25,16 +25,6 @@ interface FeedCardProps {
   handleDeletePost: (postID: string) => void;
 }
 
-const actionButtonClass = clsx(
-  designRecipes.iconButton,
-  'transition-all duration-ds hover:text-ds-text-primary active:scale-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ds-brand-500/50'
-);
-
-const actionWithCountClass = clsx(
-  actionButtonClass,
-  'inline-flex items-center gap-1 px-1.5'
-);
-
 export default function FeedCard({
   username,
   userImage,
@@ -115,7 +105,7 @@ export default function FeedCard({
           <img
             src={userImage ?? DEFAULT_PROFILE_IMAGE}
             alt={username}
-            className="h-10 w-10 shrink-0 rounded-full object-cover ring-2 ring-ds-border-subtle"
+            className={designRecipes.avatarFeed}
           />
           <div className="min-w-0 flex-1">
             <h3 className="truncate text-sm font-semibold text-ds-text-primary">
@@ -136,7 +126,7 @@ export default function FeedCard({
               <button
                 type="button"
                 onClick={handleDelete}
-                className={clsx(actionButtonClass, 'hover:text-ds-state-danger')}
+                className={`${designRecipes.feedActionButton} hover:text-ds-state-danger`}
                 aria-label="Delete post"
               >
                 <Trash className="h-5 w-5" />
@@ -146,7 +136,7 @@ export default function FeedCard({
               <button
                 type="button"
                 onClick={() => setShowMenu(!showMenu)}
-                className={actionButtonClass}
+                className={designRecipes.feedActionButton}
                 aria-label="Post options"
                 aria-expanded={showMenu}
               >
@@ -154,10 +144,7 @@ export default function FeedCard({
               </button>
             )}
             {showMenu && (
-              <div
-                className="absolute right-0 z-dsOverlay mt-1 w-48 overflow-hidden rounded-dsMd border border-ds-border-subtle bg-ds-surface-card py-1 shadow-dsLg"
-                role="menu"
-              >
+              <div className={designRecipes.dropdownMenu} role="menu">
                 <button
                   type="button"
                   role="menuitem"
@@ -165,7 +152,7 @@ export default function FeedCard({
                     setShowReportModal(true);
                     setShowMenu(false);
                   }}
-                  className="flex w-full items-center gap-2 px-4 py-2 text-left text-sm text-ds-state-danger hover:bg-ds-surface-muted"
+                  className={designRecipes.dropdownMenuItem}
                 >
                   <Flag className="h-4 w-4" />
                   Report post
@@ -208,7 +195,7 @@ export default function FeedCard({
             <button
               type="button"
               onClick={toggleLike}
-              className={actionWithCountClass}
+              className={designRecipes.feedActionWithCount}
               aria-label={postLiked ? 'Unlike post' : 'Like post'}
             >
               <Heart
@@ -227,7 +214,7 @@ export default function FeedCard({
             <button
               type="button"
               onClick={() => setShowComments(true)}
-              className={actionWithCountClass}
+              className={designRecipes.feedActionWithCount}
               aria-label="View comments"
             >
               <MessageCircle
@@ -246,7 +233,7 @@ export default function FeedCard({
             <button
               type="button"
               onClick={handleShare}
-              className={actionButtonClass}
+              className={designRecipes.feedActionButton}
               aria-label="Share post"
             >
               <Share2 className="h-[22px] w-[22px] text-ds-text-secondary" />
@@ -257,7 +244,7 @@ export default function FeedCard({
             <button
               type="button"
               onClick={handleToggleSave}
-              className={actionButtonClass}
+              className={designRecipes.feedActionButton}
               aria-label={isSaved ? 'Unsave post' : 'Save post'}
             >
               <Bookmark

@@ -24,7 +24,7 @@ export default function SearchSegmentedControl({
       role="tablist"
       aria-label="Search type"
       className={clsx(
-        'inline-flex rounded-dsPill border border-ds-border-subtle bg-ds-surface-muted p-1',
+        designRecipes.segmentedControlShell,
         disabled && 'pointer-events-none opacity-50'
       )}
     >
@@ -39,9 +39,8 @@ export default function SearchSegmentedControl({
             disabled={disabled}
             onClick={() => onChange(segment.value)}
             className={clsx(
-              'rounded-dsPill px-4 py-1.5 text-sm font-medium transition-all duration-ds',
-              isActive ? designRecipes.navItemActive : designRecipes.navItemIdle,
-              'border-0 shadow-none hover:translate-y-0'
+              designRecipes.segmentedTab,
+              isActive ? designRecipes.segmentedTabActive : designRecipes.segmentedTabIdle
             )}
           >
             {segment.label}
