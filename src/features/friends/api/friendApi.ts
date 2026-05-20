@@ -1,5 +1,6 @@
 import { LEAF_FRIEND_BASE_URL } from '../../../constants/constants';
 
+/** Friend service uses full URLs; bypasses user axios baseURL by design. */
 export function friendUrl(path: string): string {
   return `${LEAF_FRIEND_BASE_URL}${path}`;
 }

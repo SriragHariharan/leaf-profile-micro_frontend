@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router";
 import axios from "axios";
 import { Loader2, AlertCircle, Heart, MessageSquare } from "lucide-react";
-import { DEFAULT_PROFILE_IMAGE, LEAF_POST_BASE_URL } from "../constants/constants";
+import { DEFAULT_PROFILE_IMAGE, postDetailsUrl } from "../constants/constants";
 import '../index.scss';
 import { designRecipes } from "hostApp/designRecipes";
 
@@ -35,7 +35,7 @@ const Post = () => {
     }
 
     axios
-      .get(`${LEAF_POST_BASE_URL}/${postID}/details`)
+      .get(postDetailsUrl(postID))
       .then((resp) => {
         console.log(resp?.data?.data?.post)
         setPost(resp?.data?.data?.post);

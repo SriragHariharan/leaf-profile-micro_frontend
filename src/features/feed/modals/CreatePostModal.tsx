@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { X, Image, Loader, Sparkles } from 'lucide-react';
 import useAxiosInstance from 'hostApp/useAxiosInstance';
+import { GATEWAY_PATHS } from '../../../constants/constants';
 
 interface CreatePostModalProps {
   isOpen: boolean;
@@ -45,7 +46,7 @@ const CreatePostModal: React.FC<CreatePostModalProps> = ({ isOpen, onClose }) =>
       formData.append('picture', selectedFile);
     }
 
-    axiosInstance.post("../post", formData, 
+    axiosInstance.post(GATEWAY_PATHS.post.root, formData, 
       { headers: { "Content-Type": "multipart/form-data" } }
     ).then(_resp => {
       onClose();

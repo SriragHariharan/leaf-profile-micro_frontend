@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import AddTravelHistoryModal from '../modals/AddTravelHistoryModal';
 import { Plus } from 'lucide-react';
 import useAxiosInstance from 'hostApp/useAxiosInstance';
+import { PROFILE_PATHS } from '../../../constants/constants';
 import { designRecipes } from 'hostApp/designRecipes';
 
 interface TravelHistory {
@@ -20,12 +21,12 @@ function TravelHistoryCard({ userID, self }: {userID: string|undefined, self: bo
 
     /* fetch user details */
     useEffect(() => {
-        axiosInstance.get("/profile/travel-history/" + (userID ? userID : "self")).then(resp => setTravelHistory(resp?.data?.data?.travelList)).catch(err => console.log(err));
+        axiosInstance.get(PROFILE_PATHS.travelHistoryByUser(userID)).then(resp => setTravelHistory(resp?.data?.data?.travelList)).catch(err => console.log(err));
     }, [])
 
     /* submit to the server */
     const AddTravelHistory = (data:{ destination: string, year: number, places: string[]}) => {
-        axiosInstance.post("/profile/travel-history", {...data, year: String(data?.year)})
+        axiosInstance.post(PROFILE_PATHS.travelHistory, {...data, year: String(data?.year)})
         .then(resp => setTravelHistory([ ...travelHistory, resp?.data?.data]))
         .catch(err => console.log(err?.response?.data))
     }

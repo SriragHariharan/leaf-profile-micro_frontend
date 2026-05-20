@@ -118,11 +118,18 @@ module.exports = {
         hostApp: `host@${process.env.REACT_APP_HOST_REMOTE}`,
       },
       shared: {
-        react: { eager: true },
-        'react-dom': { eager: true },
-        'react-router': { eager: true },
-        clsx: {eager: true},
-        "lucide-react": {eager: true},
+        react: {
+          singleton: true,
+          requiredVersion: '^18.2.0',
+        },
+        'react-dom': {
+          singleton: true,
+          requiredVersion: '^18.2.0',
+        },
+        'react-router': {
+          singleton: true,
+          requiredVersion: '^7.1.1',
+        },
         'react-hot-toast': {
           singleton: true,
           requiredVersion: '^2.5.2',
@@ -132,8 +139,6 @@ module.exports = {
     new rspack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
       'process.env.REACT_APP_DEFAULT_PROFILE_IMAGE': JSON.stringify(process.env.REACT_APP_DEFAULT_PROFILE_IMAGE),
-      'process.env.REACT_APP_LEAF_USER_BASE_URL': JSON.stringify(process.env.REACT_APP_LEAF_USER_BASE_URL),
-      'process.env.REACT_APP_LEAF_PROFILE_REFRESH_TOKEN_URL': JSON.stringify(process.env.REACT_APP_LEAF_PROFILE_REFRESH_TOKEN_URL),
       'process.env.REACT_APP_LEAF_POST_BASE_URL': JSON.stringify(process.env.REACT_APP_LEAF_POST_BASE_URL),
       'process.env.REACT_APP_LEAF_FRIEND_BASE_URL': JSON.stringify(process.env.REACT_APP_LEAF_FRIEND_BASE_URL),
       'process.env.REACT_APP_HOST_REMOTE': JSON.stringify(process.env.REACT_APP_HOST_REMOTE),

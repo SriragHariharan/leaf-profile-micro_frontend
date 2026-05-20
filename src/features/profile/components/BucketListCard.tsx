@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import AddBucketListModal from '../modals/AddBucketListModal';
 import { Plus } from 'lucide-react';
 import useAxiosInstance from 'hostApp/useAxiosInstance';
+import { PROFILE_PATHS } from '../../../constants/constants';
 import { designRecipes } from 'hostApp/designRecipes';
 
 function BucketListCard({ userID, self }: {userID: string|undefined, self: boolean}) {
@@ -10,14 +11,14 @@ function BucketListCard({ userID, self }: {userID: string|undefined, self: boole
     const axiosInstance = useAxiosInstance();
 
     const saveBucketList = (destination: string, notes: string) => {
-        axiosInstance.post("/profile/bucket-list", { destination, notes })
+        axiosInstance.post(PROFILE_PATHS.bucketList, { destination, notes })
         .then(resp => setBucketList([...bucketList, resp?.data?.data]))
         .catch(err => console.log(err?.response?.data))
     }
 
     /* fetch user details */
     useEffect(() => {
-        axiosInstance.get("/profile/bucket-list/" + (userID ? userID : "self"))
+        axiosInstance.get(PROFILE_PATHS.bucketListByUser(userID))
         .then(resp => setBucketList(resp?.data?.data?.response))
         .catch(err => console.log(err));
     }, [])

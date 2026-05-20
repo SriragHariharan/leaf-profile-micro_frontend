@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { MessageCircle, Send, Trash2, X } from 'lucide-react';
 import useAxiosInstance from 'hostApp/useAxiosInstance';
 import { showErrorToast, showSuccessToast } from 'hostApp/toast';
-import { DEFAULT_PROFILE_IMAGE } from '../../../constants/constants';
+import { DEFAULT_PROFILE_IMAGE, GATEWAY_PATHS } from '../../../constants/constants';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { designRecipes } from 'hostApp/designRecipes';
@@ -51,7 +51,7 @@ export default function CommentsModal({
   useEffect(() => {
     if (!isOpen) return;
     axiosInstance
-      .get(`../post/${postId}/comment`)
+      .get(GATEWAY_PATHS.post.comment(postId))
       .then((resp) => setComments(resp.data?.data?.comments ?? []))
       .catch(() => showErrorToast('Unable to load comments'));
   }, [postId, isOpen]);
@@ -62,7 +62,7 @@ export default function CommentsModal({
     setIsLoading(true);
 
     axiosInstance
-      .post(`../post/${postId}/comment`, { comment: newComment })
+      .post(GATEWAY_PATHS.post.comment(postId), { comment: newComment })
       .then((resp) => {
         const { comment, commentsCount, isCommented } = resp.data?.data ?? {};
         if (comment) {
@@ -78,7 +78,7 @@ export default function CommentsModal({
 
   const handleDeleteComment = (commentId: number) => {
     axiosInstance
-      .delete(`../post/${postId}/comment/${commentId}`)
+      .delete(GATEWAY_PATHS.post.commentById(postId, commentId))
       .then((resp) => {
         const { commentsCount, isCommented } = resp.data?.data ?? {};
         setComments((prev) => prev.filter((c) => c.id !== commentId));

@@ -3,6 +3,7 @@ import useAxiosInstance from 'hostApp/useAxiosInstance';
 import useStore from "hostApp/GlobalStore";
 import { showErrorToast, showSuccessToast } from 'hostApp/toast';
 import { ImagePlus, Loader2, X } from "lucide-react";
+import { PROFILE_PATHS } from '../../../constants/constants';
 import { designRecipes } from "hostApp/designRecipes";
 
 interface ModalProps {
@@ -34,7 +35,7 @@ const ProfileImgUploadModal: React.FC<ModalProps> = ({ closeModal }) => {
     formData.append("picture", file);
 
     // Make the API call
-    axiosInstance.post("/profile/picture/profile", formData, {
+    axiosInstance.post(PROFILE_PATHS.pictureProfile, formData, {
       headers: { "Content-Type": "multipart/form-data" },
     }).then(resp => {
       console.log(resp.data?.data?.url);

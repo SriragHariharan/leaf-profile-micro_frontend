@@ -10,6 +10,7 @@ import SearchSegmentedControl from '../features/search/components/SearchSegmente
 import SearchUserCard from '../features/search/components/SearchUserCard';
 import InfoCard from '../features/search/components/InfoCard';
 import { showErrorToast } from 'hostApp/toast';
+import { GATEWAY_PATHS } from '../constants/constants';
 import { designRecipes } from 'hostApp/designRecipes';
 import type {
   SavedPostResult,
@@ -58,7 +59,7 @@ function SearchPage() {
 
     try {
       const resp = await axiosInstance.get<ApiResponse<SearchResultsData>>(
-        '../post/search',
+        GATEWAY_PATHS.post.search,
         { params: { query: trimmed, type } }
       );
 
@@ -110,7 +111,7 @@ function SearchPage() {
 
     try {
       const resp = await axiosInstance.get<ApiResponse<SavedPostsData>>(
-        '../post/save'
+        GATEWAY_PATHS.post.save
       );
       setSavedPosts(resp?.data?.data?.posts ?? []);
       setViewMode('saved');

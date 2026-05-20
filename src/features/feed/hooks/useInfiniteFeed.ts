@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import useAxiosInstance from 'hostApp/useAxiosInstance';
 import { showErrorToast } from 'hostApp/toast';
 import type { FeedSource, MappedPost, TimelineFeedItem } from '../types/feed.types';
+import { GATEWAY_PATHS } from '../../../constants/constants';
 import { mapFeedToPost, mergePosts } from '../utils/feedMappers';
 
 const SCROLL_THROTTLE_MS = 500;
@@ -13,8 +14,8 @@ export interface UseInfiniteFeedOptions {
 }
 
 function getFeedEndpoint(source: FeedSource, userId?: string): string {
-  if (source === 'home') return '../feed';
-  return `../timeline/${userId || 'self'}`;
+  if (source === 'home') return GATEWAY_PATHS.feed;
+  return GATEWAY_PATHS.timeline(userId);
 }
 
 export function useInfiniteFeed({ source, userId, resetDeps = [] }: UseInfiniteFeedOptions) {
