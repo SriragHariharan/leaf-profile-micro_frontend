@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { AlertTriangle, X } from 'lucide-react';
-import { designRecipes } from 'hostApp/designRecipes';
+import { designRecipes } from "@srirag/leaf-design-system"
 
 const ReportModal = ({ isOpen, onClose, onSubmit }: any) => {
     const [issue, setIssue] = useState('fakeAccount');

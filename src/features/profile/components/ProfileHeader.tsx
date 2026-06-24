@@ -7,7 +7,7 @@
  * @param self - true when viewing your own profile; enables edit controls and logout
  */
 import React from 'react';
-import { designRecipes } from 'hostApp/designRecipes';
+import { designRecipes } from "@srirag/leaf-design-system"
 import { useProfileHeader } from '../hooks/useProfileHeader';
 import ProfileCoverBanner from './profile-header/ProfileCoverBanner';
 import ProfileIdentitySection from './profile-header/ProfileIdentitySection';

@@ -1,5 +1,5 @@
 import React from 'react';
-import { designRecipes } from 'hostApp/designRecipes';
+import { designRecipes } from "@srirag/leaf-design-system"
 
 
 export default function InfoCard({message}: {message: string}) {

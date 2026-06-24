@@ -1,7 +1,7 @@
 import React from 'react';
 import { User } from '../../../interfaces/User.interface';
 import UserCard from './UserCard';
-import { designRecipes } from 'hostApp/designRecipes';
+import { designRecipes } from "@srirag/leaf-design-system"
 
 interface MyFriendsProps {
   users: User[];

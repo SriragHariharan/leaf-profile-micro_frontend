@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { X, Sparkles } from 'lucide-react';
-import { designRecipes } from 'hostApp/designRecipes';
+import { designRecipes } from "@srirag/leaf-design-system"
 
 interface AddBucketListModalProps {
   isOpen: boolean;

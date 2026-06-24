@@ -1,0 +1,1 @@
+declare module "@srirag/leaf-design-system";

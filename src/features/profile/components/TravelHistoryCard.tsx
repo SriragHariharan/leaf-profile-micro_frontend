@@ -3,7 +3,7 @@ import AddTravelHistoryModal from '../modals/AddTravelHistoryModal';
 import { Plus } from 'lucide-react';
 import useAxiosInstance from 'hostApp/useAxiosInstance';
 import { PROFILE_PATHS } from '../../../constants/constants';
-import { designRecipes } from 'hostApp/designRecipes';
+import { designRecipes } from "@srirag/leaf-design-system"
 
 interface TravelHistory {
   id: number;

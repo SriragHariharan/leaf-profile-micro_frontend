@@ -9,7 +9,7 @@ interface CreatePostModalProps {
 }
 
 import { showErrorToast } from 'hostApp/toast';
-import { designRecipes } from 'hostApp/designRecipes';
+import { designRecipes } from "@srirag/leaf-design-system"
 
 const CreatePostModal: React.FC<CreatePostModalProps> = ({ isOpen, onClose }) => {
   const [content, setContent] = useState('');

@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { DEFAULT_PROFILE_IMAGE } from '../../../constants/constants';
 import { Link } from 'react-router';
 import dayjs from 'dayjs';
-import { designRecipes } from 'hostApp/designRecipes';
+import { designRecipes } from "@srirag/leaf-design-system"
 import { usePostInteractions } from '../hooks/usePostInteractions';
 
 interface SavedPosts {

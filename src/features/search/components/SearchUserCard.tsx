@@ -1,7 +1,7 @@
 import React from 'react';
 import { ChevronRight } from 'lucide-react';
 import { Link } from 'react-router';
-import { designRecipes } from 'hostApp/designRecipes';
+import { designRecipes } from "@srirag/leaf-design-system"
 import { DEFAULT_PROFILE_IMAGE } from '../../../constants/constants';
 import type { SearchUserResult } from '../types/search.types';
 

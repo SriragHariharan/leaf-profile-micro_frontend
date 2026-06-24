@@ -11,7 +11,7 @@ import SearchUserCard from '../features/search/components/SearchUserCard';
 import InfoCard from '../features/search/components/InfoCard';
 import { showErrorToast } from 'hostApp/toast';
 import { GATEWAY_PATHS } from '../constants/constants';
-import { designRecipes } from 'hostApp/designRecipes';
+import { designRecipes } from "@srirag/leaf-design-system"
 import type {
   SavedPostResult,
   SearchPostResult,

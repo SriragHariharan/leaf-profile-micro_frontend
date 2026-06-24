@@ -3,7 +3,7 @@ import '../index.scss';
 import CreatePost from '../features/feed/components/CreatePost';
 import FeedCard from '../features/feed/components/FeedCard';
 import { DEFAULT_PROFILE_IMAGE } from '../constants/constants';
-import { designRecipes } from 'hostApp/designRecipes';
+import { designRecipes } from "@srirag/leaf-design-system"
 import { useInfiniteFeed } from '../features/feed/hooks/useInfiniteFeed';
 
 function Feed() {

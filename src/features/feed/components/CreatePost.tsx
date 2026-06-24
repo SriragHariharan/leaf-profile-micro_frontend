@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Image } from 'lucide-react';
 import CreatePostModal from '../modals/CreatePostModal';
-import { designRecipes } from 'hostApp/designRecipes';
+import { designRecipes } from "@srirag/leaf-design-system"
 
 import useStore from 'hostApp/GlobalStore';
 import { DEFAULT_PROFILE_IMAGE } from '../../../constants/constants';

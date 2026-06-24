@@ -5,7 +5,7 @@
  */
 import React from 'react';
 import { UserPlus, LogOut, Hourglass, Flag, X, UserMinus } from 'lucide-react';
-import { designRecipes } from 'hostApp/designRecipes';
+import { designRecipes } from "@srirag/leaf-design-system"
 import type { Profile } from '../../../../types/profile.types';
 
 type ProfileHeaderActionsProps = {

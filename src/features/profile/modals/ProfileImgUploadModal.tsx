@@ -4,7 +4,7 @@ import useStore from "hostApp/GlobalStore";
 import { showErrorToast, showSuccessToast } from 'hostApp/toast';
 import { ImagePlus, Loader2, X } from "lucide-react";
 import { PROFILE_PATHS } from '../../../constants/constants';
-import { designRecipes } from "hostApp/designRecipes";
+import { designRecipes } from "@srirag/leaf-design-system";
 
 interface ModalProps {
   closeModal: () => void;

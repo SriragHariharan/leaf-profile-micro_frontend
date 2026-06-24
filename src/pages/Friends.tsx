@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { designRecipes } from 'hostApp/designRecipes';
+import { designRecipes } from "@srirag/leaf-design-system"
 import '../index.scss';
 import MyFriends from '../features/friends/components/MyFriends';
 import FriendRequests from '../features/friends/components/FriendRequests';

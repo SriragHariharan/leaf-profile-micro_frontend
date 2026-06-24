@@ -5,7 +5,7 @@ import { showErrorToast, showSuccessToast } from 'hostApp/toast';
 import { DEFAULT_PROFILE_IMAGE, GATEWAY_PATHS } from '../../../constants/constants';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import { designRecipes } from 'hostApp/designRecipes';
+import { designRecipes } from "@srirag/leaf-design-system"
 
 dayjs.extend(relativeTime);
 

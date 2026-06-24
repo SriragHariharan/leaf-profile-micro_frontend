@@ -6,7 +6,7 @@ import ReportPostModal from '../modals/ReportPostModal';
 import { DEFAULT_PROFILE_IMAGE } from '../../../constants/constants';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import { designRecipes } from 'hostApp/designRecipes';
+import { designRecipes } from "@srirag/leaf-design-system"
 import { showSuccessToast, showErrorToast } from 'hostApp/toast';
 import { usePostInteractions } from '../hooks/usePostInteractions';
 

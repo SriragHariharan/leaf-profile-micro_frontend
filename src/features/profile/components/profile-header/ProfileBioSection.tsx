@@ -5,7 +5,7 @@
  */
 import React from 'react';
 import { Edit } from 'lucide-react';
-import { designRecipes } from 'hostApp/designRecipes';
+import { designRecipes } from "@srirag/leaf-design-system"
 
 type ProfileBioSectionProps = {
   description: string;

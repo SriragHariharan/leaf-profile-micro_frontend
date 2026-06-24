@@ -2,7 +2,7 @@ import React from 'react';
 import { DEFAULT_PROFILE_IMAGE } from '../../../constants/constants';
 import { User } from '../../../interfaces/User.interface';
 import { Link } from 'react-router';
-import { designRecipes } from 'hostApp/designRecipes';
+import { designRecipes } from "@srirag/leaf-design-system"
 
 
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import { clsx } from 'clsx';
-import { designRecipes } from 'hostApp/designRecipes';
+import { designRecipes } from "@srirag/leaf-design-system"
 import type { SearchType } from '../types/search.types';
 
 interface SearchSegmentedControlProps {

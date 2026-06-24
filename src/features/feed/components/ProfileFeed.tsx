@@ -3,7 +3,7 @@ import useAxiosInstance from 'hostApp/useAxiosInstance';
 import FeedCard from './FeedCard';
 import { showErrorToast, showSuccessToast } from 'hostApp/toast';
 import { DEFAULT_PROFILE_IMAGE } from '../../../constants/constants';
-import { designRecipes } from 'hostApp/designRecipes';
+import { designRecipes } from "@srirag/leaf-design-system"
 import { useInfiniteFeed } from '../hooks/useInfiniteFeed';
 import { POST_PATHS } from '../services/postApi';
 

@@ -4,7 +4,7 @@ import axios from "axios";
 import { Loader2, AlertCircle, Heart, MessageSquare } from "lucide-react";
 import { DEFAULT_PROFILE_IMAGE, postDetailsUrl } from "../constants/constants";
 import '../index.scss';
-import { designRecipes } from "hostApp/designRecipes";
+import { designRecipes } from "@srirag/leaf-design-system";
 
 interface Post {
   id: string;

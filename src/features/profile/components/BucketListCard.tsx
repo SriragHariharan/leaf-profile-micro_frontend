@@ -3,7 +3,7 @@ import AddBucketListModal from '../modals/AddBucketListModal';
 import { Plus } from 'lucide-react';
 import useAxiosInstance from 'hostApp/useAxiosInstance';
 import { PROFILE_PATHS } from '../../../constants/constants';
-import { designRecipes } from 'hostApp/designRecipes';
+import { designRecipes } from "@srirag/leaf-design-system"
 
 function BucketListCard({ userID, self }: {userID: string|undefined, self: boolean}) {
     const [bucketList, setBucketList] = useState<Array<{ destination: string, notes: string, id: number }>>([]);

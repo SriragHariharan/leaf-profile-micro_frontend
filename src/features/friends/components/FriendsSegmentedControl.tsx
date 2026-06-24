@@ -1,6 +1,6 @@
 import React from 'react';
 import { clsx } from 'clsx';
-import { designRecipes } from 'hostApp/designRecipes';
+import { designRecipes } from "@srirag/leaf-design-system"
 
 export type FriendsTab = 'friends' | 'requests';
 

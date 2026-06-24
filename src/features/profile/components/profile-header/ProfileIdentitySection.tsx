@@ -5,7 +5,7 @@
  */
 import React from 'react';
 import { Edit, MapPin, Calendar } from 'lucide-react';
-import { designRecipes } from 'hostApp/designRecipes';
+import { designRecipes } from "@srirag/leaf-design-system"
 
 type ProfileIdentitySectionProps = {
   self: boolean;

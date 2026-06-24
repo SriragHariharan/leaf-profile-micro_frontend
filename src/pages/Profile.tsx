@@ -6,7 +6,7 @@ import TravelHistoryCard from '../features/profile/components/TravelHistoryCard'
 import BucketListCard from '../features/profile/components/BucketListCard';
 import { useParams } from 'react-router';
 import ProfileFeed from '../features/feed/components/ProfileFeed';
-import { designRecipes } from 'hostApp/designRecipes';
+import { designRecipes } from "@srirag/leaf-design-system"
 
 const tabs = [
   { id: 'feed', label: 'Feed', icon: Film },
